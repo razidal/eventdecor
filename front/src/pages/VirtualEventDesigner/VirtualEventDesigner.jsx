@@ -193,7 +193,7 @@ const VirtualEventDesigner = () => {
       width: 50,
       height: 50,
       id: Date.now(),
-      image: image.Url, 
+      image: decoration.imageUrl,
     });
   };
 
