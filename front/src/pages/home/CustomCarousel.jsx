@@ -17,20 +17,17 @@ const images = [
   },
   {
     src: sliderimg,
-    title: 'SPECIAL OFFER',
-    text: 'Up to 50% discount when you purchase',
+    title: '🎉 Welcome to our Event Decoration! Enjoy our special offers!🎉',
     backgroundColor: '#b3e5fc',
   },
   {
     src: prod3,
-    title: 'SPECIAL OFFER',
-    text: 'Up to 50% discount when you purchase',
+    title: '🎉 Welcome to our Event Decoration! Enjoy our special offers!🎉',
     backgroundColor: '#c8e6c9',
   },
   {
     src: prod4,
-    title: 'SPECIAL OFFER',
-    text: 'Up to 50% discount when you purchase',
+    title: '🎉 Welcome to our Event Decoration! Enjoy our special offers!🎉',
     backgroundColor: '#fff9c4',
   }
 ];
@@ -111,9 +108,6 @@ const CustomCarousel = () => {
           />
           <Typography variant="h3" className="slider-title">
             {images[index].title}
-          </Typography>
-          <Typography variant="body1" className="slider-text">
-            {images[index].text}
           </Typography>
         </Box>
       </Box>
