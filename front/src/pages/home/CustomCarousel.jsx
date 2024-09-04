@@ -118,9 +118,9 @@ const CustomCarousel = () => {
             src={images[index].src}
             alt={`slide-${index}`}
             style={{
-              width: '50%',
-              maxHeight: '220px', // Set max height for images
-              objectFit: 'cover',
+              width: '100%',
+              maxHeight: '320px', // Set max height for images
+              objectFit: 'contain', // Ensures the entire image is visible without cropping
               paddingBottom: '20px',
               marginBottom: '10px',
             }}
