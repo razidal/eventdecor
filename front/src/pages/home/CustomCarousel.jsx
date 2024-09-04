@@ -75,7 +75,6 @@ const CustomCarousel = () => {
       height="450px"
       bgcolor={images[index].backgroundColor}
       overflow="hidden"
-      marginBottom="20px"
     >
       <ButtonBase
         onClick={handlePrev}
