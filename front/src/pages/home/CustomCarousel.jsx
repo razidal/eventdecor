@@ -73,7 +73,7 @@ const CustomCarousel = () => {
       alignItems="center"
       justifyContent="center"
       height="auto"
-      minHeight="450px"
+      minHeight="400px"
       bgcolor={images[index].backgroundColor}
       overflow="hidden"
     >
