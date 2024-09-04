@@ -72,13 +72,21 @@ const CustomCarousel = () => {
       display="flex"
       alignItems="center"
       justifyContent="center"
-      height="450px"
+      height="auto"
+      minHeight="450px"
       bgcolor={images[index].backgroundColor}
       overflow="hidden"
     >
       <ButtonBase
         onClick={handlePrev}
-        sx={{ position: 'absolute', left: '10px', zIndex: 1 }}
+        sx={{
+          position: 'absolute',
+          left: '10px',
+          zIndex: 1,
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          borderRadius: '50%',
+          padding: '8px',
+        }}
       >
         <ArrowBackIosNewIcon />
       </ButtonBase>
@@ -88,6 +96,8 @@ const CustomCarousel = () => {
           display: 'flex',
           transition: 'transform 0.5s ease-in-out',
           transform: direction === 'left' ? 'translateX(100%)' : direction === 'right' ? 'translateX(-100%)' : 'translateX(0)',
+          width: '100%',
+          overflow: 'hidden',
         }}
       >
         <Box
@@ -103,9 +113,14 @@ const CustomCarousel = () => {
           <img
             src={images[index].src}
             alt={`slide-${index}`}
-            style={{ height: "320px", width: "313.53px", objectFit: 'cover', paddingBottom:'30px' ,paddingTop:'50px' }}
+            style={{
+              width: '100%',
+              height: 'auto',
+              objectFit: 'cover',
+              paddingBottom: '20px',
+            }}
           />
-          <Typography variant="h3" className="slider-title" paddingBottom="20px">
+          <Typography variant="h5" sx={{ paddingBottom: '20px', px: 2 }}>
             {images[index].title}
           </Typography>
         </Box>
@@ -113,7 +128,14 @@ const CustomCarousel = () => {
 
       <ButtonBase
         onClick={handleNext}
-        sx={{ position: 'absolute', right: '10px', zIndex: 1 }}
+        sx={{
+          position: 'absolute',
+          right: '10px',
+          zIndex: 1,
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          borderRadius: '50%',
+          padding: '8px',
+        }}
       >
         <ArrowForwardIosIcon />
       </ButtonBase>
