@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Navbar, Container, Carousel, FormControl, Nav } from 'react-bootstrap'
+import {Carousel} from 'react-bootstrap'
 
 import sliderimg from "./images/wedding.png"
 import slider4 from "./images/slider2.png";
