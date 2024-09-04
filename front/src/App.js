@@ -53,7 +53,7 @@ function App() {
           path="/Cart"
           element={user ? <Cart /> : <Navigate to="/SignIn" />}
         />
-        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/Favorites" element={<Favorites />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route
           path="/VirtualEventDesigner"
