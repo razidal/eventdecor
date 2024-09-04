@@ -50,7 +50,7 @@ const CustomCarousel = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       handleNext();
-    }, 2000);
+    }, 3000);
 
     return () => clearInterval(interval); // Cleanup the interval on component unmount
   }, []);
@@ -61,7 +61,7 @@ const CustomCarousel = () => {
       display="flex"
       alignItems="center"
       justifyContent="center"
-      height="400px"
+      height="500px"
       bgcolor={images[index].backgroundColor}
       overflow="hidden"
     >
