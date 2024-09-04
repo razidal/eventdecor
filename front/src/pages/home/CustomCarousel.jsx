@@ -103,7 +103,7 @@ const CustomCarousel = () => {
           <img
             src={images[index].src}
             alt={`slide-${index}`}
-            style={{ height: "320px", width: "313.53px", objectFit: 'cover', paddingBottom:'40px' ,paddingTop:'30px' }}
+            style={{ height: "320px", width: "313.53px", objectFit: 'cover', paddingBottom:'30px' ,paddingTop:'50px' }}
           />
           <Typography variant="h3" className="slider-title" paddingBottom="20px">
             {images[index].title}
