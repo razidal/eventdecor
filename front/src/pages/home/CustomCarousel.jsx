@@ -12,7 +12,7 @@ const images = [
   {
     src: slider4,
     title: 'SPECIAL OFFER',
-    text: 'Up to 50% discount when you purchase',
+    text: '🎉 Welcome to our Event Decoration! Enjoy our special offers!🎉',
     backgroundColor: '#f8bbd0',
   },
   {
@@ -104,7 +104,7 @@ const CustomCarousel = () => {
           <img
             src={images[index].src}
             alt={`slide-${index}`}
-            style={{ height: "296px", width: "313.53px", objectFit: 'cover' }}
+            style={{ height: "296px", width: "313.53px", objectFit: 'cover', marginBottom:'100px'}}
           />
           <Typography variant="h3" className="slider-title">
             {images[index].title}
