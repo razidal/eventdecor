@@ -55,7 +55,7 @@ const CustomCarousel = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       handleNext();
-    }, 2000);
+    }, 3500);
     return () => clearInterval(interval);
   }, []);
 
@@ -90,22 +90,18 @@ const CustomCarousel = () => {
       <Box
         sx={{
           display: 'flex',
-          width: '100%',
-          height: '100%',
-          position: 'relative',
+          transition: 'transform 0.5s ease-in-out',
+          transform: direction === 'left' ? 'translateX(100%)' : direction === 'right' ? 'translateX(-100%)' : 'translateX(0)',
         }}
       >
-        {/* Current Image */}
         <Box
+          key={index}
           sx={{
-            position: 'absolute',
-            top: 0,
-            left: direction === 'right' ? 0 : '100%',
+            flexShrink: 0,
             width: '100%',
-            height: '100%',
-            transition: 'transform 0.5s ease-in-out',
-            transform: animating ? 'translateX(100%)' : 'translateX(0)',
-            zIndex: animating ? 1 : 2,
+            textAlign: 'center',
+            opacity: animating ? 0 : 1,
+            transition: 'opacity 0.5s ease-in-out',
           }}
         >
           <img
@@ -118,32 +114,6 @@ const CustomCarousel = () => {
           </Typography>
           <Typography variant="body1" className="slider-text">
             {images[index].text}
-          </Typography>
-        </Box>
-
-        {/* Next Image */}
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: direction === 'right' ? '-100%' : '100%',
-            width: '100%',
-            height: '100%',
-            transition: 'transform 0.5s ease-in-out',
-            transform: animating ? 'translateX(100%)' : 'translateX(0)',
-            zIndex: animating ? 2 : 1,
-          }}
-        >
-          <img
-            src={images[(index + 1) % images.length].src}
-            alt={`slide-${(index + 1) % images.length}`}
-            style={{ height: "296px", width: "313.53px", objectFit: 'cover' }}
-          />
-          <Typography variant="h3" className="slider-title">
-            {images[(index + 1) % images.length].title}
-          </Typography>
-          <Typography variant="body1" className="slider-text">
-            {images[(index + 1) % images.length].text}
           </Typography>
         </Box>
       </Box>
