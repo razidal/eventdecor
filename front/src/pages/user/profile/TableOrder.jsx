@@ -113,7 +113,7 @@ const TableOrder = ({ id }) => {
             {userData.map((order) => (
               <TableRow key={order._id}>
                 <TableCell>{order._id}</TableCell>
-                <TableCell>{order.totalAmount}</TableCell>
+                <TableCell>{order.totalAmount}$</TableCell>
                 <TableCell>
                   <Button onClick={() => handleOpenModal(order)}>
                     View Order

@@ -81,7 +81,7 @@ const TableAdmin = () => {
               {userData?.map((user) => (
                 <TableRow key={user._id}>
                   <TableCell>{user._id}</TableCell>
-                  <TableCell>{user.totalAmount}$</TableCell>
+                  <TableCell>{user.totalAmount}</TableCell>
                   <TableCell>{user.userId?.fullName}</TableCell>
                   <TableCell>
                     <Button onClick={() => handleOpenModal(user)}>
