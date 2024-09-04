@@ -84,12 +84,12 @@ const Home = () => {
   return (
     <div>
       <CustomCarousel/>
-      <Banner>
+      {/* <Banner>
         <Typography variant="h3">
           🎉 Welcome to our Event Decoration! Enjoy our special offers!
           🎉
         </Typography>
-      </Banner>
+      </Banner> */}
 
       <Container sx={{ mt: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
