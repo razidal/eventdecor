@@ -285,7 +285,7 @@ const VirtualEventDesigner = () => {
                 backgroundImage: `url(${background})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                cursor: "selectedDecoration",
+                cursor: "se-resize",
               }}
             >
               {decorations.map((decoration) => (
