@@ -65,7 +65,7 @@ const CustomCarousel = () => {
       const timer = setTimeout(() => {
         setAnimating(false);
         setDirection(null);
-      }, 1000); // Duration of the slide animation
+      }, 100); // Duration of the slide animation
       return () => clearTimeout(timer);
     }
   }, [index, direction]);
