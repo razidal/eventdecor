@@ -16,7 +16,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ZoomOutMapIcon from "@mui/icons-material/ZoomOutMap";
 import Draggable from "react-draggable";
-
+import axios from "axios";
 const ImageUploader = ({ onImageUpload }) => {
   const [previewImage, setPreviewImage] = useState(null);
   const [error, setError] = useState(null);
