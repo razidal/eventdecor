@@ -15,11 +15,18 @@ import Favorites from "./pages/favorite/Favorites";
 import ForgotPassword from "./pages/forgotPassword/ForgotPassword";
 import VirtualEventDesigner from "./pages/VirtualEventDesigner/VirtualEventDesigner";
 import { login } from "./redux/userSlice";
-import Footer from "./components/footer/footer"
+import Footer from "./components/footer/footer";
+import { loadFavoritesFromCookies } from "./redux/favoritesSlice";
+
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Load favorites from cookies when the app initializes
+    dispatch(loadFavoritesFromCookies());
+  }, [dispatch]);
 
   useEffect(() => {
     const savedUser = Cookies.get("user");

@@ -15,20 +15,16 @@ const favoritesSlice = createSlice({
         (item) => item._id === action.payload._id
       );
       console.log("exists", exists);
-      // If the item isn't already in the favorites, add it
       if (!exists) {
         state.favorites.push(action.payload);
-        const simplelifedFavorites = state.favorites.map((item) => ({
+        const simplifiedFavorites = state.favorites.map((item) => ({
           _id: item._id,
           name: item.name,
         }));
-
-        Cookies.set("favorites", JSON.stringify(simplelifedFavorites), {
+        Cookies.set("favorites", JSON.stringify(simplifiedFavorites), {
           expires: 7,
         });
       }
-
-      // Update cookies after modifying the favorites array
     },
 
     // Remove an item from favorites
@@ -36,9 +32,13 @@ const favoritesSlice = createSlice({
       state.favorites = state.favorites.filter(
         (item) => item._id !== action.payload
       );
-
-      // Update cookies after modifying the favorites array
-      Cookies.set("favorites", JSON.stringify(state.favorites), { expires: 7 });
+      const simplifiedFavorites = state.favorites.map((item) => ({
+        _id: item._id,
+        name: item.name,
+      }));
+      Cookies.set("favorites", JSON.stringify(simplifiedFavorites), {
+        expires: 7,
+      });
     },
 
     // Optionally, load favorites from cookies on app initialization
