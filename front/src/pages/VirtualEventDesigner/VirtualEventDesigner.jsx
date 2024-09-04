@@ -285,7 +285,7 @@ const VirtualEventDesigner = () => {
                 backgroundImage: `url(${background})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                cursor: selectedDecoration ? "crosshair" : "default",
+                cursor: "selectedDecoration",
               }}
             >
               {decorations.map((decoration) => (
@@ -305,7 +305,7 @@ const VirtualEventDesigner = () => {
                     cursor: "move",
                     border:
                       activeDecoration && activeDecoration.id === decoration.id
-                        ? "2px dashed #3f51b5"
+                        ? "2px solid blue"
                         : "none",
                   }}
                   onClick={(e) => handleDecorationClick(decoration, e)}
