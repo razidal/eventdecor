@@ -44,7 +44,7 @@ const PayButton = styled(Button)`
   background-color: #007bff;
   color: white;
   margin-top: 20px;
-
+  margin-bottom:300px;
   &:hover {
     background-color: #0056b3;
   }
