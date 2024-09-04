@@ -291,7 +291,7 @@ const Header = () => {
                     <Grid item xs={12} key={index}>
                       <FavoriteCard>
                         <FavoriteImage
-                          component= "img"
+                          component="img"
                           image={item.image || "https://via.placeholder.com/80"}
                           alt={item.name}
                         />
@@ -301,14 +301,12 @@ const Header = () => {
                             ${item.price}
                           </Typography>
                           <IconButton onClick={() => handleFavoriteToggle(item)}>
-                          <FavoriteIcon
-                          color={
-                          favorites.some((fav) => fav._id === index)
-                              ? "error"
-                              : "disabled"
-                            }
-                         />
-                </IconButton>
+                            <FavoriteIcon
+                              color={
+                                favorites.some((fav) => fav._id === item._id) ? "error" : "disabled"
+                              }
+                            />
+                          </IconButton>
                         </FavoriteContent>
                       </FavoriteCard>
                     </Grid>

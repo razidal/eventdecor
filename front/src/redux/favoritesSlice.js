@@ -14,14 +14,10 @@ const favoritesSlice = createSlice({
       const exists = state.favorites.some(
         (item) => item._id === action.payload._id
       );
-      console.log("exists", exists);
       if (!exists) {
         state.favorites.push(action.payload);
-        const simplifiedFavorites = state.favorites.map((item) => ({
-          _id: item._id,
-          name: item.name,
-        }));
-        Cookies.set("favorites", JSON.stringify(simplifiedFavorites), {
+        // Store all item details, including price and image
+        Cookies.set("favorites", JSON.stringify(state.favorites), {
           expires: 7,
         });
       }
@@ -32,11 +28,8 @@ const favoritesSlice = createSlice({
       state.favorites = state.favorites.filter(
         (item) => item._id !== action.payload
       );
-      const simplifiedFavorites = state.favorites.map((item) => ({
-        _id: item._id,
-        name: item.name,
-      }));
-      Cookies.set("favorites", JSON.stringify(simplifiedFavorites), {
+      // Update cookies with all item details after removing an item
+      Cookies.set("favorites", JSON.stringify(state.favorites), {
         expires: 7,
       });
     },
