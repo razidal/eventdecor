@@ -279,8 +279,8 @@ const VirtualEventDesigner = () => {
               onClick={handleContainerClick}
               sx={{
                 position: "relative",
-                width: 745,
-                height: 600,
+                width: "100%",
+                height: "calc(100vh - 100px)",
                 overflow: "hidden",
                 backgroundImage: `url(${background})`,
                 backgroundSize: "cover",
