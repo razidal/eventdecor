@@ -116,7 +116,19 @@ const VirtualEventDesigner = () => {
   const [activeDecoration, setActiveDecoration] = useState(null);
   const [isResizing, setIsResizing] = useState(false);
   const containerRef = useRef(null);
+  const [products, setProducts] = useState([]);
 
+  const getProducts = async () => {
+    try {
+      const response = await axios.get(
+        "https://backstore-iqcq.onrender.com/products/all"
+      );
+      setProducts(response.data.decorations);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+  
   const backgroundTemplates = [
     {
       name: "Living Room",
@@ -139,7 +151,7 @@ const VirtualEventDesigner = () => {
     },
     {
       name: "Cake",
-      url: "https://i.postimg.cc/Vvy3g4BD/35ae422c-cac9-4162-9eaf-27567eb53a39-removebg-preview.png",
+      url: "https://modernomanbakery.com/wp-content/uploads/2021/02/Modern-Oman-Bakery-Cars-Cake-1.png",
     },
   ];
 
@@ -389,7 +401,7 @@ const VirtualEventDesigner = () => {
               Decorations
             </Typography>
             <Grid container spacing={1}>
-              {decorationItems.map((item, index) => (
+              {products.map((item, index) => (
                 <Grid item key={index} xs={4}>
                   <img
                     src={item.url}
