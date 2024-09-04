@@ -404,7 +404,7 @@ const VirtualEventDesigner = () => {
               {products.map((item, index) => (
                 <Grid item key={index} xs={4}>
                   <img
-                    src={item.url}
+                    src={item.image}
                     alt={item.name}
                     style={{
                       width: "100%",
