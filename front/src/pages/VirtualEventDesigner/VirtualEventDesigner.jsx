@@ -118,6 +118,8 @@ const VirtualEventDesigner = () => {
   const [activeDecoration, setActiveDecoration] = useState(null);
   const [isResizing, setIsResizing] = useState(false);
   const containerRef = useRef(null);
+  const [currentPage, setCurrentPage] = useState(1); // State for pagination
+  const itemsPerPage = 6; // Number of items per page
 
   const backgroundTemplates = [
     {
@@ -129,6 +131,15 @@ const VirtualEventDesigner = () => {
       url: "https://www.galimganim.com/wp-content/uploads/2023/01/hazter1-5.jpg",
     },
   ];
+
+  const handlePageChange = (event, newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const currentDecorations = products.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   useEffect(() => {
     const handleMouseMove = (event) => {
@@ -280,7 +291,7 @@ const VirtualEventDesigner = () => {
               sx={{
                 position: "relative",
                 width: "100%",
-                height: "100%",
+                height: "calc(100vh - 100px)",
                 overflow: "hidden",
                 backgroundImage: `url(${background})`,
                 backgroundSize: "cover",
@@ -392,7 +403,7 @@ const VirtualEventDesigner = () => {
               Decorations
             </Typography>
             <Grid container spacing={1}>
-              {products.map((product) => (
+              {currentDecorations.map((product) => (
                 <Grid item key={product._id} xs={4}>
                   <img
                     src={product.imageUrl}
@@ -411,6 +422,14 @@ const VirtualEventDesigner = () => {
                 </Grid>
               ))}
             </Grid>
+            <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
+              <Pagination
+                count={Math.ceil(products.length / itemsPerPage)}
+                page={currentPage}
+                onChange={handlePageChange}
+                color="primary"
+              />
+            </Box>
           </Paper>
         </Grid>
       </Grid>
