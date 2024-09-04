@@ -83,6 +83,7 @@ const Home = () => {
 
   return (
     <div>
+      <CustomCarousel/>
       <Banner>
         <Typography variant="h3">
           🎉 Welcome to our Event Decoration! Enjoy our special offers!
