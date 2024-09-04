@@ -20,7 +20,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PersonIcon from "@mui/icons-material/Person";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -28,7 +28,6 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import { logout } from "../../redux/userSlice";
-import { useNavigate } from "react-router-dom";
 import {
   addToFavorites,
   removeFromFavorites,
@@ -194,6 +193,11 @@ const Header = () => {
       dispatch(addToFavorites(product));
     }
   };
+
+  const handleFavoriteIconClick = () => {
+    navigate('/Favorites'); // Navigate to the Favorites page
+  };
+
   const isMobile = useMediaQuery("(max-width:600px)");
 
   return (
@@ -274,7 +278,7 @@ const Header = () => {
             <>
               <StyledIconButton
                 aria-haspopup="true"
-                onClick={handleMenuClickFavorite}
+                onClick={handleFavoriteIconClick} // Update to navigate to Favorites page
               >
                 <FavoriteIcon />
                 {favorites.length > 0 && (
@@ -301,14 +305,14 @@ const Header = () => {
                             ${item.price}
                           </Typography>
                           <IconButton onClick={() => handleFavoriteToggle(item)}>
-                          <FavoriteIcon
-                          color={
-                          favorites.some((fav) => fav._id === index)
-                              ? "error"
-                              : "disabled"
-                            }
-                         />
-                </IconButton>
+                            <FavoriteIcon
+                              color={
+                                favorites.some((fav) => fav._id === index)
+                                  ? "error"
+                                  : "disabled"
+                              }
+                            />
+                          </IconButton>
                         </FavoriteContent>
                       </FavoriteCard>
                     </Grid>
