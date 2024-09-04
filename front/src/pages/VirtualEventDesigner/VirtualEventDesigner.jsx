@@ -118,7 +118,6 @@ const VirtualEventDesigner = () => {
   const [activeDecoration, setActiveDecoration] = useState(null);
   const [isResizing, setIsResizing] = useState(false);
   const containerRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
 
   const backgroundTemplates = [
     {
@@ -137,15 +136,9 @@ const VirtualEventDesigner = () => {
         handleResizeMove(event);
       }
     };
-    const handleDragStart = (e) => {
-      setIsDragging(true);
-    };
-  
-    const handleDragStop = () => {
-      setIsDragging(false);
-    };
+
     const handleMouseUp = () => {
-      if (isDragging) {
+      if (isResizing) {
         handleResizeEnd();
       }
     };
@@ -169,7 +162,7 @@ const VirtualEventDesigner = () => {
       document.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isResizing, activeDecoration, isDragging]);
+  }, [isResizing, activeDecoration]);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -185,7 +178,6 @@ const VirtualEventDesigner = () => {
 
     getProducts();
   }, []);
-
   const handleBackgroundUpload = (imageData) => {
     setBackground(imageData);
   };
@@ -286,7 +278,7 @@ const VirtualEventDesigner = () => {
               onClick={handleContainerClick}
               sx={{
                 position: "relative",
-                width: 800,
+                width: 500,
                 height: 600,
                 overflow: "hidden",
                 backgroundImage: `url(${background})`,
@@ -299,17 +291,15 @@ const VirtualEventDesigner = () => {
                 <Draggable
                   key={decoration.id}
                   position={{ x: decoration.x, y: decoration.y }}
-                  onStart={handleDragStart} // Start dragging
-                  onStop={handleDragStop} // Stop dragging
                   onDrag={(e, ui) => handleDrag(e, ui, decoration.id)}
                   bounds="parent"
                 >
-                   <div
+                  <div
                     style={{
                       width: decoration.width,
                       height: decoration.height,
                       position: "absolute",
-                      backgroundImage: `url(${decoration.image})`,
+                      backgroundImage: `url(${decoration.url})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       cursor: "move",
@@ -319,109 +309,104 @@ const VirtualEventDesigner = () => {
                           ? "2px solid blue"
                           : "none",
                     }}
-                    onClick={(e) => handleDecorationClick(decoration, e)}
+                    onClick={(event) =>
+                      handleDecorationClick(decoration, event)
+                    }
                   >
-                    <img
-                      src={decoration.image}
-                      alt={decoration.name}
+                    <IconButton
+                      size="small"
                       style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
+                        position: "absolute",
+                        top: 0,
+                        right: 0,
+                        backgroundColor: "rgba(255, 255, 255, 0.7)",
+                        zIndex: 1000,
                       }}
-                    />
-                    {activeDecoration && activeDecoration.id === decoration.id && (
-                      <>
-                        <IconButton
-                          sx={{
-                            position: "absolute",
-                            bottom: -8,
-                            right: -8,
-                            bgcolor: "white",
-                          }}
-                          onMouseDown={(e) =>
-                            handleResizeStart(e, decoration)
-                          }
-                        >
-                          <ZoomOutMapIcon />
-                        </IconButton>
-                        <IconButton
-                          sx={{
-                            position: "absolute",
-                            top: -8,
-                            right: -8,
-                            bgcolor: "white",
-                          }}
-                          onClick={() => handleDeleteDecoration(decoration.id)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </>
-                    )}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteDecoration(decoration.id);
+                      }}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                    <div
+                      style={{
+                        position: "absolute",
+                        right: 0,
+                        bottom: 0,
+                        width: 20,
+                        height: 20,
+                        backgroundColor: "rgba(0, 0, 255, 0.5)",
+                        cursor: "se-resize",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        transition: "background-color 0.3s",
+                      }}
+                      onMouseDown={(event) =>
+                        handleResizeStart(event, decoration)
+                      }
+                      onMouseEnter={(e) =>
+                        (e.target.style.backgroundColor =
+                          "rgba(0, 0, 255, 0.8)")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.target.style.backgroundColor =
+                          "rgba(0, 0, 255, 0.5)")
+                      }
+                    >
+                      <ZoomOutMapIcon
+                        style={{ fontSize: 16, color: "white" }}
+                      />
+                    </div>
                   </div>
                 </Draggable>
               ))}
             </Box>
           </Paper>
+        </Grid>
+
+        <Grid item xs={12} md={4}>
+          <ImageUploader onImageUpload={handleBackgroundUpload} />
 
           <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
             <Typography variant="h6" gutterBottom>
-              Choose Background Template
+              Or choose a template:
             </Typography>
             <Select
+              fullWidth
               value={background}
               onChange={handleTemplateSelect}
-              fullWidth
-              displayEmpty
             >
-              <MenuItem value="" disabled>
-                Select a template
-              </MenuItem>
-              {backgroundTemplates.map((template) => (
-                <MenuItem key={template.name} value={template.url}>
+              {backgroundTemplates.map((template, index) => (
+                <MenuItem key={index} value={template.url}>
                   {template.name}
                 </MenuItem>
               ))}
             </Select>
           </Paper>
 
-          <ImageUploader onImageUpload={handleBackgroundUpload} />
-        </Grid>
-
-        <Grid item xs={12} md={4}>
           <Paper elevation={3} sx={{ p: 2 }}>
             <Typography variant="h6" gutterBottom>
-              Available Decorations
+              Decorations
             </Typography>
-            <Grid container spacing={2}>
+            <Grid container spacing={1}>
               {products.map((product) => (
-                <Grid item xs={6} key={product._id}>
-                  <Paper
-                    elevation={2}
-                    sx={{
-                      p: 1,
-                      textAlign: "center",
+                <Grid item key={product._id} xs={4}>
+                  <img
+                    src={product.url}
+                    alt={product.name}
+                    style={{
+                      width: "100%",
                       cursor: "pointer",
                       border:
-                        selectedDecoration &&
-                        selectedDecoration._id === product._id
-                          ? "2px solid #3f51b5"
+                      selectedDecoration &&
+                      selectedDecoration._id === product._id
+                          ? "2px solid blue"
                           : "none",
                     }}
-                    onClick={() => handleDecorationSelect(product)}
-                  >
-                    <img
-                      src={product.imageUrl}
-                      alt={product.name}
-                      style={{
-                        width: "100%",
-                        height: "100px",
-                        objectFit: "cover",
-                        marginBottom: 8,
-                      }}
-                    />
-                    <Typography variant="body2">{product.name}</Typography>
-                  </Paper>
+                    onClick={() => handleDecorationSelect(item)}
+                  />
                 </Grid>
               ))}
             </Grid>
