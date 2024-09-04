@@ -108,6 +108,10 @@ const CustomCarousel = () => {
             textAlign: 'center',
             opacity: animating ? 0 : 1,
             transition: 'opacity 0.5s ease-in-out',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <img
@@ -115,12 +119,13 @@ const CustomCarousel = () => {
             alt={`slide-${index}`}
             style={{
               width: '100%',
-              height: 'auto',
+              maxHeight: '320px', // Set max height for images
               objectFit: 'cover',
               paddingBottom: '20px',
+              marginBottom: '10px',
             }}
           />
-          <Typography variant="h5" sx={{ paddingBottom: '20px', px: 2 }}>
+          <Typography variant="h5" sx={{ px: 2, textAlign: 'center' }}>
             {images[index].title}
           </Typography>
         </Box>
