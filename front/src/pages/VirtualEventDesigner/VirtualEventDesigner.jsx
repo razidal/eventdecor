@@ -139,7 +139,7 @@ const VirtualEventDesigner = () => {
     },
     {
       name: "Cake",
-      url: "https://modernomanbakery.com/wp-content/uploads/2021/02/Modern-Oman-Bakery-Cars-Cake-1.png",
+      url: "https://i.postimg.cc/Vvy3g4BD/35ae422c-cac9-4162-9eaf-27567eb53a39-removebg-preview.png",
     },
   ];
 
