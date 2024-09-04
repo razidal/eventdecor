@@ -3,7 +3,15 @@ import { Box, Typography, Link } from '@mui/material';
 
 export default function Footer() {
   return (
-    <Box sx={{ bgcolor: '#f8f8f8', p: 2, mt: 4, textAlign: 'center' }}>
+    <Box
+      sx={{
+        bgcolor: '#f8f8f8',
+        p: 2,
+        textAlign: 'center',
+        position: 'relative', // Ensure the footer’s position is relative to its container
+        width: '100%', // Ensure the footer takes the full width
+      }}
+    >
       <Typography variant="body2" color="textSecondary">
         © {new Date().getFullYear()} - Event Decor. All rights reserved.
       </Typography>
