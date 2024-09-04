@@ -300,7 +300,7 @@ const VirtualEventDesigner = () => {
                       width: decoration.width,
                       height: decoration.height,
                       position: "absolute",
-                      backgroundImage: `url(${decoration.url})`,
+                      backgroundImage: `url(${decoration.image})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       cursor: "move",
