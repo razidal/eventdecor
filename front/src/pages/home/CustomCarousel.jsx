@@ -11,8 +11,7 @@ import prod4 from "./slider4.png";
 const images = [
   {
     src: slider4,
-    title: 'SPECIAL OFFER',
-    text: '🎉 Welcome to our Event Decoration! Enjoy our special offers!🎉',
+    title: '🎉 Welcome to our Event Decoration! Enjoy our special offers!🎉',
     backgroundColor: '#f8bbd0',
   },
   {
@@ -76,7 +75,7 @@ const CustomCarousel = () => {
       height="450px"
       bgcolor={images[index].backgroundColor}
       overflow="hidden"
-      paddingBottom="20px"
+      marginBottom="20px"
     >
       <ButtonBase
         onClick={handlePrev}
