@@ -124,7 +124,7 @@ const TableAdmin = () => {
                 {selectedUser?.products?.map((product, productIndex) => (
                   <TableRow key={productIndex}>
                     <TableCell>{product.productId?.name}</TableCell>
-                    <TableCell>{product.price}</TableCell>
+                    <TableCell>{product.price}$</TableCell>
                     <TableCell>{product.quantity}</TableCell>
                   </TableRow>
                 ))}
