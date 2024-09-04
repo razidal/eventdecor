@@ -405,7 +405,7 @@ const VirtualEventDesigner = () => {
                           ? "2px solid blue"
                           : "none",
                     }}
-                    onClick={() => handleDecorationSelect(item)}
+                    onClick={() => handleDecorationSelect(product)}
                   />
                 </Grid>
               ))}
