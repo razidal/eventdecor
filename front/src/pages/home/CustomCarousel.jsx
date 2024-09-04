@@ -55,7 +55,7 @@ const CustomCarousel = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       handleNext();
-    }, 2000);
+    }, 3500);
     return () => clearInterval(interval);
   }, []);
 
@@ -65,7 +65,7 @@ const CustomCarousel = () => {
       const timer = setTimeout(() => {
         setAnimating(false);
         setDirection(null);
-      }, 500); // Duration of the slide animation
+      }, 1000); // Duration of the slide animation
       return () => clearTimeout(timer);
     }
   }, [index, direction]);
