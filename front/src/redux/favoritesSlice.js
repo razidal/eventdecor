@@ -14,6 +14,7 @@ const favoritesSlice = createSlice({
       const exists = state.favorites.some(
         (item) => item._id === action.payload._id
       );
+      console.log("exists", exists);
       if (!exists) {
         state.favorites.push(action.payload);
         // Store all item details, including price and image
