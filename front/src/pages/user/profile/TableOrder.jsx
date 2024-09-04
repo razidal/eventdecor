@@ -155,7 +155,7 @@ const TableOrder = ({ id }) => {
               {selectedOrder?.products?.map((product) => (
                 <TableRow key={product._id}>
                   <TableCell>{product.productId.name}</TableCell>
-                  <TableCell>{product.productId.price}</TableCell>
+                  <TableCell>{product.productId.price}$</TableCell>
                   <TableCell>{product.quantity}</TableCell>
                 </TableRow>
               ))}
