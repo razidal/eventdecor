@@ -383,6 +383,7 @@ const Header = () => {
               to="/Cart"
               component={Link}
               sx={{ marginTop: 2, width: "100%" }}
+              onClick={toggleDrawer(false)}
             >
               Proceed to Payment
             </Button>
