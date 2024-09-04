@@ -280,7 +280,7 @@ const VirtualEventDesigner = () => {
               sx={{
                 position: "relative",
                 width: "100%",
-                height: "calc(100vh - 100px)",
+                height: "100%",
                 overflow: "hidden",
                 backgroundImage: `url(${background})`,
                 backgroundSize: "cover",
