@@ -25,14 +25,10 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PersonIcon from "@mui/icons-material/Person";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
 import { logout } from "../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
-import {
-  addToFavorites,
-  removeFromFavorites,
-} from "../../redux/favoritesSlice";
 
 const StyledAppBar = styled(AppBar)`
   background-color: #3f51b5;
@@ -58,7 +54,7 @@ const StyledPopover = styled(Popover)`
 const StyledIconButton = styled(IconButton)`
   color: white;
   background-color: white;
-  position: relative; /* Ensure positioning of badge relative to the icon */
+  position: relative;
 `;
 
 const FavoriteCard = styled(Card)`
@@ -127,9 +123,9 @@ const Header = () => {
   const [anchorElFavorite, setAnchorElFavorite] = useState(null);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [anchorElNav, setAnchorElNav] = useState(null);
+  const [favorites, setFavorites] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
   const dispatch = useDispatch();
-  const favorites = useSelector((state) => state.favorites.favorites);
-  const cartItems = useSelector((state) => state.cart.items);
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -140,6 +136,16 @@ const Header = () => {
     if (userCookies) {
       setIsLogin(true);
     }
+
+    const favoritesFromCookies = Cookies.get("favorites")
+      ? JSON.parse(Cookies.get("favorites"))
+      : [];
+    const cartItemsFromCookies = Cookies.get("cart")
+      ? JSON.parse(Cookies.get("cart"))
+      : [];
+
+    setFavorites(favoritesFromCookies);
+    setCartItems(cartItemsFromCookies);
   }, [userCookies]);
 
   const handleLogout = () => {
@@ -183,17 +189,7 @@ const Header = () => {
   const handleNavMenuClose = () => {
     setAnchorElNav(null);
   };
-  
-  const handleFavoriteToggle = (product) => {
-    const isAlreadyFavorite = favorites.some(
-      (favorite) => favorite._id === product._id
-    );
-    if (isAlreadyFavorite) {
-      dispatch(removeFromFavorites(product._id));
-    } else {
-      dispatch(addToFavorites(product));
-    }
-  };
+
   const isMobile = useMediaQuery("(max-width:600px)");
 
   return (
@@ -291,7 +287,7 @@ const Header = () => {
                     <Grid item xs={12} key={index}>
                       <FavoriteCard>
                         <FavoriteImage
-                          component= "img"
+                          component="img"
                           image={item.image || "https://via.placeholder.com/80"}
                           alt={item.name}
                         />
@@ -300,15 +296,6 @@ const Header = () => {
                           <Typography variant="body2" color="textSecondary">
                             ${item.price}
                           </Typography>
-                          <IconButton onClick={() => handleFavoriteToggle(item)}>
-                          <FavoriteIcon
-                          color={
-                          favorites.some((fav) => fav._id === index)
-                              ? "error"
-                              : "disabled"
-                            }
-                         />
-                </IconButton>
                         </FavoriteContent>
                       </FavoriteCard>
                     </Grid>
@@ -394,4 +381,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Header;
