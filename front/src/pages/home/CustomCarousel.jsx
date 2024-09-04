@@ -55,7 +55,7 @@ const CustomCarousel = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       handleNext();
-    }, 3500);
+    }, 2000);
     return () => clearInterval(interval);
   }, []);
 
@@ -65,7 +65,7 @@ const CustomCarousel = () => {
       const timer = setTimeout(() => {
         setAnimating(false);
         setDirection(null);
-      }, 100); // Duration of the slide animation
+      }, 500); // Duration of the slide animation
       return () => clearTimeout(timer);
     }
   }, [index, direction]);
@@ -90,18 +90,22 @@ const CustomCarousel = () => {
       <Box
         sx={{
           display: 'flex',
-          transition: 'transform 0.5s ease-in-out',
-          transform: direction === 'left' ? 'translateX(100%)' : direction === 'right' ? 'translateX(-100%)' : 'translateX(0)',
+          width: '100%',
+          height: '100%',
+          position: 'relative',
         }}
       >
+        {/* Current Image */}
         <Box
-          key={index}
           sx={{
-            flexShrink: 0,
+            position: 'absolute',
+            top: 0,
+            left: direction === 'right' ? 0 : '100%',
             width: '100%',
-            textAlign: 'center',
-            opacity: animating ? 0 : 1,
-            transition: 'opacity 0.5s ease-in-out',
+            height: '100%',
+            transition: 'transform 0.5s ease-in-out',
+            transform: animating ? 'translateX(100%)' : 'translateX(0)',
+            zIndex: animating ? 1 : 2,
           }}
         >
           <img
@@ -114,6 +118,32 @@ const CustomCarousel = () => {
           </Typography>
           <Typography variant="body1" className="slider-text">
             {images[index].text}
+          </Typography>
+        </Box>
+
+        {/* Next Image */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: direction === 'right' ? '-100%' : '100%',
+            width: '100%',
+            height: '100%',
+            transition: 'transform 0.5s ease-in-out',
+            transform: animating ? 'translateX(100%)' : 'translateX(0)',
+            zIndex: animating ? 2 : 1,
+          }}
+        >
+          <img
+            src={images[(index + 1) % images.length].src}
+            alt={`slide-${(index + 1) % images.length}`}
+            style={{ height: "296px", width: "313.53px", objectFit: 'cover' }}
+          />
+          <Typography variant="h3" className="slider-title">
+            {images[(index + 1) % images.length].title}
+          </Typography>
+          <Typography variant="body1" className="slider-text">
+            {images[(index + 1) % images.length].text}
           </Typography>
         </Box>
       </Box>
