@@ -3,10 +3,10 @@ import { Box, Button, Grid } from '@mui/material';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 
 const images = [
-  './images/wedding.png',
-  './images/slider2.png',
-  './images/slider3.png',
-'./images/slider4.png',
+  './wedding.png',
+  './slider2.png',
+  './slider3.png',
+'./slider4.png',
 ];
 
 const CustomCarousel = () => {

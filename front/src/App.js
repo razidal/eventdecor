@@ -16,7 +16,6 @@ import ForgotPassword from "./pages/forgotPassword/ForgotPassword";
 import VirtualEventDesigner from "./pages/VirtualEventDesigner/VirtualEventDesigner";
 import { login } from "./redux/userSlice";
 import Footer from "./components/footer/footer"
-import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
