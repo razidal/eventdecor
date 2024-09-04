@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import axios from "axios";
 import {
   Button,
   Box,
@@ -16,7 +17,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ZoomOutMapIcon from "@mui/icons-material/ZoomOutMap";
 import Draggable from "react-draggable";
-import axios from "axios";
+
 const ImageUploader = ({ onImageUpload }) => {
   const [previewImage, setPreviewImage] = useState(null);
   const [error, setError] = useState(null);
@@ -110,25 +111,14 @@ const ImageUploader = ({ onImageUpload }) => {
 };
 
 const VirtualEventDesigner = () => {
+  const [products, setProducts] = useState([]);
   const [background, setBackground] = useState(null);
   const [decorations, setDecorations] = useState([]);
   const [selectedDecoration, setSelectedDecoration] = useState(null);
   const [activeDecoration, setActiveDecoration] = useState(null);
   const [isResizing, setIsResizing] = useState(false);
   const containerRef = useRef(null);
-  const [products, setProducts] = useState([]);
 
-  const getProducts = async () => {
-    try {
-      const response = await axios.get(
-        "https://backstore-iqcq.onrender.com/products/all"
-      );
-      setProducts(response.data.decorations);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  };
-  
   const backgroundTemplates = [
     {
       name: "Living Room",
@@ -137,21 +127,6 @@ const VirtualEventDesigner = () => {
     {
       name: "Backyard",
       url: "https://www.galimganim.com/wp-content/uploads/2023/01/hazter1-5.jpg",
-    },
-  ];
-
-  const decorationItems = [
-    {
-      name: "Balloon",
-      url: "https://welcomefamily.com/8640-large_default/balloons-25-cm-variegated-colors.jpg",
-    },
-    {
-      name: "Banner",
-      url: "https://png.pngtree.com/png-clipart/20231127/original/pngtree-pastel-rainbow-flag-party-banner-png-image_13722467.png",
-    },
-    {
-      name: "Cake",
-      url: "https://modernomanbakery.com/wp-content/uploads/2021/02/Modern-Oman-Bakery-Cars-Cake-1.png",
     },
   ];
 
@@ -188,6 +163,21 @@ const VirtualEventDesigner = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isResizing, activeDecoration]);
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const response = await axios.get(
+          "https://backstore-iqcq.onrender.com/products/all"
+        );
+        setProducts(response.data.decorations);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    getProducts();
+  }, []);
 
   const handleBackgroundUpload = (imageData) => {
     setBackground(imageData);
@@ -306,116 +296,120 @@ const VirtualEventDesigner = () => {
                 >
                   <div
                     style={{
-                      width: decoration.width,
-                      height: decoration.height,
+                      width: `${decoration.width}px`,
+                      height: `${decoration.height}px`,
                       position: "absolute",
-                      backgroundImage: `url(${decoration.url})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
+                      top: 0,
+                      left: 0,
                       cursor: "move",
                       border:
-                        activeDecoration &&
-                        activeDecoration.id === decoration.id
-                          ? "2px solid blue"
+                        activeDecoration && activeDecoration.id === decoration.id
+                          ? "2px dashed #3f51b5"
                           : "none",
                     }}
-                    onClick={(event) =>
-                      handleDecorationClick(decoration, event)
-                    }
+                    onClick={(e) => handleDecorationClick(decoration, e)}
                   >
-                    <IconButton
-                      size="small"
+                    <img
+                      src={decoration.image}
+                      alt={decoration.name}
                       style={{
-                        position: "absolute",
-                        top: 0,
-                        right: 0,
-                        backgroundColor: "rgba(255, 255, 255, 0.7)",
-                        zIndex: 1000,
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
                       }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteDecoration(decoration.id);
-                      }}
-                    >
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                    <div
-                      style={{
-                        position: "absolute",
-                        right: 0,
-                        bottom: 0,
-                        width: 20,
-                        height: 20,
-                        backgroundColor: "rgba(0, 0, 255, 0.5)",
-                        cursor: "se-resize",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        transition: "background-color 0.3s",
-                      }}
-                      onMouseDown={(event) =>
-                        handleResizeStart(event, decoration)
-                      }
-                      onMouseEnter={(e) =>
-                        (e.target.style.backgroundColor =
-                          "rgba(0, 0, 255, 0.8)")
-                      }
-                      onMouseLeave={(e) =>
-                        (e.target.style.backgroundColor =
-                          "rgba(0, 0, 255, 0.5)")
-                      }
-                    >
-                      <ZoomOutMapIcon
-                        style={{ fontSize: 16, color: "white" }}
-                      />
-                    </div>
+                    />
+                    {activeDecoration && activeDecoration.id === decoration.id && (
+                      <>
+                        <IconButton
+                          sx={{
+                            position: "absolute",
+                            bottom: -8,
+                            right: -8,
+                            bgcolor: "white",
+                          }}
+                          onMouseDown={(e) =>
+                            handleResizeStart(e, decoration)
+                          }
+                        >
+                          <ZoomOutMapIcon />
+                        </IconButton>
+                        <IconButton
+                          sx={{
+                            position: "absolute",
+                            top: -8,
+                            right: -8,
+                            bgcolor: "white",
+                          }}
+                          onClick={() => handleDeleteDecoration(decoration.id)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </>
+                    )}
                   </div>
                 </Draggable>
               ))}
             </Box>
           </Paper>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <ImageUploader onImageUpload={handleBackgroundUpload} />
 
           <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
             <Typography variant="h6" gutterBottom>
-              Or choose a template:
+              Choose Background Template
             </Typography>
             <Select
-              fullWidth
               value={background}
               onChange={handleTemplateSelect}
+              fullWidth
+              displayEmpty
             >
-              {backgroundTemplates.map((template, index) => (
-                <MenuItem key={index} value={template.url}>
+              <MenuItem value="" disabled>
+                Select a template
+              </MenuItem>
+              {backgroundTemplates.map((template) => (
+                <MenuItem key={template.name} value={template.url}>
                   {template.name}
                 </MenuItem>
               ))}
             </Select>
           </Paper>
 
+          <ImageUploader onImageUpload={handleBackgroundUpload} />
+        </Grid>
+
+        <Grid item xs={12} md={4}>
           <Paper elevation={3} sx={{ p: 2 }}>
             <Typography variant="h6" gutterBottom>
-              Decorations
+              Available Decorations
             </Typography>
-            <Grid container spacing={1}>
-              {products.map((item, index) => (
-                <Grid item key={index} xs={4}>
-                  <img
-                    src={item.imageUrl}
-                    alt={item.name}
-                    style={{
-                      width: "100%",
+            <Grid container spacing={2}>
+              {products.map((product) => (
+                <Grid item xs={6} key={product._id}>
+                  <Paper
+                    elevation={2}
+                    sx={{
+                      p: 1,
+                      textAlign: "center",
                       cursor: "pointer",
                       border:
-                        selectedDecoration?.name === item.name
-                          ? "2px solid blue"
+                        selectedDecoration &&
+                        selectedDecoration._id === product._id
+                          ? "2px solid #3f51b5"
                           : "none",
                     }}
-                    onClick={() => handleDecorationSelect(item)}
-                  />
+                    onClick={() => handleDecorationSelect(product)}
+                  >
+                    <img
+                      src={product.imageUrl}
+                      alt={product.name}
+                      style={{
+                        width: "100%",
+                        height: "100px",
+                        objectFit: "cover",
+                        marginBottom: 8,
+                      }}
+                    />
+                    <Typography variant="body2">{product.name}</Typography>
+                  </Paper>
                 </Grid>
               ))}
             </Grid>
