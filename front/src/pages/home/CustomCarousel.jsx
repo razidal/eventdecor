@@ -1,48 +1,86 @@
-import React, { useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
-import wedding from "./wedding.png";
-import slider2 from "./slider2.png";
-import slider3 from "./slider3.png";
-import slider4 from "./slider4.png";
+import React, { useState } from 'react';
+import { Box, ButtonBase, Typography } from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
+import sliderimg from "./wedding.png";
+import slider4 from "./slider2.png";
+import prod3 from "./slider3.png";
+import prod4 from "./slider4.png";
 
 const images = [
-  { src: wedding, caption: "Special Offer: Wedding Discount" },
-  { src: slider2, caption: "Special Offer: Up to 50% Off" },
-  { src: slider3, caption: "Exclusive: Limited Time Offer" },
-  { src: slider4, caption: "Flash Sale: Don't Miss Out" }
+  {
+    src: slider4,
+    title: 'SPECIAL OFFER',
+    text: 'Up to 50% discount when you purchase',
+  },
+  {
+    src: sliderimg,
+    title: 'SPECIAL OFFER',
+    text: 'Up to 50% discount when you purchase',
+  },
+  {
+    src: prod3,
+    title: 'SPECIAL OFFER',
+    text: 'Up to 50% discount when you purchase',
+  },
+  {
+    src: prod4,
+    title: 'SPECIAL OFFER',
+    text: 'Up to 50% discount when you purchase',
+  }
 ];
 
 const CustomCarousel = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [index, setIndex] = useState(0);
 
   const handlePrev = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
-    );
+    setIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
   };
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === images.length - 1 ? 0 : prevIndex + 1
-    );
+    setIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
   };
 
   return (
-    <Box sx={{ position: "relative", maxWidth: "100%", textAlign: "center" }}>
-      <Box component="img" 
-           src={images[currentIndex].src} 
-           alt={images[currentIndex].caption}
-           sx={{ width: "100%", height: "auto" }} 
-      />
-      <Typography variant="h6" sx={{ position: "absolute", bottom: 10, left: 0, right: 0, color: "#fff", backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
-        {images[currentIndex].caption}
-      </Typography>
-      <Button onClick={handlePrev} sx={{ position: "absolute", top: "50%", left: 0, transform: "translateY(-50%)" }}>Prev</Button>
-      <Button onClick={handleNext} sx={{ position: "absolute", top: "50%", right: 0, transform: "translateY(-50%)" }}>Next</Button>
+    <Box
+      position="relative"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      height="400px"
+      bgcolor="#f5f5f5"
+      overflow="hidden"
+    >
+      <ButtonBase
+        onClick={handlePrev}
+        sx={{ position: 'absolute', left: '10px', zIndex: 1 }}
+      >
+        <ArrowBackIosNewIcon />
+      </ButtonBase>
+
+      <Box textAlign="center">
+        <img
+          src={images[index].src}
+          alt={`slide-${index}`}
+          style={{ height: "296px", width: "313.53px", objectFit: 'cover' }}
+        />
+        <Typography variant="h3" className="slider-title">
+          {images[index].title}
+        </Typography>
+        <Typography variant="body1" className="slider-text">
+          {images[index].text}
+        </Typography>
+      </Box>
+
+      <ButtonBase
+        onClick={handleNext}
+        sx={{ position: 'absolute', right: '10px', zIndex: 1 }}
+      >
+        <ArrowForwardIosIcon />
+      </ButtonBase>
     </Box>
   );
 };
-
 
 export default CustomCarousel;
