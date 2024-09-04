@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import axios from "axios";
 import {
   Button,
   Box,
@@ -16,7 +17,6 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ZoomOutMapIcon from "@mui/icons-material/ZoomOutMap";
 import Draggable from "react-draggable";
-import axios from 'axios';
 
 const ImageUploader = ({ onImageUpload }) => {
   const [previewImage, setPreviewImage] = useState(null);
@@ -97,6 +97,7 @@ const ImageUploader = ({ onImageUpload }) => {
               position: "absolute",
               top: 5,
               right: 5,
+
               bgcolor: "rgba(255,255,255,0.7)",
               zIndex: 10000000, // Make sure the icon is on top of any other layers
             }}
@@ -110,6 +111,7 @@ const ImageUploader = ({ onImageUpload }) => {
 };
 
 const VirtualEventDesigner = () => {
+  const [products, setProducts] = useState([]);
   const [background, setBackground] = useState(null);
   const [decorations, setDecorations] = useState([]);
   const [selectedDecoration, setSelectedDecoration] = useState(null);
@@ -127,23 +129,6 @@ const VirtualEventDesigner = () => {
       url: "https://www.galimganim.com/wp-content/uploads/2023/01/hazter1-5.jpg",
     },
   ];
-
-  const [decorationItems, setDecorationItems] = useState([]);
-
-  useEffect(() => {
-    const fetchDecorations = async () => {
-      try {
-        const response = await axios.get(
-          "https://backstore-iqcq.onrender.com/products/all"
-        );
-        setDecorationItems(response.data.decorations);
-      } catch (error) {
-        console.error("Error fetching decorations:", error);
-      }
-    };
-
-    fetchDecorations();
-  }, []);
 
   useEffect(() => {
     const handleMouseMove = (event) => {
@@ -179,6 +164,21 @@ const VirtualEventDesigner = () => {
     };
   }, [isResizing, activeDecoration]);
 
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const response = await axios.get(
+          "https://backstore-iqcq.onrender.com/products/all"
+        );
+        setProducts(response.data.decorations);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    getProducts();
+  }, []);
+
   const handleBackgroundUpload = (imageData) => {
     setBackground(imageData);
   };
@@ -193,6 +193,7 @@ const VirtualEventDesigner = () => {
       width: 50,
       height: 50,
       id: Date.now(),
+      image: decoration.imageUrl,
     });
   };
 
@@ -278,7 +279,7 @@ const VirtualEventDesigner = () => {
               onClick={handleContainerClick}
               sx={{
                 position: "relative",
-                width: 745,
+                width: 500,
                 height: 600,
                 overflow: "hidden",
                 backgroundImage: `url(${background})`,
@@ -309,28 +310,56 @@ const VirtualEventDesigner = () => {
                           ? "2px solid blue"
                           : "none",
                     }}
-                    onClick={(e) => handleDecorationClick(decoration, e)}
+                    onClick={(event) =>
+                      handleDecorationClick(decoration, event)
+                    }
                   >
                     <IconButton
+                      size="small"
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        right: 0,
+                        backgroundColor: "rgba(255, 255, 255, 0.7)",
+                        zIndex: 1000,
+                      }}
                       onClick={(e) => {
                         e.stopPropagation();
                         handleDeleteDecoration(decoration.id);
                       }}
-                      sx={{ position: "absolute", top: 5, right: 5 }}
                     >
-                      <DeleteIcon />
+                      <DeleteIcon fontSize="small" />
                     </IconButton>
-                    <IconButton
-                      onClick={(e) => handleResizeStart(e, decoration)}
-                      sx={{
+                    <div
+                      style={{
                         position: "absolute",
-                        bottom: 5,
-                        right: 5,
-                        bgcolor: "rgba(255,255,255,0.7)",
+                        right: 0,
+                        bottom: 0,
+                        width: 20,
+                        height: 20,
+                        backgroundColor: "rgba(0, 0, 255, 0.5)",
+                        cursor: "se-resize",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        transition: "background-color 0.3s",
                       }}
+                      onMouseDown={(event) =>
+                        handleResizeStart(event, decoration)
+                      }
+                      onMouseEnter={(e) =>
+                        (e.target.style.backgroundColor =
+                          "rgba(0, 0, 255, 0.8)")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.target.style.backgroundColor =
+                          "rgba(0, 0, 255, 0.5)")
+                      }
                     >
-                      <ZoomOutMapIcon />
-                    </IconButton>
+                      <ZoomOutMapIcon
+                        style={{ fontSize: 16, color: "white" }}
+                      />
+                    </div>
                   </div>
                 </Draggable>
               ))}
@@ -341,26 +370,47 @@ const VirtualEventDesigner = () => {
         <Grid item xs={12} md={4}>
           <ImageUploader onImageUpload={handleBackgroundUpload} />
 
+          <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
+            <Typography variant="h6" gutterBottom>
+              Or choose a template:
+            </Typography>
+            <Select
+              fullWidth
+              value={background}
+              onChange={handleTemplateSelect}
+            >
+              {backgroundTemplates.map((template, index) => (
+                <MenuItem key={index} value={template.url}>
+                  {template.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </Paper>
+
           <Paper elevation={3} sx={{ p: 2 }}>
             <Typography variant="h6" gutterBottom>
-              Select a Decoration
+              Decorations
             </Typography>
-            {decorationItems.length === 0 ? (
-              <Typography>No decorations available</Typography>
-            ) : (
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                {decorationItems.map((decoration) => (
-                  <Button
-                    key={decoration.id}
-                    onClick={() => handleDecorationSelect(decoration)}
-                    sx={{ mb: 2 }}
-                    variant="contained"
-                  >
-                    {decoration.name}
-                  </Button>
-                ))}
-              </Box>
-            )}
+            <Grid container spacing={1}>
+              {products.map((product) => (
+                <Grid item key={product._id} xs={4}>
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    style={{
+                      width: "100%",
+                      cursor: "pointer",
+                      border:
+                      selectedDecoration &&
+                      selectedDecoration._id === product._id
+                          ? "2px solid blue"
+                          : "none",
+                    }}
+                    onClick={() => handleDecorationSelect(product)}
+                  />
+                </Grid>
+              ))}
+            </Grid>
           </Paper>
         </Grid>
       </Grid>
