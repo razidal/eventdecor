@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, ButtonBase, Typography } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -13,21 +13,25 @@ const images = [
     src: slider4,
     title: 'SPECIAL OFFER',
     text: 'Up to 50% discount when you purchase',
+    backgroundColor: '#f8bbd0', // Light pink background
   },
   {
     src: sliderimg,
     title: 'SPECIAL OFFER',
     text: 'Up to 50% discount when you purchase',
+    backgroundColor: '#b3e5fc', // Light blue background
   },
   {
     src: prod3,
     title: 'SPECIAL OFFER',
     text: 'Up to 50% discount when you purchase',
+    backgroundColor: '#c8e6c9', // Light green background
   },
   {
     src: prod4,
     title: 'SPECIAL OFFER',
     text: 'Up to 50% discount when you purchase',
+    backgroundColor: '#fff9c4', // Light yellow background
   }
 ];
 
@@ -42,6 +46,15 @@ const CustomCarousel = () => {
     setIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
   };
 
+  // Auto-slide every 2 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleNext();
+    }, 2000);
+
+    return () => clearInterval(interval); // Cleanup the interval on component unmount
+  }, []);
+
   return (
     <Box
       position="relative"
@@ -49,7 +62,7 @@ const CustomCarousel = () => {
       alignItems="center"
       justifyContent="center"
       height="400px"
-      bgcolor="#f5f5f5"
+      bgcolor={images[index].backgroundColor}
       overflow="hidden"
     >
       <ButtonBase
