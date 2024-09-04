@@ -73,7 +73,7 @@ const CustomCarousel = () => {
       display="flex"
       alignItems="center"
       justifyContent="center"
-      height="400px"
+      height="450px"
       bgcolor={images[index].backgroundColor}
       overflow="hidden"
     >
@@ -104,7 +104,7 @@ const CustomCarousel = () => {
           <img
             src={images[index].src}
             alt={`slide-${index}`}
-            style={{ height: "320px", width: "313.53px", objectFit: 'cover', paddingBottom:'40px'}}
+            style={{ height: "320px", width: "313.53px", objectFit: 'cover', paddingBottom:'40px' ,paddingTop:'30px' }}
           />
           <Typography variant="h3" className="slider-title">
             {images[index].title}
