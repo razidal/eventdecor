@@ -118,6 +118,7 @@ const VirtualEventDesigner = () => {
   const [activeDecoration, setActiveDecoration] = useState(null);
   const [isResizing, setIsResizing] = useState(false);
   const containerRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const backgroundTemplates = [
     {
@@ -136,9 +137,15 @@ const VirtualEventDesigner = () => {
         handleResizeMove(event);
       }
     };
-
+    const handleDragStart = (e) => {
+      setIsDragging(true);
+    };
+  
+    const handleDragStop = () => {
+      setIsDragging(false);
+    };
     const handleMouseUp = () => {
-      if (isResizing) {
+      if (isDragging) {
         handleResizeEnd();
       }
     };
@@ -162,7 +169,7 @@ const VirtualEventDesigner = () => {
       document.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isResizing, activeDecoration]);
+  }, [isResizing, activeDecoration, isDragging]);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -279,7 +286,7 @@ const VirtualEventDesigner = () => {
               onClick={handleContainerClick}
               sx={{
                 position: "relative",
-                width: 650,
+                width: 800,
                 height: 600,
                 overflow: "hidden",
                 backgroundImage: `url(${background})`,
@@ -292,20 +299,24 @@ const VirtualEventDesigner = () => {
                 <Draggable
                   key={decoration.id}
                   position={{ x: decoration.x, y: decoration.y }}
+                  onStart={handleDragStart} // Start dragging
+                  onStop={handleDragStop} // Stop dragging
                   onDrag={(e, ui) => handleDrag(e, ui, decoration.id)}
                   bounds="parent"
                 >
-                  <div
+                   <div
                     style={{
-                      width: `${decoration.width}px`,
-                      height: `${decoration.height}px`,
+                      width: decoration.width,
+                      height: decoration.height,
                       position: "absolute",
-                      top: 0,
-                      left: 0,
+                      backgroundImage: `url(${decoration.image})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
                       cursor: "move",
                       border:
-                        activeDecoration && activeDecoration.id === decoration.id
-                          ? "2px dashed #3f51b5"
+                        activeDecoration &&
+                        activeDecoration.id === decoration.id
+                          ? "2px solid blue"
                           : "none",
                     }}
                     onClick={(e) => handleDecorationClick(decoration, e)}
