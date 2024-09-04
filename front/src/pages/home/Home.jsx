@@ -19,6 +19,7 @@ import {
   removeFromFavorites,
 } from "../../redux/favoritesSlice";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import Slider from "./Slider.jsx"
 
 const Banner = styled.div`
   background-color: #3f51b5;
@@ -82,6 +83,7 @@ const Home = () => {
 
   return (
     <div>
+      <Slider/>
       <Banner>
         <Typography variant="h3">
           🎉 Welcome to our Event Decoration! Enjoy our special offers!
