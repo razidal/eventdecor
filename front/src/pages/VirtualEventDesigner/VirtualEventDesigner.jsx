@@ -285,7 +285,7 @@ const VirtualEventDesigner = () => {
                 backgroundImage: `url(${background})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                cursor: "se-resize",
+                cursor: "move",
               }}
             >
               {decorations.map((decoration) => (
@@ -302,7 +302,7 @@ const VirtualEventDesigner = () => {
                     position: "absolute",
                     top: 0,
                     left: 0,
-                    cursor: "move",
+                    cursor: "se-resize",
                     border:
                       activeDecoration && activeDecoration.id === decoration.id
                         ? "2px solid blue"
