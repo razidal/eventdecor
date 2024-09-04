@@ -7,7 +7,7 @@ export default function Footer() {
       sx={{
         bgcolor: '#f8f8f8',
         p: 2,
-        paddingTop: '2000px',
+        marginTop: '2000px',
         textAlign: 'center',
         position: 'relative', // Ensure the footer’s position is relative to its container
         width: '100%', // Ensure the footer takes the full width
