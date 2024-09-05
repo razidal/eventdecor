@@ -3,25 +3,24 @@ const router = express.Router();
 const Order = require('../models/Order'); // Make sure the path is correct
 
 // Route to delete an order
-router.delete('/delete/:id', async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   try {
-    const orderId = req.params.id;
-    const deletedOrder = await Order.findByIdAndDelete(orderId);
-
+    const deletedOrder = await Order.findByIdAndDelete(
+      req.params.id
+    );
     if (!deletedOrder) {
-      return res.status(404).json({ error: 'Order not found' });
+      return res.status(404).json({ error: "Decoration not found" });
     }
-
     res.status(200).json({
-      message: 'Order deleted successfully',
-      order: deletedOrder,
+      message: "Decoration deleted successfully",
+      decoration: deletedOrder,
     });
   } catch (err) {
     console.error(err);
-    if (err.kind === 'ObjectId') {
-      return res.status(400).json({ error: 'Invalid order ID' });
+    if (err.kind === "ObjectId") {
+      return res.status(400).json({ error: "Invalid decoration ID" });
     }
-    res.status(500).json({ error: 'Failed to delete order' });
+    res.status(500).json({ error: "Failed to delete decoration" });
   }
 });
 
