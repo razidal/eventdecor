@@ -24,7 +24,7 @@ const TableAdmin = () => {
   const fetchOrders = async () => {
     try {
       const response = await axios.get(
-        `https://backstore-iqcq.onrender.com/cart/all`,
+        `https://backstore-iqcq.onrender.com/cart/allOrders`,
         {
           timeout: 5000,
         }
@@ -44,7 +44,7 @@ const TableAdmin = () => {
   // Handle order deletion
   const handleDeleteOrder = async (orderId) => {
     try {
-      await axios.delete(`https://backstore-iqcq.onrender.com/orders/delete/${orderId}`, { timeout: 5000 });
+      await axios.delete(`https://backstore-iqcq.onrender.com/cart/delete/${orderId}`, { timeout: 5000 });
       alert("Order deleted successfully");
       fetchOrders(); // Refresh the order list after deletion
     } catch (error) {
