@@ -18,7 +18,7 @@ const TableAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null); // State to store the ID of the selected user
 
   const handleOpenModal = (user) => {
     setSelectedUser(user);
@@ -29,56 +29,39 @@ const TableAdmin = () => {
     setOpenModal(false);
   };
 
-  // Fetch orders data
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        `https://backstore-iqcq.onrender.com/cart/allOrders`,
-        {
-          timeout: 5000,
-        }
-      );
-      setUserData(response.data.orders);
-      setLoading(false);
-    } catch (error) {
-      setError(error);
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://backstore-iqcq.onrender.com/cart/allOrders",
+          {
+            timeout: 5000,
+          }
+        );
+
+        setUserData(response.data.orders);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    };
+
     fetchData();
   }, []);
 
-  // Delete order function
-  const deleteOrder = async (orderId) => {
-    console.log("Attempting to delete order with ID:", orderId);
-    try {
-      const response = await axios.delete(`https://backstore-iqcq.onrender.com/orders/delete/${orderId}`, {
-        timeout: 5000,
-      });
-      alert("Order deleted successfully");
-      fetchData(); // Refresh the orders list after deletion
-    } catch (error) {
-      console.error("Failed to delete the order:", error.response ? error.response.data : error.message);
-      alert(`Error deleting order: ${error.response ? error.response.data.message : error.message}`);
-    }
-  };
-  
-  
-
   return (
     <div>
-      <Box sx={{ textAlign: 'center' }}>
-        <Typography variant="h4" sx={{ paddingTop: '50px', paddingBottom:'30px', display: 'inline-block' }}>
-          Orders
-        </Typography>
-      </Box>
+       <Box sx={{ textAlign: 'center' }}>
+          <Typography variant="h4" sx={{ paddingTop: '50px', paddingBottom:'30px', display: 'inline-block' }}>
+            Orders
+          </Typography>
+        </Box>
       {loading ? (
         <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="h6" sx={{ display: 'inline-block' }}>
-            Loading...
-          </Typography>
+        <Typography variant="h6" sx={{ display: 'inline-block' }}>
+          Loading...
+        </Typography>
         </Box>
       ) : error ? (
         <p>Error: {error.message}</p>
@@ -92,7 +75,6 @@ const TableAdmin = () => {
                 <TableCell>Customer Name</TableCell>
                 <TableCell>Order Details</TableCell>
                 <TableCell>Order Confirmation</TableCell>
-                <TableCell>Actions</TableCell> 
               </TableRow>
             </TableHead>
             <TableBody>
@@ -107,22 +89,12 @@ const TableAdmin = () => {
                     </Button>
                   </TableCell>
                   <TableCell>Confirmed</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      onClick={() => deleteOrder(user._id)} // Call deleteOrder function
-                    >
-                      Delete
-                    </Button>
-                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </Container>
       )}
-      {/* Modal for Order Details */}
       <Modal open={openModal} onClose={handleCloseModal}>
         <div>
           <Box

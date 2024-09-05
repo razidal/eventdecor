@@ -5,7 +5,6 @@ const authRoutes = require("./routes/auth");
 const productRoutes = require("./routes/products");
 const cardRoutes = require("./routes/cart");
 const payRoutes = require("./routes/pay");
-const orderRoutes = require("./routes/order");
 const cors = require("cors");
 app.use(express.json());
 
@@ -14,7 +13,6 @@ app.use(cors(
     credentials:true
    }
 )); // Use this after the variable declara
-app.use("/orders", orderRoutes);
 app.use("/auth", authRoutes);
 app.use("/products", productRoutes);
 app.use("/cart", cardRoutes);
