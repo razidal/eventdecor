@@ -16,7 +16,7 @@ const OrdersCard = ({ order, fetchOrders }) => {
   const deleteOrder = async () => {
     try {
       await axios.delete(
-        `https://backstore-iqcq.onrender.com/orders/delete/${order._id}`,
+        `https://backstore-iqcq.onrender.com/order/delete/${order._id}`,
         {
           timeout: 5000,
         }
