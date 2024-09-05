@@ -9,19 +9,19 @@ import {
   Modal,
   Box,
   Container,
+  Typography,
 } from "@mui/material";
 import axios from "axios";
-import Typography from '@mui/material/Typography';
 
 const TableAdmin = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null); // State to store the ID of the selected user
+  const [selectedOrder, setSelectedOrder] = useState(null); // State to store the ID of the selected order
 
-  const handleOpenModal = (user) => {
-    setSelectedUser(user);
+  const handleOpenModal = (order) => {
+    setSelectedOrder(order);
     setOpenModal(true);
   };
 
@@ -29,39 +29,50 @@ const TableAdmin = () => {
     setOpenModal(false);
   };
 
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get(
+        `https://backstore-iqcq.onrender.com/orders`,
+        { timeout: 5000 }
+      );
+      setUserData(response.data.orders);
+      setLoading(false);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://backstore-iqcq.onrender.com/cart/allOrders",
-          {
-            timeout: 5000,
-          }
-        );
-
-        setUserData(response.data.orders);
-        setLoading(false);
-      } catch (error) {
-        setError(error);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    fetchOrders();
   }, []);
+
+  const handleDeleteOrder = async (orderId) => {
+    try {
+      await axios.delete(
+        `https://backstore-iqcq.onrender.com/orders/delete/${orderId}`,
+        { timeout: 5000 }
+      );
+      alert("Order deleted successfully");
+      fetchOrders(); // Refresh the order list after deletion
+    } catch (error) {
+      console.error("Error deleting order:", error);
+      alert("Error deleting order");
+    }
+  };
 
   return (
     <div>
-       <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="h4" sx={{ paddingTop: '50px', paddingBottom:'30px', display: 'inline-block' }}>
-            Orders
-          </Typography>
-        </Box>
+      <Box sx={{ textAlign: 'center' }}>
+        <Typography variant="h4" sx={{ paddingTop: '50px', paddingBottom: '30px', display: 'inline-block' }}>
+          Orders
+        </Typography>
+      </Box>
       {loading ? (
         <Box sx={{ textAlign: 'center' }}>
-        <Typography variant="h6" sx={{ display: 'inline-block' }}>
-          Loading...
-        </Typography>
+          <Typography variant="h6" sx={{ display: 'inline-block' }}>
+            Loading...
+          </Typography>
         </Box>
       ) : error ? (
         <p>Error: {error.message}</p>
@@ -74,21 +85,25 @@ const TableAdmin = () => {
                 <TableCell>Total Price</TableCell>
                 <TableCell>Customer Name</TableCell>
                 <TableCell>Order Details</TableCell>
-                <TableCell>Order Confirmation</TableCell>
+                <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {userData?.map((user) => (
-                <TableRow key={user._id}>
-                  <TableCell>{user._id}</TableCell>
-                  <TableCell>{user.totalAmount}$</TableCell>
-                  <TableCell>{user.userId?.fullName}</TableCell>
+              {userData?.map((order) => (
+                <TableRow key={order._id}>
+                  <TableCell>{order._id}</TableCell>
+                  <TableCell>{order.totalAmount}$</TableCell>
+                  <TableCell>{order.userId?.fullName}</TableCell>
                   <TableCell>
-                    <Button onClick={() => handleOpenModal(user)}>
+                    <Button onClick={() => handleOpenModal(order)}>
                       Order Details
                     </Button>
                   </TableCell>
-                  <TableCell>Confirmed</TableCell>
+                  <TableCell>
+                    <Button color="error" onClick={() => handleDeleteOrder(order._id)}>
+                      Delete
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -96,47 +111,47 @@ const TableAdmin = () => {
         </Container>
       )}
       <Modal open={openModal} onClose={handleCloseModal}>
-        <div>
-          <Box
-            component="form"
-            sx={{
-              "& > :not(style)": { m: 1, width: "25ch" },
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              backgroundColor: "white",
-              justifyContent: "center",
-              gap: "1rem",
-              width: "50%",
-              margin: "auto",
-            }}
-          >
-            <h2>Order Details</h2>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Product Name</TableCell>
-                  <TableCell>Price</TableCell>
-                  <TableCell>Quantity</TableCell>
+        <Box
+          component="form"
+          sx={{
+            "& > :not(style)": { m: 1, width: "25ch" },
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            backgroundColor: "white",
+            justifyContent: "center",
+            gap: "1rem",
+            width: "50%",
+            margin: "auto",
+            padding: "2rem",
+            boxShadow: 24,
+          }}
+        >
+          <Typography variant="h6">Order Details</Typography>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Product Name</TableCell>
+                <TableCell>Price</TableCell>
+                <TableCell>Quantity</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {selectedOrder?.products?.map((product, productIndex) => (
+                <TableRow key={productIndex}>
+                  <TableCell>{product.productId?.name}</TableCell>
+                  <TableCell>{product.price}$</TableCell>
+                  <TableCell>{product.quantity}</TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {selectedUser?.products?.map((product, productIndex) => (
-                  <TableRow key={productIndex}>
-                    <TableCell>{product.productId?.name}</TableCell>
-                    <TableCell>{product.price}$</TableCell>
-                    <TableCell>{product.quantity}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            <h3>Delivery Address</h3>
-            <p>
-              {selectedUser?.address?.street}, {selectedUser?.address?.city},{" "}
-              {selectedUser?.address?.postalCode}, {selectedUser?.address?.country}
-            </p>
-          </Box>
-        </div>
+              ))}
+            </TableBody>
+          </Table>
+          <Typography variant="h6">Delivery Address</Typography>
+          <Typography>
+            {selectedOrder?.address?.street}, {selectedOrder?.address?.city},{" "}
+            {selectedOrder?.address?.postalCode}, {selectedOrder?.address?.country}
+          </Typography>
+        </Box>
       </Modal>
     </div>
   );
