@@ -14,48 +14,35 @@ import axios from "axios";
 import Typography from '@mui/material/Typography';
 
 const TableAdmin = () => {
-  const [userData, setUserData] = useState(null);
+  const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null); // State to store the ID of the selected user
+  const [selectedOrder, setSelectedOrder] = useState(null); // State to store the selected order
 
-  const handleOpenModal = (user) => {
-    setSelectedUser(user);
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get(
+        `https://backstore-iqcq.onrender.com/cart/allOrders`,
+        {
+          timeout: 5000,
+        }
+      );
+      setOrders(response.data.orders); // Adjust this based on the actual structure of your response
+      setLoading(false);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://backstore-iqcq.onrender.com/cart/allOrders",
-          {
-            timeout: 5000,
-          }
-        );
-
-        setUserData(response.data.orders);
-        setLoading(false);
-      } catch (error) {
-        setError(error);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    fetchOrders(); // Fetch orders on component mount
   }, []);
 
   const handleDeleteOrder = async (orderId) => {
     try {
-      await axios.delete(
-        `https://backstore-iqcq.onrender.com/cart/delete/${orderId}`,
-        { timeout: 5000 }
-      );
+      await axios.delete(`https://backstore-iqcq.onrender.com/orders/delete/${orderId}`, { timeout: 5000 });
       alert("Order deleted successfully");
       fetchOrders(); // Refresh the order list after deletion
     } catch (error) {
@@ -63,7 +50,16 @@ const TableAdmin = () => {
       alert("Error deleting order");
     }
   };
-  
+
+  const handleOpenModal = (order) => {
+    setSelectedOrder(order);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
   return (
     <div>
        <Box sx={{ textAlign: 'center' }}>
@@ -73,9 +69,9 @@ const TableAdmin = () => {
         </Box>
       {loading ? (
         <Box sx={{ textAlign: 'center' }}>
-        <Typography variant="h6" sx={{ display: 'inline-block' }}>
-          Loading...
-        </Typography>
+          <Typography variant="h6" sx={{ display: 'inline-block' }}>
+            Loading...
+          </Typography>
         </Box>
       ) : error ? (
         <p>Error: {error.message}</p>
@@ -88,23 +84,22 @@ const TableAdmin = () => {
                 <TableCell>Total Price</TableCell>
                 <TableCell>Customer Name</TableCell>
                 <TableCell>Order Details</TableCell>
-                <TableCell>Order Confirmation</TableCell>
+                <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {userData?.map((user) => (
-                <TableRow key={user._id}>
-                  <TableCell>{user._id}</TableCell>
-                  <TableCell>{user.totalAmount}$</TableCell>
-                  <TableCell>{user.userId?.fullName}</TableCell>
+              {orders.map((order) => (
+                <TableRow key={order._id}>
+                  <TableCell>{order._id}</TableCell>
+                  <TableCell>{order.totalAmount}$</TableCell>
+                  <TableCell>{order.userId?.fullName}</TableCell>
                   <TableCell>
-                    <Button onClick={() => handleOpenModal(user)}>
+                    <Button onClick={() => handleOpenModal(order)}>
                       Order Details
                     </Button>
                   </TableCell>
-                  <TableCell>Confirmed</TableCell>
                   <TableCell>
-                    <Button onClick={() => handleDeleteOrder(user._id)} color="error">
+                    <Button onClick={() => handleDeleteOrder(order._id)} color="error">
                       Delete
                     </Button>
                   </TableCell>
@@ -140,7 +135,7 @@ const TableAdmin = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {selectedUser?.products?.map((product, productIndex) => (
+                {selectedOrder?.products?.map((product, productIndex) => (
                   <TableRow key={productIndex}>
                     <TableCell>{product.productId?.name}</TableCell>
                     <TableCell>{product.price}$</TableCell>
@@ -151,8 +146,8 @@ const TableAdmin = () => {
             </Table>
             <h3>Delivery Address</h3>
             <p>
-              {selectedUser?.address?.street}, {selectedUser?.address?.city},{" "}
-              {selectedUser?.address?.postalCode}, {selectedUser?.address?.country}
+              {selectedOrder?.address?.street}, {selectedOrder?.address?.city},{" "}
+              {selectedOrder?.address?.postalCode}, {selectedOrder?.address?.country}
             </p>
           </Box>
         </div>
