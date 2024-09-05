@@ -11,7 +11,7 @@ import {
   Container,
 } from "@mui/material";
 import axios from "axios";
-import Typography from "@mui/material/Typography";
+import Typography from '@mui/material/Typography';
 
 const TableAdmin = () => {
   const [userData, setUserData] = useState(null);
@@ -19,7 +19,6 @@ const TableAdmin = () => {
   const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [refreshData, setRefreshData] = useState(false); // State to trigger re-fetching
 
   const handleOpenModal = (user) => {
     setSelectedUser(user);
@@ -30,55 +29,51 @@ const TableAdmin = () => {
     setOpenModal(false);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `https://backstore-iqcq.onrender.com/cart/allOrders`,
-          {
-            timeout: 5000,
-          }
-        );
-        setUserData(response.data.orders);
-        setLoading(false);
-      } catch (error) {
-        setError(error);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [refreshData]); // Fetch data again when refreshData changes
-
-  const deleteOrder = async (orderId) => {
+  // Fetch orders data
+  const fetchData = async () => {
     try {
-      await axios.delete(
-        `https://backstore-iqcq.onrender.com/orders/delete/${orderId}`,
+      const response = await axios.get(
+        `https://backstore-iqcq.onrender.com/cart/allOrders`,
         {
           timeout: 5000,
         }
       );
-      alert("Order deleted successfully");
-      setRefreshData((prev) => !prev); // Trigger data refresh
+      setUserData(response.data.orders);
+      setLoading(false);
     } catch (error) {
-      console.log(error);
+      setError(error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Delete order function
+  const deleteOrder = async (orderId) => {
+    try {
+      await axios.delete(`https://backstore-iqcq.onrender.com/orders/delete/${orderId}`, {
+        timeout: 5000,
+      });
+      alert("Order deleted successfully");
+      fetchData(); // Refresh the orders list after deletion
+    } catch (error) {
+      console.error("Failed to delete the order", error);
       alert("Error deleting order");
     }
   };
 
   return (
     <div>
-      <Box sx={{ textAlign: "center" }}>
-        <Typography
-          variant="h4"
-          sx={{ paddingTop: "50px", paddingBottom: "30px", display: "inline-block" }}
-        >
+      <Box sx={{ textAlign: 'center' }}>
+        <Typography variant="h4" sx={{ paddingTop: '50px', paddingBottom:'30px', display: 'inline-block' }}>
           Orders
         </Typography>
       </Box>
       {loading ? (
-        <Box sx={{ textAlign: "center" }}>
-          <Typography variant="h6" sx={{ display: "inline-block" }}>
+        <Box sx={{ textAlign: 'center' }}>
+          <Typography variant="h6" sx={{ display: 'inline-block' }}>
             Loading...
           </Typography>
         </Box>
@@ -93,7 +88,8 @@ const TableAdmin = () => {
                 <TableCell>Total Price</TableCell>
                 <TableCell>Customer Name</TableCell>
                 <TableCell>Order Details</TableCell>
-                <TableCell>Delete Order</TableCell> {/* Added column for delete */}
+                <TableCell>Order Confirmation</TableCell>
+                <TableCell>Actions</TableCell> {/* New Actions Column */}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -107,10 +103,12 @@ const TableAdmin = () => {
                       Order Details
                     </Button>
                   </TableCell>
+                  <TableCell>Confirmed</TableCell>
                   <TableCell>
                     <Button
+                      variant="contained"
                       color="error"
-                      onClick={() => deleteOrder(user._id)} // Call delete function
+                      onClick={() => deleteOrder(user._id)} // Call deleteOrder function
                     >
                       Delete
                     </Button>
@@ -121,6 +119,7 @@ const TableAdmin = () => {
           </Table>
         </Container>
       )}
+      {/* Modal for Order Details */}
       <Modal open={openModal} onClose={handleCloseModal}>
         <div>
           <Box
