@@ -10,8 +10,13 @@ const TableAdmin = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('https://backstore-iqcq.onrender.com/orders/allOrders', { timeout: 5000 });
-      setOrders(response.data.orders);
+      const response = await axios.get(
+        `https://backstore-iqcq.onrender.com/cart/allOrders`,
+        {
+          timeout: 5000,
+        }
+      );
+      setOrders(response.data.orders); // Adjust based on actual response structure
       setLoading(false);
     } catch (error) {
       setError(error);
