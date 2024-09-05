@@ -53,7 +53,7 @@ const TableAdmin = () => {
   const deleteOrder = async (orderId) => {
     try {
       await axios.delete(
-        `https://backstore-iqcq.onrender.com/cart/deleteOrder/${orderId}`,
+        `https://backstore-iqcq.onrender.com/products/delete/${orderId}`,
         {
           timeout: 5000,
         }
