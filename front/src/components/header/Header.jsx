@@ -296,8 +296,8 @@ const Header = () => {
                             image={item.imageUrl && item.imageUrl !== "null" ? item.imageUrl : "https://via.placeholder.com/80"}
                             alt={item.name}
                             sx={{
-                              width: 80,
-                              height: 80,
+                              width: 100,
+                              height: 100,
                               objectFit: 'contain', // Use 'contain' to avoid cropping, or 'cover' for a filled image
                             }}
                           />
