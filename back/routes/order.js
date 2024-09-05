@@ -1,18 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const Order = require('../models/Order'); // Assuming your model is Order
+const Order = require('../models/Order'); // Make sure the path is correct
 
-// Delete order by ID
+// Route to delete an order
 router.delete('/delete/:id', async (req, res) => {
   try {
-    const deletedOrder = await Order.findByIdAndDelete(req.params.id);
+    const orderId = req.params.id;
+    const deletedOrder = await Order.findByIdAndDelete(orderId);
+
     if (!deletedOrder) {
-      return res.status(404).json({ message: 'Order not found' });
+      return res.status(404).json({ error: 'Order not found' });
     }
-    res.status(200).json({ message: 'Order deleted successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to delete order' });
+
+    res.status(200).json({
+      message: 'Order deleted successfully',
+      order: deletedOrder,
+    });
+  } catch (err) {
+    console.error(err);
+    if (err.kind === 'ObjectId') {
+      return res.status(400).json({ error: 'Invalid order ID' });
+    }
+    res.status(500).json({ error: 'Failed to delete order' });
   }
 });
 
