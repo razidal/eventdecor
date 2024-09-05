@@ -24,7 +24,7 @@ const TableAdmin = () => {
   const fetchOrders = async () => {
     try {
       const response = await axios.get(
-        `https://backstore-iqcq.onrender.com/cart/allOrders`,
+        `https://backstore-iqcq.onrender.com/cart/all`,
         {
           timeout: 5000,
         }
