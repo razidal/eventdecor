@@ -292,7 +292,7 @@ const Header = () => {
                       <FavoriteCard>
                          <FavoriteImage
                             component="img"
-                            image={item.image && item.image !== "null" ? item.image : "https://via.placeholder.com/80"}
+                            image={item.imageUrl && item.imageUrl !== "null" ? item.imageUrl : "https://via.placeholder.com/80"}
                             alt={item.name}
                           />
                         <FavoriteContent>
