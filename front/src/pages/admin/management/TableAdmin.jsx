@@ -89,7 +89,7 @@ const TableAdmin = () => {
                 <TableCell>Customer Name</TableCell>
                 <TableCell>Order Details</TableCell>
                 <TableCell>Order Confirmation</TableCell>
-                <TableCell>Actions</TableCell> {/* New Actions Column */}
+                <TableCell>Actions</TableCell> 
               </TableRow>
             </TableHead>
             <TableBody>

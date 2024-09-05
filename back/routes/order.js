@@ -1,28 +1,18 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const Order = require("../models/Order"); // Import your Order model
+const Order = require('../models/Order'); // Assuming your model is Order
 
-// Delete an order by ID
-router.delete("/delete/:id", async (req, res) => {
+// Delete order by ID
+router.delete('/delete/:id', async (req, res) => {
   try {
     const deletedOrder = await Order.findByIdAndDelete(req.params.id);
-
     if (!deletedOrder) {
-      return res.status(404).json({ error: "Order not found" });
+      return res.status(404).json({ message: 'Order not found' });
     }
-
-    res.status(200).json({
-      message: "Order deleted successfully",
-      order: deletedOrder,
-    });
-  } catch (err) {
-    console.error(err);
-
-    if (err.kind === "ObjectId") {
-      return res.status(400).json({ error: "Invalid order ID" });
-    }
-
-    res.status(500).json({ error: "Failed to delete order" });
+    res.status(200).json({ message: 'Order deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to delete order' });
   }
 });
 
