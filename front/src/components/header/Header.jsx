@@ -291,24 +291,30 @@ const Header = () => {
                   {favorites.map((item, index) => (
                     <Grid item xs={12} key={index}>
                       <FavoriteCard>
-                          <FavoriteImage
-                            src={item.imageUrl || "https://via.placeholder.com/80"}
+                         <FavoriteImage
+                            component="img"
+                            image={item.imageUrl && item.imageUrl !== "null" ? item.imageUrl : "https://via.placeholder.com/80"}
                             alt={item.name}
+                            sx={{
+                              width: 80,
+                              height: 80,
+                              objectFit: 'contain', // Use 'contain' to avoid cropping, or 'cover' for a filled image
+                            }}
                           />
-                          <FavoriteContent>
-                            <Typography variant="h6">{item.name}</Typography>
-                            <Typography variant="body2" color="textSecondary">
-                              ${item.price}
-                            </Typography>
-                            <IconButton onClick={() => handleFavoriteToggle(item)}>
-                              <FavoriteIcon
-                                color={
-                                  favorites.some((fav) => fav._id === item._id) ? "error" : "disabled"
-                                }
-                              />
-                            </IconButton>
-                          </FavoriteContent>
-                        </FavoriteCard>
+                        <FavoriteContent>
+                          <Typography variant="h6">{item.name}</Typography>
+                          <Typography variant="body2" color="textSecondary">
+                            ${item.price}
+                          </Typography>
+                          <IconButton onClick={() => handleFavoriteToggle(item)}>
+                            <FavoriteIcon
+                              color={
+                                favorites.some((fav) => fav._id === item._id) ? "error" : "disabled"
+                              }
+                            />
+                          </IconButton>
+                        </FavoriteContent>
+                      </FavoriteCard>
                     </Grid>
                   ))}
                 </Grid>
