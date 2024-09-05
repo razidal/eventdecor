@@ -52,17 +52,20 @@ const TableAdmin = () => {
 
   // Delete order function
   const deleteOrder = async (orderId) => {
+    console.log("Attempting to delete order with ID:", orderId);
     try {
-      await axios.delete(`https://backstore-iqcq.onrender.com/orders/delete/${orderId}`, {
+      const response = await axios.delete(`https://backstore-iqcq.onrender.com/orders/delete/${orderId}`, {
         timeout: 5000,
       });
       alert("Order deleted successfully");
       fetchData(); // Refresh the orders list after deletion
     } catch (error) {
-      console.error("Failed to delete the order", error);
-      alert("Error deleting order");
+      console.error("Failed to delete the order:", error.response ? error.response.data : error.message);
+      alert(`Error deleting order: ${error.response ? error.response.data.message : error.message}`);
     }
   };
+  
+  
 
   return (
     <div>
