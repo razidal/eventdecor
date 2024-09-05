@@ -290,11 +290,11 @@ const Header = () => {
                   {favorites.map((item, index) => (
                     <Grid item xs={12} key={index}>
                       <FavoriteCard>
-                        <FavoriteImage
-                          component="img"
-                          image={item.image || "https://via.placeholder.com/80"}
-                          alt={item.name}
-                        />
+                         <FavoriteImage
+                            component="img"
+                            image={item.image && item.image !== "null" ? item.image : "https://via.placeholder.com/80"}
+                            alt={item.name}
+                          />
                         <FavoriteContent>
                           <Typography variant="h6">{item.name}</Typography>
                           <Typography variant="body2" color="textSecondary">
