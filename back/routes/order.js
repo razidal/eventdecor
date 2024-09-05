@@ -11,7 +11,10 @@ router.delete("/delete/:id", async (req, res) => {
     if (!deletedOrder) {
       return res.status(404).json({ error: "Order not found" });
     }
-    res.status(200).json({ message: "Order deleted successfully", order: deletedOrder });
+    res.status(200).json({ 
+      message: "Order deleted successfully",
+      order: deletedOrder 
+    });
   } catch (err) {
     console.error(err);
     if (err.kind === "ObjectId") {
