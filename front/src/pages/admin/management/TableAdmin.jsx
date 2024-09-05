@@ -9,16 +9,16 @@ import {
   Modal,
   Box,
   Container,
+  Typography,
 } from "@mui/material";
 import axios from "axios";
-import Typography from '@mui/material/Typography';
 
 const TableAdmin = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null); // State to store the ID of the selected user
+  const [selectedUser, setSelectedUser] = useState(null); // State to store the selected order
 
   const handleOpenModal = (user) => {
     setSelectedUser(user);
@@ -50,18 +50,28 @@ const TableAdmin = () => {
     fetchData();
   }, []);
 
+  // Function to delete an order
+  const handleDeleteOrder = async (orderId) => {
+    try {
+      await axios.delete(`https://backstore-iqcq.onrender.com/cart/order/${orderId}`);
+      setUserData(userData.filter((order) => order._id !== orderId));
+    } catch (error) {
+      console.error("Failed to delete order:", error);
+    }
+  };
+
   return (
     <div>
-       <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="h4" sx={{ paddingTop: '50px', paddingBottom:'30px', display: 'inline-block' }}>
-            Orders
-          </Typography>
-        </Box>
+      <Box sx={{ textAlign: 'center' }}>
+        <Typography variant="h4" sx={{ paddingTop: '50px', paddingBottom: '30px', display: 'inline-block' }}>
+          Orders
+        </Typography>
+      </Box>
       {loading ? (
         <Box sx={{ textAlign: 'center' }}>
-        <Typography variant="h6" sx={{ display: 'inline-block' }}>
-          Loading...
-        </Typography>
+          <Typography variant="h6" sx={{ display: 'inline-block' }}>
+            Loading...
+          </Typography>
         </Box>
       ) : error ? (
         <p>Error: {error.message}</p>
@@ -75,6 +85,7 @@ const TableAdmin = () => {
                 <TableCell>Customer Name</TableCell>
                 <TableCell>Order Details</TableCell>
                 <TableCell>Order Confirmation</TableCell>
+                <TableCell>Delete Order</TableCell> {/* Add delete column */}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -89,6 +100,16 @@ const TableAdmin = () => {
                     </Button>
                   </TableCell>
                   <TableCell>Confirmed</TableCell>
+                  <TableCell>
+                    {/* Add delete button */}
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={() => handleDeleteOrder(user._id)}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
