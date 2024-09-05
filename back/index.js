@@ -14,7 +14,7 @@ app.use(cors(
     credentials:true
    }
 )); // Use this after the variable declara
-app.use('/orders', orderRoutes);
+app.use('/order', orderRoutes);
 app.use("/auth", authRoutes);
 app.use("/products", productRoutes);
 app.use("/cart", cardRoutes);

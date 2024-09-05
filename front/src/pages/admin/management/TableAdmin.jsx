@@ -44,14 +44,14 @@ const TableAdmin = () => {
   // Handle order deletion
   const handleDeleteOrder = async (orderId) => {
     try {
-      await axios.delete(`https://backstore-iqcq.onrender.com/cart/delete/${orderId}`, { timeout: 5000 });
+      await axios.delete(`https://backstore-iqcq.onrender.com/order/delete/${orderId}`, { timeout: 5000 });
       alert("Order deleted successfully");
       fetchOrders(); // Refresh the order list after deletion
     } catch (error) {
       console.error("Error deleting order:", error);
       alert("Error deleting order");
     }
-  };
+  };  
 
   const handleOpenModal = (order) => {
     setSelectedOrder(order);
