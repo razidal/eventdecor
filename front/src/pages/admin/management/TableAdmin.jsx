@@ -20,6 +20,7 @@ const TableAdmin = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null); // State to store the selected order
 
+  // Fetch orders from the /cart/allOrders endpoint
   const fetchOrders = async () => {
     try {
       const response = await axios.get(
@@ -28,7 +29,7 @@ const TableAdmin = () => {
           timeout: 5000,
         }
       );
-      setOrders(response.data.orders); // Adjust this based on the actual structure of your response
+      setOrders(response.data.orders); // Adjust based on actual response structure
       setLoading(false);
     } catch (error) {
       setError(error);
@@ -40,9 +41,10 @@ const TableAdmin = () => {
     fetchOrders(); // Fetch orders on component mount
   }, []);
 
+  // Handle order deletion
   const handleDeleteOrder = async (orderId) => {
     try {
-      await axios.delete(`https://backstore-iqcq.onrender.com/cart/delete/${orderId}`, { timeout: 5000 });
+      await axios.delete(`https://backstore-iqcq.onrender.com/orders/delete/${orderId}`, { timeout: 5000 });
       alert("Order deleted successfully");
       fetchOrders(); // Refresh the order list after deletion
     } catch (error) {
