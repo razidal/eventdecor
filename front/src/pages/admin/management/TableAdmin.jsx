@@ -53,7 +53,7 @@ const TableAdmin = () => {
   const handleDeleteOrder = async (orderId) => {
     try {
       await axios.delete(
-        `https://backstore-iqcq.onrender.com/orders/delete/${orderId}`,
+        `https://backstore-iqcq.onrender.com/cart/delete/${orderId}`,
         { timeout: 5000 }
       );
       alert("Order deleted successfully");
@@ -103,6 +103,11 @@ const TableAdmin = () => {
                     </Button>
                   </TableCell>
                   <TableCell>Confirmed</TableCell>
+                  <TableCell>
+                    <Button onClick={() => handleDeleteOrder(user._id)} color="error">
+                      Delete
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
