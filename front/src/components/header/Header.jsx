@@ -71,6 +71,7 @@ const FavoriteCard = styled(Card)`
 const FavoriteImage = styled(CardMedia)`
   width: 80px;
   height: 80px;
+  object-fit: contain;
 `;
 
 const FavoriteContent = styled(CardContent)`
