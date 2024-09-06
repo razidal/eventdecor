@@ -8,12 +8,15 @@ import {
   Container,
   IconButton,
   InputAdornment,
+  Alert,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Edit = ({ id }) => {
   const [user, setUser] = useState({});
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [errors, setErrors] = useState({}); // State to store validation errors
+  const [successMessage, setSuccessMessage] = useState("");
 
   const [editUser, setEditUser] = useState({
     fullName: id.fullName || "",
@@ -42,8 +45,36 @@ const Edit = ({ id }) => {
     }
   }, [id]);
 
+  // Email validation
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // Password validation
+  const validatePassword = (password) => {
+    return password.length >= 6;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let validationErrors = {};
+
+    // Email validation check
+    if (!validateEmail(editUser.email)) {
+      validationErrors.email = "Please enter a valid email.";
+    }
+
+    // Password validation check
+    if (editUser.password && !validatePassword(editUser.password)) {
+      validationErrors.password = "Password must be at least 6 characters long.";
+    }
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors); // Set validation errors
+      return;
+    }
+
     const userData = {
       fullName: editUser.fullName || user.fullName,
       email: editUser.email || user.email,
@@ -56,13 +87,14 @@ const Edit = ({ id }) => {
         userData
       );
       console.log("User updated:", response.data);
-      alert("User updated");
+      setSuccessMessage("User updated successfully!");
       setUser(response.data.user);
       setEditUser({
         fullName: response.data.user.fullName,
         email: response.data.user.email,
         password: "",
       });
+      setErrors({}); // Clear errors after successful update
     } catch (error) {
       console.error("Error updating user:", error);
       if (error.response) {
@@ -104,6 +136,8 @@ const Edit = ({ id }) => {
             onChange={(e) =>
               setEditUser({ ...editUser, email: e.target.value })
             }
+            error={!!errors.email}
+            helperText={errors.email}
           />
           <TextField
             id="password"
@@ -115,6 +149,8 @@ const Edit = ({ id }) => {
             onChange={(e) =>
               setEditUser({ ...editUser, password: e.target.value })
             }
+            error={!!errors.password}
+            helperText={errors.password}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -128,9 +164,16 @@ const Edit = ({ id }) => {
           <Button variant="contained" type="submit" fullWidth>
             Update
           </Button>
+
+          {/* Display success message */}
+          {successMessage && (
+            <Alert severity="success" style={{ marginTop: "20px" }}>
+              {successMessage}
+            </Alert>
+          )}
         </Box>
       </form>
-  
+
       <Box mt={4}>
         <Typography variant="h6">Updated User Details:</Typography>
         <Typography variant="body1">Full Name: {user.fullName}</Typography>
@@ -140,4 +183,4 @@ const Edit = ({ id }) => {
   );
 };
 
-export default Edit;
+export default Edit;

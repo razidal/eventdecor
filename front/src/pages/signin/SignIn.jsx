@@ -125,7 +125,7 @@ const SignIn = () => {
 
   const handleVerifyCode = async () => {
     if (verificationCode === sentCode) {
-      if (newPassword.length>6 && newPassword === confirmPassword) {
+      if (newPassword.length>=6 && newPassword === confirmPassword) {
         try {
           await axios.put("https://backstore-iqcq.onrender.com/auth/reset-password", {
             email: forgotEmail,
