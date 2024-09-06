@@ -209,14 +209,14 @@ router.post("/send-code", async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
-        user: "your-email@gmail.com",
-        pass: "your-email-password", // Use an app-specific password if using Gmail 2FA
+        user: "eventdeocr@gmail.com",
+        pass: "qbuw ncuc xwxl snsh", // Use an app-specific password if using Gmail 2FA
       },
     });
 
     // Send the email with the verification code
     const mailOptions = {
-      from: "your-email@gmail.com",
+      from: "eventdeocr@gmail.com",
       to: email,
       subject: "Password Reset Code",
       text: `Your verification code is ${code}`,
