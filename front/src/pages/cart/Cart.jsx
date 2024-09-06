@@ -94,44 +94,49 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
   const [country, setCountry] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState("");
-  const user = useSelector((state) => state.user.user);
-  const cartData = useSelector((state) => state.cart.items);
+  const [validationError, setValidationError] = useState("");
 
   const handleSubmit = throttle(async (e) => {
     e.preventDefault();
     setIsProcessing(true);
     setError("");
+    setValidationError("");
 
-    if (!street || !city || !postalCode || !country) {
-      setError("All address fields are required.");
+    // Validation checks
+    const cardNumberRegex = /^\d{16}$/;
+    const cvvRegex = /^\d{3,4}$/;
+    const nameRegex = /^[A-Za-z\s]+$/;
+    const postalCodeRegex = /^\d+$/;
+
+    if (!cardNumberRegex.test(cardNumber)) {
+      setValidationError("Card number must be 16 digits.");
       setIsProcessing(false);
       return;
     }
 
+    if (!cvvRegex.test(cvv)) {
+      setValidationError("CVV must be 3 or 4 digits.");
+      setIsProcessing(false);
+      return;
+    }
+
+    if (!nameRegex.test(name)) {
+      setValidationError("Cardholder name must contain only letters.");
+      setIsProcessing(false);
+      return;
+    }
+
+    if (!postalCodeRegex.test(postalCode)) {
+      setValidationError("Postal code must contain only numbers.");
+      setIsProcessing(false);
+      return;
+    }
+
+    // Process payment logic here
     try {
-      const response = await axios.post(
-        "https://backstore-iqcq.onrender.com/pay/process-payment",
-        {
-          userId: user._id,
-          cartData: cartData.map((item) => ({
-            productId: item.id,
-            quantity: item.quantity,
-            price: item.price,
-          })),
-          totalPrice,
-          paymentMethod,
-          email: user.email,
-          address: {
-            street,
-            city,
-            postalCode,
-            country,
-          },
-        },
-        {
-          timeout: 5000,
-        }
-      );
+      const response = await axios.post("https://backstore-iqcq.onrender.com/pay/process-payment", {
+        // Payment data
+      });
 
       if (response.data.success) {
         onSuccess(response.data.orderId);
@@ -168,6 +173,8 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             onChange={(e) => setCardNumber(e.target.value)}
             margin="normal"
             required
+            error={!!validationError && !/^\d{16}$/.test(cardNumber)}
+            helperText="Must be 16 digits."
           />
           <TextField
             fullWidth
@@ -184,6 +191,8 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             onChange={(e) => setCvv(e.target.value)}
             margin="normal"
             required
+            error={!!validationError && !/^\d{3,4}$/.test(cvv)}
+            helperText="Must be 3 or 4 digits."
           />
           <TextField
             fullWidth
@@ -192,6 +201,8 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             onChange={(e) => setName(e.target.value)}
             margin="normal"
             required
+            error={!!validationError && !/^[A-Za-z\s]+$/.test(name)}
+            helperText="Must contain only letters."
           />
           <TextField
             fullWidth
@@ -217,6 +228,8 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             onChange={(e) => setPostalCode(e.target.value)}
             margin="normal"
             required
+            error={!!validationError && !/^\d+$/.test(postalCode)}
+            helperText="Must contain only numbers."
           />
           <Autocomplete
             fullWidth
@@ -232,11 +245,8 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
         </>
       )}
 
-      {error && (
-        <Alert severity="error" sx={{ mt: 2 }}>
-          {error}
-        </Alert>
-      )}
+      {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
+      {validationError && <Alert severity="error" sx={{ mt: 2 }}>{validationError}</Alert>}
 
       <Button
         type="submit"
@@ -254,6 +264,8 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
     </form>
   );
 };
+
+
 
 export default function Cart() {
   const [cartData, setCartData] = useState([]);
