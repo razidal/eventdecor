@@ -21,8 +21,8 @@ const ManageUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("https://backstore-iqcq.onrender.com/auth/users/get"); // Fetch all users
-        setUsers(response.data);
+        const response = await axios.get("https://backstore-iqcq.onrender.com/users/get"); // Fetch all users
+        setUsers(response.data.users);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching users:", error);
