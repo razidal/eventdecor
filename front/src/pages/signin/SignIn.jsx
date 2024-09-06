@@ -236,6 +236,16 @@ const SignIn = () => {
               </Button>
             </>
           )}
+          {error && (
+          <Alert severity="error" style={{ marginTop: "20px", width: "100%" }}>
+            {error}
+          </Alert>
+        )}
+        {success && (
+          <Alert severity="success" style={{ marginTop: "20px", width: "100%" }}>
+            {success}
+          </Alert>
+        )}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialogOpen(false)} color="primary">
