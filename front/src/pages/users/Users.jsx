@@ -49,7 +49,7 @@ const ManageUsers = () => {
   };
 
   const handleDeleteUser = async (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this order?");
+    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
     if (!confirmDelete) return;
     setDeleting(true);
     try {
