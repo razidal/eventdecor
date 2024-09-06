@@ -134,7 +134,7 @@ const SignIn = () => {
           setError("");
           setNewPassword("");
           setConfirmPassword("");
-          navigate("/sign-in");
+          navigate("/SignIn");
         } catch (error) {
           setError("Failed to reset password. Please try again.");
         }
@@ -180,9 +180,13 @@ const SignIn = () => {
       <Typography variant="body1" align="center" style={{ marginTop: "20px" }}>
         Don't have an account? <Link to="/SignUp">Sign up</Link>
       </Typography>
-      <Typography variant="body1" align="center" style={{ marginTop: "10px", cursor: "pointer" }} onClick={() => setDialogOpen(true)}>
-        Forgot your password?
-      </Typography>
+      <Button
+          variant="text"
+          onClick={() => setDialogOpen(true)}
+          style={{ marginTop: "10px", textTransform: "none" }}
+        >
+          Forgot your password?
+      </Button>
 
       {/* Forgot Password Dialog */}
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
