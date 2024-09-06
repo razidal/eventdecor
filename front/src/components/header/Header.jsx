@@ -212,6 +212,7 @@ const Header = () => {
                   <>
                     <StyledLink to="/Admin/Management">Admin Panel</StyledLink>
                     <StyledLink to="/Admin/TableAdmin">Table Admin</StyledLink>
+                    <StyledLink to="/Admin/Users">Users</StyledLink>
                   </>
                 )}
 
@@ -248,6 +249,9 @@ const Header = () => {
                       </MenuItem>
                       <MenuItem onClick={handleNavMenuClose} component={Link} to="/Admin/TableAdmin">
                         Table Admin
+                      </MenuItem>
+                      <MenuItem onClick={handleNavMenuClose} component={Link} to="/Admin/Users">
+                        Users
                       </MenuItem>
                     </>
                   )}

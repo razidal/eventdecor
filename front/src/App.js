@@ -51,6 +51,7 @@ function App() {
           path="/Admin/*"
           element={user && user.role === "Admin" ? <AdminRoute /> : <Navigate to="/SignIn" />}
         />
+        
         <Route
           path="/User/*"
           element={user ? <UserRoute /> : <Navigate to="/SignIn" />}

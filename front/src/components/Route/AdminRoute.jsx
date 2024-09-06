@@ -7,6 +7,7 @@ import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import Users from "../../pages/users/Users"
 import Management from "../../pages/admin/management/Management";
 import TableAdmin from "../../pages/admin/management/TableAdmin";
 import Cookies from "js-cookie";
@@ -16,6 +17,7 @@ const AdminRoute = () => {
   return (
     <div>
       <Routes>
+        <Route path="/Users" element={<Users/>}/> 
         <Route path="/Management" element={<Management />} />
         <Route path="/TableAdmin" element={<TableAdmin />} />
         <Route path="/edit" element={<Edit />} />
