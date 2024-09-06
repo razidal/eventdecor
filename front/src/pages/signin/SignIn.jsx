@@ -82,7 +82,7 @@ const SignIn = () => {
         <DialogContent>
           {!codeSent ? (
             <TextField
-              label="Enter your email"
+              label="Enter your emaila"
               fullWidth
               value={resetEmail}
               onChange={(e) => setResetEmail(e.target.value)}
