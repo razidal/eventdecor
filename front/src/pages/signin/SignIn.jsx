@@ -68,6 +68,7 @@ const SignIn = () => {
   const [sentCode, setSentCode] = useState(null);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [success, setSuccess] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -124,7 +125,7 @@ const SignIn = () => {
 
   const handleVerifyCode = async () => {
     if (verificationCode === sentCode) {
-      if (newPassword === confirmPassword) {
+      if (newPassword.length>6 && newPassword === confirmPassword) {
         try {
           await axios.put("https://backstore-iqcq.onrender.com/auth/reset-password", {
             email: forgotEmail,
@@ -132,115 +133,136 @@ const SignIn = () => {
           });
           setDialogOpen(false);
           setError("");
+          setSuccess("Password reset successful. You can now sign in with your new password.");
           setNewPassword("");
           setConfirmPassword("");
           navigate("/SignIn");
         } catch (error) {
           setError("Failed to reset password. Please try again.");
         }
-      } else {
+      } else if(newPassword !== confirmPassword) {
         setError("Passwords do not match.");
+      }else if(newPassword.length<6){
+        setError("Password must be at least 6 characters long.");
       }
     } else {
       setError("Incorrect verification code.");
     }
   };
 
-  return (
-    <FormContainer component="form" noValidate autoComplete="off">
-      <Title>Sign In</Title>
-      <InputField
-        label="Email"
-        variant="outlined"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <InputField
-        label="Password"
-        type="password"
-        variant="outlined"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      <ButtonContainer>
-        <StyledButton type="submit" variant="contained" onClick={handleSubmit}>
-          Sign In
-        </StyledButton>
-        <GoogleButton variant="contained" onClick={handleGoogleSignIn}>
-          Sign In with Google
-        </GoogleButton>
-      </ButtonContainer>
-      {error && (
-        <Alert severity="error" style={{ marginTop: "20px", width: "100%" }}>
-          {error}
-        </Alert>
-      )}
-      <Typography variant="body1" align="center" style={{ marginTop: "20px" }}>
-        Don't have an account? <Link to="/SignUp">Sign up</Link>
-      </Typography>
-      <Button
-          variant="text"
-          onClick={() => setDialogOpen(true)}
-          style={{ marginTop: "10px", textTransform: "none" }}
-        >
-          Forgot your password?
-      </Button>
+return (
+  <FormContainer component="form" noValidate autoComplete="off">
+    <Title>Sign In</Title>
+    <InputField
+      label="Email"
+      variant="outlined"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      required
+    />
+    <InputField
+      label="Password"
+      type="password"
+      variant="outlined"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      required
+    />
+    <ButtonContainer>
+      <StyledButton
+        type="submit"
+        variant="contained"
+        onClick={handleSubmit}
+      >
+        Sign In
+      </StyledButton>
+      <GoogleButton variant="contained" onClick={handleGoogleSignIn}>
+        Sign In with Google
+      </GoogleButton>
+    </ButtonContainer>
+    {error && (
+      <Alert severity="error" style={{ marginTop: "20px", width: "100%" }}>
+        {error}
+      </Alert>
+    )}
+    <Typography variant="body1" align="center" style={{ marginTop: "20px" }}>
+      Don't have an account? <Link to="/SignUp">Sign up</Link>
+    </Typography>
 
-      {/* Forgot Password Dialog */}
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <DialogTitle>Reset Password</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Enter your email"
-            fullWidth
-            margin="normal"
-            value={forgotEmail}
-            onChange={(e) => setForgotEmail(e.target.value)}
-          />
-          <Button onClick={handleForgotPassword} variant="contained" fullWidth>
-            Send Code
-          </Button>
-          {sentCode && (
-            <>
-              <TextField
-                label="Enter Verification Code"
-                fullWidth
-                margin="normal"
-                value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value)}
-              />
-              <TextField
-                label="New Password"
-                type="password"
-                fullWidth
-                margin="normal"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
-              <TextField
-                label="Confirm New Password"
-                type="password"
-                fullWidth
-                margin="normal"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-              <Button onClick={handleVerifyCode} variant="contained" fullWidth>
-                Reset Password
-              </Button>
-            </>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDialogOpen(false)} color="primary">
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </FormContainer>
-  );
+    {/* Button to open the Forgot Password dialog */}
+    <StyledButton variant="text" onClick={() => setDialogOpen(true)}>
+      Forgot your password?
+    </StyledButton>
+
+    {/* Forgot Password Dialog */}
+    <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+      <DialogTitle>Reset Password</DialogTitle>
+      <DialogContent>
+        <Typography>Please enter your email to receive the code.</Typography>
+        <InputField
+          label="Email"
+          variant="outlined"
+          value={forgotEmail}
+          onChange={(e) => setForgotEmail(e.target.value)}
+          required
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSendCode}
+        >
+          Send Code
+        </Button>
+
+        {/* Code Verification and New Password Fields */}
+        {sentCode && (
+          <>
+            <Typography>Please enter the verification code sent to your email.</Typography>
+            <InputField
+              label="Verification Code"
+              variant="outlined"
+              value={verificationCode}
+              onChange={(e) => setVerificationCode(e.target.value)}
+              required
+            />
+            <InputField
+              label="New Password"
+              type="password"
+              variant="outlined"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+            />
+            <InputField
+              label="Confirm New Password"
+              type="password"
+              variant="outlined"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleVerifyCode}
+            >
+              Reset Password
+            </Button>
+          </>
+        )}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => setDialogOpen(false)}>Close</Button>
+      </DialogActions>
+    </Dialog>
+
+    {success && (
+      <Alert severity="success" style={{ marginTop: "20px", width: "100%" }}>
+        {success}
+      </Alert>
+    )}
+  </FormContainer>
+);
 };
 
 export default SignIn;
