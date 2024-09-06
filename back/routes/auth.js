@@ -201,7 +201,7 @@ router.post("/send-code", async (req, res) => {
 
     const transporter = nodemailer.createTransport({
       service: "Gmail",
-      auth: { user: "eventdeocr@gmail.com", pass: "qbuw ncuc xwxl snsh" },
+      auth: { user: "eventdeocr@gmail.com", pass: "eventdecor999" },
     });
 
     await transporter.sendMail({
