@@ -134,6 +134,7 @@ const TableAdmin = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              marginTop:"2rem",
               backgroundColor: "white",
               justifyContent: "center",
               gap: "1rem",
