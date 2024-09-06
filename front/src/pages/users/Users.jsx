@@ -47,12 +47,22 @@ const ManageUsers = () => {
     }
   };
 
-  const handleDeleteUser = async (id) => {
-    try {
-      await axios.delete(`https://backstore-iqcq.onrender.com/users/delete/${id}`);
-      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id));
-    } catch (error) {
-      console.error("Error deleting user:", error);
+  const handleDeleteUser = async (userId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+    
+    if (confirmDelete) {
+      try {
+        await axios.delete(`https://backstore-iqcq.onrender.com/auth/users/delete/${userId}`);
+        alert("User deleted successfully!");
+        // Optionally, refresh the user list after deletion
+        fetchUsers(); 
+      } catch (error) {
+        console.error("Error deleting user:", error);
+        alert("Failed to delete user. Please try again.");
+      }
+    } else {
+      // User canceled the action, do nothing
+      console.log("User deletion canceled.");
     }
   };
 
@@ -89,7 +99,7 @@ const ManageUsers = () => {
                 </TableCell>
                 <TableCell>
                   <Button
-                    color="secondary"
+                    color="error"
                     variant="contained"
                     onClick={() => handleDeleteUser(user._id)}
                   >
