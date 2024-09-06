@@ -107,27 +107,34 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
     const cvvRegex = /^\d{3,4}$/;
     const nameRegex = /^[A-Za-z\s]+$/;
     const postalCodeRegex = /^\d+$/;
+    const expiryDateRegex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
 
     if (!cardNumberRegex.test(cardNumber)) {
-      setValidationError("Card number must be 16 digits.");
+      setValidationError("Check fields");
       setIsProcessing(false);
       return;
     }
 
     if (!cvvRegex.test(cvv)) {
-      setValidationError("CVV must be 3 or 4 digits.");
+      setValidationError("Check fields");
+      setIsProcessing(false);
+      return;
+    }
+    
+    if(!expiryDateRegex.test(expiryDate)){
+      setValidationError("Check fields");
       setIsProcessing(false);
       return;
     }
 
     if (!nameRegex.test(name)) {
-      setValidationError("Cardholder name must contain only letters.");
+      setValidationError("Check fields");
       setIsProcessing(false);
       return;
     }
 
     if (!postalCodeRegex.test(postalCode)) {
-      setValidationError("Postal code must contain only numbers.");
+      setValidationError("Check fields");
       setIsProcessing(false);
       return;
     }
@@ -183,6 +190,8 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             onChange={(e) => setExpiryDate(e.target.value)}
             margin="normal"
             required
+            error={!!validationError && !/^(0[1-9]|1[0-2])\/([0-9]{2})$/.test(expiryDate)}
+            helperText="Must be in MM/YY format."
           />
           <TextField
             fullWidth
