@@ -3,6 +3,7 @@ const router = express.Router();
 const nodemailer = require("nodemailer");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 
 const sendRegistrationConfirmationEmail = async (userEmail, userName) => {
   //using Google strategy for registeration and loging in
@@ -184,6 +185,54 @@ router.get("/user/id/:email", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send({ error: "Something went wrong" });
+  }
+});
+
+// To send verification code
+router.post("/send-code", async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).send({ error: "User does not exist" });
+    }
+
+    const code = crypto.randomInt(1000, 9999).toString(); // Generate random 4-digit code
+
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: { user: "eventdeocr@gmail.com", pass: "qbuw ncuc xwxl snsh" },
+    });
+
+    await transporter.sendMail({
+      from: "eventdeocr@gmail.com",
+      to: email,
+      subject: "Password Reset Code",
+      text: `Your verification code is ${code}`,
+    });
+
+    res.status(200).send({ code });
+  } catch (err) {
+    res.status(500).send({ error: "Failed to send code" });
+  }
+});
+
+// To reset password
+router.put("/reset-password", async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).send({ error: "User does not exist" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).send({ message: "Password updated successfully" });
+  } catch (err) {
+    res.status(500).send({ error: "Failed to reset password" });
   }
 });
 
