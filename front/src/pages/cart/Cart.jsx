@@ -94,8 +94,11 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
   const [country, setCountry] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState("");
+  const user = useSelector((state) => state.user.user);
+  const cartData = useSelector((state) => state.cart.items);
   const [validationError, setValidationError] = useState("");
-
+  
+   
   const handleSubmit = throttle(async (e) => {
     e.preventDefault();
     setIsProcessing(true);
@@ -103,47 +106,71 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
     setValidationError("");
 
     // Validation checks
-    const cardNumberRegex = /^\d{16}$/;
-    const cvvRegex = /^\d{3,4}$/;
-    const nameRegex = /^[A-Za-z\s]+$/;
-    const postalCodeRegex = /^\d+$/;
-    const expiryDateRegex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
+   const cardNumberRegex = /^\d{16}$/;
+   const cvvRegex = /^\d{3,4}$/;
+   const nameRegex = /^[A-Za-z\s]+$/;
+   const postalCodeRegex = /^\d+$/;
+   const expiryDateRegex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
 
-    if (!cardNumberRegex.test(cardNumber)) {
-      setValidationError("Check fields");
+   if (!cardNumberRegex.test(cardNumber)) {
+     setValidationError("Check fields.");
+     setIsProcessing(false);
+     return;
+   }
+
+   if(!expiryDateRegex.test(expiryDate)) {
+      setValidationError("Check fields.");
+      setIsProcessing(false);
+   }
+
+   if (!cvvRegex.test(cvv)) {
+     setValidationError("Check fields.");
+     setIsProcessing(false);
+     return;
+   }
+
+   if (!nameRegex.test(name)) {
+     setValidationError("Check fields.");
+     setIsProcessing(false);
+     return;
+   }
+
+   if (!postalCodeRegex.test(postalCode)) {
+     setValidationError("Check fields.");
+     setIsProcessing(false);
+     return;
+   }
+    // Check if all required fields are filled
+    if (!street || !city || !postalCode || !country) {
+      setError("All address fields are required.");
       setIsProcessing(false);
       return;
     }
 
-    if (!cvvRegex.test(cvv)) {
-      setValidationError("Check fields");
-      setIsProcessing(false);
-      return;
-    }
-    
-    if(!expiryDateRegex.test(expiryDate)){
-      setValidationError("Check fields");
-      setIsProcessing(false);
-      return;
-    }
-
-    if (!nameRegex.test(name)) {
-      setValidationError("Check fields");
-      setIsProcessing(false);
-      return;
-    }
-
-    if (!postalCodeRegex.test(postalCode)) {
-      setValidationError("Check fields");
-      setIsProcessing(false);
-      return;
-    }
-
-    // Process payment logic here
     try {
-      const response = await axios.post("https://backstore-iqcq.onrender.com/pay/process-payment", {
-        // Payment data
-      });
+      const response = await axios.post(
+        "https://backstore-iqcq.onrender.com/pay/process-payment",
+        {
+          userId: user._id,
+          cartData: cartData.map((item) => ({
+            productId: item.id,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+          totalPrice,
+          paymentMethod,
+          email: user.email,
+          address: {
+            street,
+            city,
+            postalCode,
+            country,
+          },
+        },
+        {
+          timeout: 5000,
+        }
+      );
 
       if (response.data.success) {
         onSuccess(response.data.orderId);
@@ -191,7 +218,7 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             margin="normal"
             required
             error={!!validationError && !/^(0[1-9]|1[0-2])\/([0-9]{2})$/.test(expiryDate)}
-            helperText="Must be in MM/YY format."
+            helperText="Must be 16 digits."
           />
           <TextField
             fullWidth
@@ -273,8 +300,6 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
     </form>
   );
 };
-
-
 
 export default function Cart() {
   const [cartData, setCartData] = useState([]);
