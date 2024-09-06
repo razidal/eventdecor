@@ -111,7 +111,7 @@ const TableAdmin = () => {
                   <TableCell>
                     <Button
                       variant="contained"
-                      color="secondary"
+                      color="error"
                       onClick={() => deleteOrder(user._id)}
                       disabled={deleting}
                     >
