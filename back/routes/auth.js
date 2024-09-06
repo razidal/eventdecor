@@ -191,19 +191,15 @@ router.get("/user/id/:email", async (req, res) => {
 // To send verification code
 router.post("/send-code", async (req, res) => {
   const { email } = req.body;
-
+  console.log(email);
   try {
-    // Check if user exists in the database
     const user = await User.findOne({ email });
     if (!user) {
-      console.log("User not found:", email);
       return res.status(400).send({ error: "User does not exist" });
     }
 
-    console.log("User found:", user.email);
-
-    // Generate a random 4-digit code
-    const code = crypto.randomInt(1000, 9999).toString();
+    // Generate and send verification code logic
+    const code = Math.floor(1000 + Math.random() * 9000).toString();
 
     // Create the nodemailer transporter
     const transporter = nodemailer.createTransport({
