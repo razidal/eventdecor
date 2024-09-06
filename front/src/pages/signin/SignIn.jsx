@@ -1,104 +1,217 @@
 import React, { useState } from "react";
-import {
-  Box, TextField, Button, Alert, Dialog, DialogActions, DialogContent, DialogTitle,
-  Typography
-} from "@mui/material";
+import styled from "styled-components";
+import { Box, Typography, TextField, Button, Alert, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useDispatch } from "react-redux";
 import { login } from "../../redux/userSlice";
+import { useDispatch } from "react-redux";
+import { auth, googleProvider } from "../../FireBase";
+import { signInWithPopup } from "firebase/auth";
+
+const FormContainer = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  max-width: 400px;
+  margin: auto;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+`;
+
+const Title = styled.h1`
+  text-align: center;
+  color: #3f51b5;
+  font-size: 36px;
+  margin-bottom: 30px;
+`;
+
+const InputField = styled(TextField)`
+  margin-bottom: 20px !important;
+  width: 300px;
+`;
+
+const StyledButton = styled(Button)`
+  margin-top: 30px;
+  background-color: #3f51b5;
+  width: 300px;
+  &:hover {
+    background-color: #2c387e;
+  }
+`;
+
+const GoogleButton = styled(Button)`
+  background-color: #4285f4;
+  color: white;
+  width: 300px;
+  &:hover {
+    background-color: #357ae8;
+  }
+`;
+
+const ButtonContainer = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  width: 100%;
+`;
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [openDialog, setOpenDialog] = useState(false);
-  const [resetEmail, setResetEmail] = useState("");
-  const [resetCode, setResetCode] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
+  const [sentCode, setSentCode] = useState(null);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
-  const [codeSent, setCodeSent] = useState(false);
-  const [resetError, setResetError] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const userData = { email, password };
+    const userData = {
+      email: email,
+      password: password,
+    };
     try {
-      const response = await axios.post(
-        "https://backstore-iqcq.onrender.com/auth/login", userData
-      );
+      const response = await axios.post("https://backstore-iqcq.onrender.com/auth/login", userData);
       const user = response.data.user;
       dispatch(login(user));
       localStorage.setItem("user", JSON.stringify(user));
-      user.role === "Admin" ? navigate("/Admin/Management") : navigate("/");
+      if (user.role === "Admin") {
+        navigate("/Admin/Management");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
       setError("Login failed. Please check your credentials.");
+      console.error(err);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      const response = await axios.post("https://backstore-iqcq.onrender.com/auth/google-login", {
+        email: user.email,
+        googleId: user.uid,
+        fullName: user.displayName,
+      });
+      const userData = response.data.user;
+      dispatch(login(userData));
+      localStorage.setItem("user", JSON.stringify(userData));
+      navigate("/");
+    } catch (error) {
+      setError("Google sign-in failed. Please try again.");
+      console.error(error);
     }
   };
 
   const handleForgotPassword = async () => {
     try {
-      const response = await axios.post("https://backstore-iqcq.onrender.com/auth/send-code", { email: resetEmail });
-      setVerificationCode(response.data.code); // backend sends verification code
-      setCodeSent(true);
-    } catch (err) {
-      setResetError("Failed to send verification code. Please check the email.");
+      const response = await axios.post("https://backstore-iqcq.onrender.com/auth/send-code", { email: forgotEmail });
+      setSentCode(response.data.code);
+    } catch (error) {
+      setError("Failed to send verification code. Please check the email.");
+      console.error(error);
     }
   };
 
-  const handleResetPassword = async () => {
-    if (resetCode !== verificationCode) {
-      setResetError("Incorrect code.");
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      setResetError("Passwords do not match.");
-      return;
-    }
-    try {
-      await axios.put("https://backstore-iqcq.onrender.com/auth/reset-password", {
-        email: resetEmail, password: newPassword
-      });
-      setOpenDialog(false);
-    } catch (err) {
-      setResetError("Failed to reset password.");
+  const handleVerifyCode = async () => {
+    if (verificationCode === sentCode) {
+      if (newPassword === confirmPassword) {
+        try {
+          await axios.put("https://backstore-iqcq.onrender.com/auth/reset-password", {
+            email: forgotEmail,
+            password: newPassword,
+          });
+          setDialogOpen(false);
+          setError("");
+          setNewPassword("");
+          setConfirmPassword("");
+          navigate("/sign-in");
+        } catch (error) {
+          setError("Failed to reset password. Please try again.");
+        }
+      } else {
+        setError("Passwords do not match.");
+      }
+    } else {
+      setError("Incorrect verification code.");
     }
   };
 
   return (
-    <Box component="form" noValidate autoComplete="off">
-      {/* Sign In Form */}
+    <FormContainer component="form" noValidate autoComplete="off">
+      <Title>Sign In</Title>
+      <InputField
+        label="Email"
+        variant="outlined"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <InputField
+        label="Password"
+        type="password"
+        variant="outlined"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <ButtonContainer>
+        <StyledButton type="submit" variant="contained" onClick={handleSubmit}>
+          Sign In
+        </StyledButton>
+        <GoogleButton variant="contained" onClick={handleGoogleSignIn}>
+          Sign In with Google
+        </GoogleButton>
+      </ButtonContainer>
+      {error && (
+        <Alert severity="error" style={{ marginTop: "20px", width: "100%" }}>
+          {error}
+        </Alert>
+      )}
       <Typography variant="body1" align="center" style={{ marginTop: "20px" }}>
-        Forgot your password?{" "}
-        <Link onClick={() => setOpenDialog(true)}>Click here</Link>
+        Don't have an account? <Link to="/SignUp">Sign up</Link>
+      </Typography>
+      <Typography variant="body1" align="center" style={{ marginTop: "10px", cursor: "pointer" }} onClick={() => setDialogOpen(true)}>
+        Forgot your password?
       </Typography>
 
       {/* Forgot Password Dialog */}
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle>Reset Password</DialogTitle>
         <DialogContent>
-          {!codeSent ? (
-            <TextField
-              label="Enter your emaila"
-              fullWidth
-              value={resetEmail}
-              onChange={(e) => setResetEmail(e.target.value)}
-            />
-          ) : (
+          <TextField
+            label="Enter your email"
+            fullWidth
+            margin="normal"
+            value={forgotEmail}
+            onChange={(e) => setForgotEmail(e.target.value)}
+          />
+          <Button onClick={handleForgotPassword} variant="contained" fullWidth>
+            Send Code
+          </Button>
+          {sentCode && (
             <>
               <TextField
-                label="Enter verification code"
+                label="Enter Verification Code"
                 fullWidth
-                value={resetCode}
-                onChange={(e) => setResetCode(e.target.value)}
+                margin="normal"
+                value={verificationCode}
+                onChange={(e) => setVerificationCode(e.target.value)}
               />
               <TextField
                 label="New Password"
                 type="password"
                 fullWidth
+                margin="normal"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
               />
@@ -106,22 +219,23 @@ const SignIn = () => {
                 label="Confirm New Password"
                 type="password"
                 fullWidth
+                margin="normal"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
+              <Button onClick={handleVerifyCode} variant="contained" fullWidth>
+                Reset Password
+              </Button>
             </>
           )}
         </DialogContent>
         <DialogActions>
-          {!codeSent ? (
-            <Button onClick={handleForgotPassword}>Send Code</Button>
-          ) : (
-            <Button onClick={handleResetPassword}>Reset Password</Button>
-          )}
+          <Button onClick={() => setDialogOpen(false)} color="primary">
+            Cancel
+          </Button>
         </DialogActions>
-        {resetError && <Alert severity="error">{resetError}</Alert>}
       </Dialog>
-    </Box>
+    </FormContainer>
   );
 };
 
