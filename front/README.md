@@ -44,7 +44,7 @@ This project is an e-commerce platform that allows users to browse products, add
 
 ### Classes:
 1. **User**
-   - Attributes: userId, fullName, email, password, role, address, phoneNumber
+   - Attributes: userId, fullName, email, password, role, address
    - Methods: register(), login(), updateProfile()
 
 2. **Product**

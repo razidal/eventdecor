@@ -43,9 +43,6 @@ const UserSchema = new mongoose.Schema(
       postalCode: { type: String, required: false },
       country: { type: String, required: false },
     },
-    phoneNumber: {
-      type: String,
-    },
   },
   { timestamps: true }
 );
