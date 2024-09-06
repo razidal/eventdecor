@@ -191,29 +191,50 @@ router.get("/user/id/:email", async (req, res) => {
 // To send verification code
 router.post("/send-code", async (req, res) => {
   const { email } = req.body;
+
   try {
+    // Check if user exists in the database
     const user = await User.findOne({ email });
     if (!user) {
+      console.log("User not found:", email);
       return res.status(400).send({ error: "User does not exist" });
     }
 
-    const code = crypto.randomInt(1000, 9999).toString(); // Generate random 4-digit code
+    console.log("User found:", user.email);
 
+    // Generate a random 4-digit code
+    const code = crypto.randomInt(1000, 9999).toString();
+
+    // Create the nodemailer transporter
     const transporter = nodemailer.createTransport({
       service: "Gmail",
-      auth: { user: "eventdeocr@gmail.com", pass: "eventdecor999" },
+      auth: {
+        user: "your-email@gmail.com",
+        pass: "your-email-password", // Use an app-specific password if using Gmail 2FA
+      },
     });
 
-    await transporter.sendMail({
-      from: "eventdeocr@gmail.com",
+    // Send the email with the verification code
+    const mailOptions = {
+      from: "your-email@gmail.com",
       to: email,
       subject: "Password Reset Code",
       text: `Your verification code is ${code}`,
-    });
+    };
 
-    res.status(200).send({ code });
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error while sending email:", error);
+        return res.status(500).send({ error: "Failed to send email." });
+      }
+      console.log("Email sent:", info.response);
+
+      // Respond with the generated code (or store it for comparison later)
+      res.status(200).send({ code });
+    });
   } catch (err) {
-    res.status(500).send({ error: "Failed to send code" });
+    console.error("Unexpected error:", err);
+    res.status(500).send({ error: "Failed to send code. Please try again." });
   }
 });
 
