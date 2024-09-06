@@ -17,6 +17,7 @@ import axios from "axios";
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deleting,setDeleting]=useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -47,22 +48,19 @@ const ManageUsers = () => {
     }
   };
 
-  const handleDeleteUser = async (userId) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
-    
-    if (confirmDelete) {
-      try {
-        await axios.delete(`https://backstore-iqcq.onrender.com/auth/users/delete/${userId}`);
-        alert("User deleted successfully!");
-        // Optionally, refresh the user list after deletion
-        fetchUsers(); 
-      } catch (error) {
-        console.error("Error deleting user:", error);
-        alert("Failed to delete user. Please try again.");
-      }
-    } else {
-      // User canceled the action, do nothing
-      console.log("User deletion canceled.");
+  const handleDeleteUser = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this order?");
+    if (!confirmDelete) return;
+    setDeleting(true);
+    try {
+      await axios.delete(`https://backstore-iqcq.onrender.com/users/delete/${id}`);
+      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id));
+      setDeleting(false);
+      alert("User deleted successfully.");
+    } catch (error) {
+      setDeleting(false);
+      alert("Failed to delete user. Please try again.");
+      console.error("Error deleting user:", error);
     }
   };
 
@@ -102,8 +100,9 @@ const ManageUsers = () => {
                     color="error"
                     variant="contained"
                     onClick={() => handleDeleteUser(user._id)}
+                    disabled={deleting}
                   >
-                    Delete
+                     {deleting ? "Deleting..." : "Delete"}
                   </Button>
                 </TableCell>
               </TableRow>
