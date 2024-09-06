@@ -209,7 +209,7 @@ const SignIn = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={handleSendCode}
+            onClick={handleForgotPassword}
           >
             Send Code
           </Button>
