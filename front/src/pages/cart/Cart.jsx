@@ -218,7 +218,7 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             margin="normal"
             required
             error={!!validationError && !/^(0[1-9]|1[0-2])\/([0-9]{2})$/.test(expiryDate)}
-            helperText="Must be 16 digits."
+            helperText="Must be in MM/YY format."
           />
           <TextField
             fullWidth
