@@ -169,11 +169,7 @@ const SignIn = () => {
         required
       />
       <ButtonContainer>
-        <StyledButton
-          type="submit"
-          variant="contained"
-          onClick={handleSubmit}
-        >
+        <StyledButton type="submit" variant="contained" onClick={handleSubmit}>
           Sign In
         </StyledButton>
         <GoogleButton variant="contained" onClick={handleGoogleSignIn}>
@@ -188,79 +184,65 @@ const SignIn = () => {
       <Typography variant="body1" align="center" style={{ marginTop: "20px" }}>
         Don't have an account? <Link to="/SignUp">Sign up</Link>
       </Typography>
-  
-      {/* Button to open the Forgot Password dialog */}
-      <StyledButton variant="text" onClick={() => setDialogOpen(true)}>
-        Forgot your password?
-      </StyledButton>
-  
+      <Button
+          variant="text"
+          onClick={() => setDialogOpen(true)}
+          style={{ marginTop: "10px", textTransform: "none" }}
+        >
+          Forgot your password?
+      </Button>
+
       {/* Forgot Password Dialog */}
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle>Reset Password</DialogTitle>
         <DialogContent>
-          <Typography>Please enter your email to receive the code.</Typography>
-          <InputField
-            label="Email"
-            variant="outlined"
+          <TextField
+            label="Enter your email"
+            fullWidth
+            margin="normal"
             value={forgotEmail}
             onChange={(e) => setForgotEmail(e.target.value)}
-            required
           />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleForgotPassword}
-          >
+          <Button onClick={handleForgotPassword} variant="contained" fullWidth>
             Send Code
           </Button>
-  
-          {/* Code Verification and New Password Fields */}
           {sentCode && (
             <>
-              <Typography>Please enter the verification code sent to your email.</Typography>
-              <InputField
-                label="Verification Code"
-                variant="outlined"
+              <TextField
+                label="Enter Verification Code"
+                fullWidth
+                margin="normal"
                 value={verificationCode}
                 onChange={(e) => setVerificationCode(e.target.value)}
-                required
               />
-              <InputField
+              <TextField
                 label="New Password"
                 type="password"
-                variant="outlined"
+                fullWidth
+                margin="normal"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                required
               />
-              <InputField
+              <TextField
                 label="Confirm New Password"
                 type="password"
-                variant="outlined"
+                fullWidth
+                margin="normal"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                required
               />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleVerifyCode}
-              >
+              <Button onClick={handleVerifyCode} variant="contained" fullWidth>
                 Reset Password
               </Button>
             </>
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDialogOpen(false)}>Close</Button>
+          <Button onClick={() => setDialogOpen(false)} color="primary">
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
-  
-      {success && (
-        <Alert severity="success" style={{ marginTop: "20px", width: "100%" }}>
-          {success}
-        </Alert>
-      )}
     </FormContainer>
   );
 };
