@@ -22,7 +22,7 @@ const ManageUsers = () => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get("https://backstore-iqcq.onrender.com/users/get"); // Fetch all users
-        setUsers(response.data.users);
+        setUsers(response.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching users:", error);
