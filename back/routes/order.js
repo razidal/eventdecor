@@ -15,6 +15,7 @@ router.delete("/delete/:id", async (req, res) => {
       message: "Order deleted successfully",
       order: deletedOrder 
     });
+    deletedOrder.status = 'Cancelled'; // Update the status to 'Cancelled'
   } catch (err) {
     console.error(err);
     if (err.kind === "ObjectId") {
