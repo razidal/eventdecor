@@ -4,6 +4,7 @@ const nodemailer = require("nodemailer");
 const Order = require("../models/Order");
 const User = require("../models/User");
 const PartyDecoration = require("../models/PartyDecoration");
+const stripe = require("stripe")("sk_test_51PwNVNDPvgfjYdfi0WlwoFXRVX2KUSerAJQS3jqtL0K9opavbhuePjqEicoR8kyYcia86YYQZDlL6NqW8McxTqlO00LD1Y5EM8");
 
 const sendOrderConfirmationEmail = async (userEmail, orderData) => {
   try {
@@ -87,58 +88,31 @@ router.post("/user/:id/new_order", async (req, res) => {
   }
 });
 
+// Process payment
 router.post("/process-payment", async (req, res) => {
-  console.log("Received payment request:", req.body);
-
-  const { userId, cartData, totalPrice, paymentMethod, email, address } =
-    req.body;
-
-  if (
-    !userId ||
-    !cartData ||
-    !totalPrice ||
-    !paymentMethod ||
-    !email ||
-    !address
-  ) {
-    return res
-      .status(400)
-      .json({ success: false, error: "Missing or invalid required fields" });
-  }
-
-  if (
-    !address.street ||
-    !address.city ||
-    !address.postalCode ||
-    !address.country
-  ) {
-    return res
-      .status(400)
-      .json({ success: false, error: "Invalid address data" });
-  }
+  const { userId, cartData, totalPrice, email, address, cardInfo } = req.body;
 
   try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ success: false, error: "User not found" });
-    }
+    // Create Stripe token
+    const token = await stripe.tokens.create({
+      card: {
+        number: cardInfo.cardNumber,
+        exp_month: cardInfo.expiryMonth,
+        exp_year: cardInfo.expiryYear,
+        cvc: cardInfo.cvv,
+        name: cardInfo.cardholderName,
+      },
+    });
 
-    for (const item of cartData) {
-      const product = await PartyDecoration.findById(item.productId);
-      if (!product) {
-        return res.status(404).json({
-          success: false,
-          error:` Product ${item.productId} not found`,
-        });
-      }
-      if (product.stockQuantity < item.quantity) {
-        return res.status(400).json({
-          success: false,
-          error:` Insufficient stock for product ${product.name}`,
-        });
-      }
-    }
+    // Charge the card using the token
+    const charge = await stripe.charges.create({
+      amount: totalPrice * 100, // Stripe expects the amount in cents
+      currency: "usd",
+      source: token.id,
+      description: `Order by user ${userId}`,
+    });
 
+    // Save the order in the database
     const newOrder = new Order({
       userId,
       products: cartData.map((item) => ({
@@ -147,37 +121,20 @@ router.post("/process-payment", async (req, res) => {
         price: item.price,
       })),
       totalAmount: totalPrice,
-      paymentMethod,
-      status: "Completed",
+      paymentInfo: {
+        cardholderName: cardInfo.cardholderName,
+        cardToken: token.id,  // Storing token instead of actual card number
+        expiryDate: `${cardInfo.expiryMonth}/${cardInfo.expiryYear}`,
+      },
       address,
     });
 
     await newOrder.save();
 
-    for (const item of cartData) {
-      await PartyDecoration.findByIdAndUpdate(item.productId, {
-        $inc: { stockQuantity: -item.quantity },
-      });
-    }
-
-    await sendOrderConfirmationEmail(email, newOrder);
-
     res.status(200).json({ success: true, orderId: newOrder._id });
   } catch (error) {
-    console.error("Error processing payment:", error);
-    if (error.name === "ValidationError") {
-      res.status(400).json({
-        success: false,
-        error: "Validation error",
-        details: error.errors,
-      });
-    } else {
-      res.status(500).json({
-        success: false,
-        error: "Order processing failed",
-        details: error.message,
-      });
-    }
+    console.error("Payment processing failed:", error);
+    res.status(500).json({ success: false, error: "Payment failed" });
   }
 });
 
