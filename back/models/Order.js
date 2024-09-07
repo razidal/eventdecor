@@ -58,20 +58,6 @@ const OrderSchema = new mongoose.Schema(
         required: true,
       },
     },
-    paymentInfo: {
-      cardholderName: {
-        type: String,
-        required: true,
-      },
-      cardToken: {  // Securely store tokenized credit card information
-        type: String,
-        required: true,
-      },
-      expiryDate: {
-        type: String,
-        required: true,
-      },
-    },
   },
   { timestamps: true }
 );
