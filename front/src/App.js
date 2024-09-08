@@ -11,8 +11,6 @@ import UserRoute from "./components/Route/UserRoute";
 import Management from "./pages/admin/management/Management";
 import Products from "./pages/products/Products";
 import Cart from "./pages/cart/Cart";
-import Favorites from "./pages/favorite/Favorites";
-import ForgotPassword from "./pages/forgotPassword/ForgotPassword";
 import VirtualEventDesigner from "./pages/VirtualEventDesigner/VirtualEventDesigner";
 import { login } from "./redux/userSlice";
 import Footer from "./components/footer/footer";
