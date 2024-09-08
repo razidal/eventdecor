@@ -44,6 +44,7 @@ router.post("/register", async (req, res) => {
     if (user) {
       return res.status(400).json({ error: "User already exists" });
     }
+    const formattedDate = new Date(dateOfBirth).toISOString().split('T')[0];
 
     user = new User({
       fullName,
@@ -51,7 +52,7 @@ router.post("/register", async (req, res) => {
       password,
       authType: "local",
       role: "User",
-      dateOfBirth,
+      dateOfBirth: formattedDate,
     });
     //encrypt the user's password
     const salt = await bcrypt.genSalt(10);
