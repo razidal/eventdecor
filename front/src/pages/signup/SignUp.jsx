@@ -116,7 +116,6 @@ const SignUp = () => {
         googleId: user.uid,
         email: user.email,
         fullName: user.displayName,
-        profileImage: user.photoURL,
       });
 
       console.log("Google sign-up successful", response.data);

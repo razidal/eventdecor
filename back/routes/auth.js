@@ -51,6 +51,7 @@ router.post("/register", async (req, res) => {
       password,
       authType: "local",
       role: "User",
+      dateOfBirth,
     });
     //encrypt the user's password
     const salt = await bcrypt.genSalt(10);
@@ -107,6 +108,7 @@ router.post("/google-login", async (req, res) => {
         googleId: googleId || '', //to check if googleId is null or not
         authType: "google",
         role: "User",
+        dateOfBirth,
       });
       await user.save();
     } else if (!user.googleId) {

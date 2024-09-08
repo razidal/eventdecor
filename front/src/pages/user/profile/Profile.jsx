@@ -81,7 +81,7 @@ const Profile = ({ id }) => {
             Email: {user.email || "Not available"}
           </Typography>
           <Typography variant="body1">
-            Email: {user.dateOfBirth || "Not available"}
+            Date of Birth: {user.dateOfBirth || "Not available"}
           </Typography>
         </Box>
         <Divider sx={{ mb: 3 }} />

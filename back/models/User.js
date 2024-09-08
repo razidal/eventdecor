@@ -7,9 +7,6 @@ const UserSchema = new mongoose.Schema(
       sparse: true,
       unique: true,
     },
-    profileImage: {
-      type: String,
-    },
     fullName: {
       type: String,
       required: true,
@@ -43,7 +40,7 @@ const UserSchema = new mongoose.Schema(
       postalCode: { type: String, required: false },
       country: { type: String, required: false },
     },
-    dateOfBirth: { type: Date, required: false },
+    dateOfBirth: { type: Date, required: true },
   },
   { timestamps: true }
 );
