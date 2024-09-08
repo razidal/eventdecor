@@ -6,19 +6,19 @@ const initialState = {
   isAuthenticating: false,
 };
 
-const userSlice = createSlice({
+const userSlice = createSlice({ // Define a userSlice using createSlice
   name: "user",
   initialState,
   reducers: {
-    login: (state, action) => {
-      state.user = action.payload;
-      state.isAuthenticating = true;
+    login: (state, action) => { // Define a login reducer
+      state.user = action.payload; // Update the user state with the payload
+      state.isAuthenticating = true;  // Set isAuthenticating to true
       Cookies.set("user", JSON.stringify(action.payload), {
-        expires: 7,
-        path: "/",
+        expires: 7, 
+        path: "/", 
       }); // Set a 7-day expiration (adjust as needed)
     },
-    logout: (state) => {
+    logout: (state) => { // Define a logout reducer
       state.user = null;
       state.isAuthenticating = false;
       Cookies.remove("user"); // Remove the user cookie

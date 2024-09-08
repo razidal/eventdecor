@@ -11,7 +11,8 @@ import {
 } from "@mui/material";
 
 const Edit = ({ product, handleEditSuccess }) => {
-  const [editProduct, setEditProduct] = useState({
+  const [editProduct, setEditProduct] = useState({ // Initialize editProduct state with product data
+    // ...product, // Spread the product data into editProduct state
     name: product.name || "",
     description: product.description || "",
     price: product.price || "",
@@ -26,7 +27,7 @@ const Edit = ({ product, handleEditSuccess }) => {
       length: product.dimensions?.length || "",
       width: product.dimensions?.width || "",
       height: product.dimensions?.height || "",
-    },
+    }, 
     isReusable: product.isReusable || false,
     ageGroup: product.ageGroup || "",
     brand: product.brand || "",
@@ -37,26 +38,26 @@ const Edit = ({ product, handleEditSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await axios.put(
-        `https://backstore-iqcq.onrender.com/products/update/${product._id}`,
+    try { // Use try-catch block to handle errors during API call
+      const response = await axios.put( 
+        `https://backstore-iqcq.onrender.com/products/update/${product._id}`, // Use product._id to update the specific product
         editProduct
       );
 
-      alert("Product updated successfully");
-      handleEditSuccess();
+      alert("Product updated successfully"); // Show success alert
+      handleEditSuccess(); // Call handleEditSuccess function to update the product list in the parent component
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditProduct({ ...editProduct, [name]: value });
+    const { name, value } = e.target; // Destructure name and value from e.target
+    setEditProduct({ ...editProduct, [name]: value }); // Update the editProduct state with the new value
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}> 
       <Box component="form">
         <TextField
           id="name"
@@ -66,7 +67,7 @@ const Edit = ({ product, handleEditSuccess }) => {
           required
           name="name"
           value={editProduct.name}
-          onChange={handleInputChange}
+          onChange={handleInputChange} // Call handleInputChange function on input change
         />
         <TextField
           id="description"
@@ -76,7 +77,7 @@ const Edit = ({ product, handleEditSuccess }) => {
           required
           name="description"
           value={editProduct.description}
-          onChange={handleInputChange}
+          onChange={handleInputChange} // Call handleInputChange function on input change
         />
         <TextField
           id="price"
@@ -87,7 +88,7 @@ const Edit = ({ product, handleEditSuccess }) => {
           required
           name="price"
           value={editProduct.price}
-          onChange={handleInputChange}
+          onChange={handleInputChange} 
         />
         <TextField
           id="imageUrl"
@@ -126,7 +127,7 @@ const Edit = ({ product, handleEditSuccess }) => {
           required
           name="stockQuantity"
           value={editProduct.stockQuantity}
-          onChange={handleInputChange}
+          onChange={handleInputChange} 
         />
         <TextField
           id="color"
@@ -194,9 +195,9 @@ const Edit = ({ product, handleEditSuccess }) => {
             name="width"
             value={editProduct.dimensions.width}
             onChange={(e) =>
-              setEditProduct({
+              setEditProduct({ // Update the editProduct state with the new value for width
                 ...editProduct,
-                dimensions: {
+                dimensions: { // Update the dimensions object within editProduct state
                   ...editProduct.dimensions,
                   width: e.target.value,
                 },
@@ -212,9 +213,9 @@ const Edit = ({ product, handleEditSuccess }) => {
             name="height"
             value={editProduct.dimensions.height}
             onChange={(e) =>
-              setEditProduct({
-                ...editProduct,
-                dimensions: {
+              setEditProduct({ // Update the editProduct state with the new value for height
+                ...editProduct, 
+                dimensions: {  // Update the dimensions object within editProduct state
                   ...editProduct.dimensions,
                   height: e.target.value,
                 },
@@ -230,7 +231,7 @@ const Edit = ({ product, handleEditSuccess }) => {
             fullWidth
             name="ageGroup"
             value={editProduct.ageGroup}
-            onChange={handleInputChange}
+            onChange={handleInputChange} 
           >
             <MenuItem value="Kids">Kids</MenuItem>
             <MenuItem value="Teens">Teens</MenuItem>

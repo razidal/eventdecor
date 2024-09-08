@@ -31,16 +31,16 @@ const TableAdmin = () => {
   };
 
   const fetchData = async () => {
-    try {
-      const response = await axios.get(
+    try { 
+      const response = await axios.get( 
         `https://backstore-iqcq.onrender.com/cart/allOrders`,
         {
           timeout: 5000,
         }
-      );
-      setUserData(response.data.orders);
-      setLoading(false);
-    } catch (error) {
+      ); 
+      setUserData(response.data.orders); // Assuming the response contains an array of users
+      setLoading(false); // Set loading to false once data is fetched
+    } catch (error) { // Catch any errors that occur during the fetch request
       setError(error);
       setLoading(false);
     }
@@ -50,19 +50,19 @@ const TableAdmin = () => {
     fetchData();
   }, []);
 
-  const deleteOrder = async (orderId) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this order?");
-    if (!confirmDelete) return;
+  const deleteOrder = async (orderId) => { // Function to handle order deletion
+    const confirmDelete = window.confirm("Are you sure you want to delete this order?"); // Confirmation dialog before deletion
+    if (!confirmDelete) return; // If the user cancels the deletion, do nothing
 
-    setDeleting(true);
+    setDeleting(true); // Set deleting state to true to show loading indicator or disable buttons
     try {
-      await axios.delete(`https://backstore-iqcq.onrender.com/order/delete/${orderId}`);
-      setUserData((prevData) => prevData.filter((order) => order._id !== orderId));
+      await axios.delete(`https://backstore-iqcq.onrender.com/order/delete/${orderId}`); // Make a DELETE request to the server to delete the order
+      setUserData((prevData) => prevData.filter((order) => order._id !== orderId)); // Remove the deleted order from the local state to update the UI instantly
       setDeleting(false);
-      alert("Order deleted successfully.");
+      alert("Order deleted successfully."); // Show success message
     } catch (error) {
-      setDeleting(false);
-      alert("Failed to delete order. Please try again.");
+      setDeleting(false);   
+      alert("Failed to delete order. Please try again."); // Show error message
       console.error("Error deleting order:", error);
     }
   };
@@ -75,15 +75,15 @@ const TableAdmin = () => {
         </Typography>
       </Box>
 
-      {loading ? (
+      {loading ? ( // Show loading indicator while data is being fetched
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant="h6" sx={{ display: 'inline-block' }}>
             Loading...
           </Typography>
         </Box>
-      ) : error ? (
+      ) : error ? ( // Show error message if there was an error during the fetch request
         <p>Error: {error.message}</p>
-      ) : (
+      ) : ( // Render the table with user data if data is available and there was no error
         <Container>
           <Table>
             <TableHead>
@@ -97,7 +97,7 @@ const TableAdmin = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {userData?.map((user) => (
+              {userData?.map((user) => ( // Map through the user data and render a table row for each user
                 <TableRow key={user._id}>
                   <TableCell>{user._id}</TableCell>
                   <TableCell>{user.totalAmount}$</TableCell>
@@ -112,10 +112,10 @@ const TableAdmin = () => {
                     <Button
                       variant="contained"
                       color="error"
-                      onClick={() => deleteOrder(user._id)}
+                      onClick={() => deleteOrder(user._id)} // Call deleteOrder function with the user's ID
                       disabled={deleting}
                     >
-                      {deleting ? "Deleting..." : "Delete"}
+                      {deleting ? "Deleting..." : "Delete"} {/* Show loading indicator or "Delete" button text based on deleting state */}
                     </Button>
                   </TableCell>
                 </TableRow>

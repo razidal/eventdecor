@@ -34,7 +34,7 @@ const TableOrder = ({ id }) => {
     }
   }, [id]);
 
-  useEffect(() => {
+  useEffect(() => { // Fetch data when idPerson changes
     const fetchData = async () => {
       if (!idPerson) {
         console.error("ID is undefined");
@@ -43,18 +43,18 @@ const TableOrder = ({ id }) => {
 
       console.log("Fetching data for ID:", idPerson);
 
-      try {
+      try { // Fetch data from the API
         const response = await axios.get(
           `https://backstore-iqcq.onrender.com/cart/user/${idPerson}/getOrders`
         );
         console.log("API Response:", response.data);
 
-        if (response.data.orders) {
+        if (response.data.orders) { // Check if orders exist in the response
           setUserData(response.data.orders);
         } else {
           setUserData([]);
         }
-      } catch (error) {
+      } catch (error) { // Handle errors
         setError(error);
       } finally {
         setLoading(false);
@@ -65,12 +65,12 @@ const TableOrder = ({ id }) => {
   }, [idPerson]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async () => { // Fetch data when idPerson changes
       if (!id) return;
       console.log("Fetching data for ID:", idPerson);
 
       try {
-        const response = await axios.get(
+        const response = await axios.get( // Fetch data from the API
           `https://backstore-iqcq.onrender.com/cart/user/${id}/getOrders`
         );
         console.log("API Response:", response.data);
@@ -93,13 +93,13 @@ const TableOrder = ({ id }) => {
   return (
     <div>
       <h2>Orders</h2>
-      {loading ? (
+      {loading ? (  // Display loading state
         <p>Loading...</p>
-      ) : error ? (
+      ) : error ? ( // Display error state
         <p>Error: {error.message}</p>
-      ) : userData.length === 0 ? (
+      ) : userData.length === 0 ? ( // Display no orders state
         <p>No orders available.</p>
-      ) : (
+      ) : ( // Display orders table
         <Table>
           <TableHead>
             <TableRow>
@@ -110,7 +110,7 @@ const TableOrder = ({ id }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {userData.map((order) => (
+            {userData.map((order) => ( // Map through orders and display each one
               <TableRow key={order._id}>
                 <TableCell>{order._id}</TableCell>
                 <TableCell>{order.totalAmount}$</TableCell>
@@ -152,7 +152,7 @@ const TableOrder = ({ id }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {selectedOrder?.products?.map((product) => (
+              {selectedOrder?.products?.map((product) => ( // Map through products in the selected order and display each one
                 <TableRow key={product._id}>
                   <TableCell>{product.productId.name}</TableCell>
                   <TableCell>{product.productId.price}$</TableCell>

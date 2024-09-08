@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const PartyDecorationSchema = new mongoose.Schema(
-  {
+  {// Define the schema for the party decoration item
     name: {
       type: String,
       required: true,

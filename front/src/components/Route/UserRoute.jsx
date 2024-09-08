@@ -24,18 +24,18 @@ import { logout } from "../../redux/userSlice";
 
 const drawerWidth = 240;
 
-const UserRoute = () => {
+const UserRoute = () => { 
   const [id, setId] = useState("");
   const location = useLocation();
   const navigate=useNavigate()
   const dispatch=useDispatch()
-  useEffect(() => {
-    const token = Cookies.get("user");
-    if (token) {
-      setId(JSON.parse(token));
+  useEffect(() => { // Fetch user ID from cookies when the component mounts
+    const token = Cookies.get("user"); // Replace 'userToken' with your actual cookie name
+    if (token) { // If the token exists, parse it and set the user ID
+      setId(JSON.parse(token)); // Assuming the token is a JSON string containing the user ID
     }
   }, []);
-  const handleLogout = () => {
+  const handleLogout = () => { // Handle logout action
     dispatch(logout()); 
     Cookies.remove("user");
     Cookies.remove("cart"); 
@@ -43,20 +43,20 @@ const UserRoute = () => {
     navigate("/");
     window.location.reload();
     }
-  const menuItems = [
+  const menuItems = [ // Define your menu items
     { text: "Profile", icon: <PersonIcon />, path: "profile/" },
     { text: "Edit Profile", icon: <EditIcon />, path: "edit/" },
-    { text: "Logout", icon: <LogoutIcon />, path: "/" ,action: handleLogout },
+    { text: "Logout", icon: <LogoutIcon />, path: "/" ,action: handleLogout }, // Attach the logout action
   ];
 
-  return (
+  return ( 
     <Box sx={{ display: "flex" }}>
       <Drawer
         variant="permanent"
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          "& .MuiDrawer-paper": {
+          "& .MuiDrawer-paper": {   // Apply styles to the drawer paper
             width: drawerWidth,
             boxSizing: "border-box",
             top: "64px",
@@ -72,19 +72,19 @@ const UserRoute = () => {
         </Box>
         <Divider />
         <List>
-        {menuItems.map((item, index) => (
+        {menuItems.map((item, index) => ( // Map through the menu items and create ListItems
             <ListItem
               button
               key={item.text}
               component={item.action ? "div" : Link} // Use "div" if there's an action, otherwise Link
               to={item.path}
               onClick={item.action ? item.action : null} // Attach the action if it exists
-              selected={location.pathname.includes(item.path)}
+              selected={location.pathname.includes(item.path)} // Highlight the selected item
               sx={{
                 "&.Mui-selected": {
-                  backgroundColor: "primary.light",
+                  backgroundColor: "primary.light", // Apply a background color when selected
                   "&:hover": {
-                    backgroundColor: "primary.light",
+                    backgroundColor: "primary.light", // Keep the background color on hover
                   },
                 },
               }}
@@ -100,14 +100,14 @@ const UserRoute = () => {
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          width: { sm: `calc(100% - ${drawerWidth}px)` }, // Adjust the main content width based on the drawer width
 
           marginLeft: ``,
           marginTop: "64px",
         }}
       >
         <Routes>
-          <Route path="profile/" element={<Profile id={id} />} />
+          <Route path="profile/" element={<Profile id={id} />} /> 
           <Route path="edit/" element={<Edit id={id} />} />
           <Route
             path="/"

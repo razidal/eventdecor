@@ -8,7 +8,7 @@ import slider4 from "./slider2.png";
 import prod3 from "./slider3.png";
 import prod4 from "./slider4.png";
 
-const images = [
+const images = [ // Define images and titles here
   {
     src: slider4,
     title: '🎉 Welcome to our Event Decoration! Enjoy our special offers!🎉',
@@ -36,33 +36,33 @@ const CustomCarousel = () => {
   const [animating, setAnimating] = useState(false);
   const [direction, setDirection] = useState(null);
 
-  const handlePrev = () => {
-    if (animating) return;
-    setDirection('left');
-    setIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
+  const handlePrev = () => { // Handle previous slide
+    if (animating) return; // Prevent multiple clicks during animation
+    setDirection('left'); // Set direction for slide animation
+    setIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1)); // Update index for previous slide
   };
 
-  const handleNext = () => {
+  const handleNext = () => { // Handle next slide
     if (animating) return;
-    setDirection('right');
-    setIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
+    setDirection('right');  // Set direction for slide animation
+    setIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1)); // Update index for next slide
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const interval = setInterval(() => { // Auto slide every 3.5 seconds
       handleNext();
     }, 3500);
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // Clear interval on component unmount
   }, []);
 
   useEffect(() => {
-    if (direction) {
+    if (direction) { // Reset animation state and direction after slide animation
       setAnimating(true);
-      const timer = setTimeout(() => {
-        setAnimating(false);
-        setDirection(null);
+      const timer = setTimeout(() => { // Delay for slide animation
+        setAnimating(false); // Reset animation state
+        setDirection(null); // Reset direction
       }, 300); // Duration of the slide animation
-      return () => clearTimeout(timer);
+      return () => clearTimeout(timer); // Clear timeout on component unmount or direction change
     }
   }, [index, direction]);
 
@@ -94,8 +94,8 @@ const CustomCarousel = () => {
       <Box
         sx={{
           display: 'flex',
-          transition: 'transform 0.5s ease-in-out',
-          transform: direction === 'left' ? 'translateX(100%)' : direction === 'right' ? 'translateX(-100%)' : 'translateX(0)',
+          transition: 'transform 0.5s ease-in-out', // Slide animation
+          transform: direction === 'left' ? 'translateX(100%)' : direction === 'right' ? 'translateX(-100%)' : 'translateX(0)', // Slide animation based on direction
           width: '100%',
           overflow: 'hidden',
         }}
@@ -106,7 +106,7 @@ const CustomCarousel = () => {
             flexShrink: 0,
             width: '100%',
             textAlign: 'center',
-            opacity: animating ? 0 : 1,
+            opacity: animating ? 0 : 1, // Fade animation
             transition: 'opacity 0.5s ease-in-out',
             display: 'flex',
             flexDirection: 'column',
@@ -137,7 +137,7 @@ const CustomCarousel = () => {
           position: 'absolute',
           right: '10px',
           zIndex: 1,
-          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          backgroundColor: 'rgba(255, 255, 255, 0.5)', // Semi-transparent white background
           borderRadius: '50%',
           padding: '8px',
         }}

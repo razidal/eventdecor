@@ -18,20 +18,20 @@ const Edit = ({ id }) => {
   const [errors, setErrors] = useState({}); // State to store validation errors
   const [successMessage, setSuccessMessage] = useState("");
 
-  const [editUser, setEditUser] = useState({
+  const [editUser, setEditUser] = useState({ // State to store edited user data
     fullName: id.fullName || "",
     email: id.email || "",
     password: "",
   });
 
-  const togglePasswordVisibility = () => {
+  const togglePasswordVisibility = () => { // Function to toggle password visibility
     setShowPassword(!showPassword);
   };
 
   useEffect(() => {
-    const getUser = async () => {
+    const getUser = async () => { 
       try {
-        const response = await axios.get(
+        const response = await axios.get( // Fetch user data from the server
           `https://backstore-iqcq.onrender.com/auth/user/${id._id}`
         );
         setUser(response.data.user);
@@ -40,19 +40,19 @@ const Edit = ({ id }) => {
       }
     };
 
-    if (id._id) {
+    if (id._id) { // Check if id._id is defined before making the API call
       getUser();
     }
   }, [id]);
 
   // Email validation
-  const validateEmail = (email) => {
+  const validateEmail = (email) => { // Function to validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
   // Password validation
-  const validatePassword = (password) => {
+  const validatePassword = (password) => { // Function to validate password length
     return password.length >= 6;
   };
 
@@ -70,19 +70,19 @@ const Edit = ({ id }) => {
       validationErrors.password = "Password must be at least 6 characters long.";
     }
 
-    if (Object.keys(validationErrors).length > 0) {
+    if (Object.keys(validationErrors).length > 0) { // Check if there are any validation errors
       setErrors(validationErrors); // Set validation errors
       return;
     }
 
-    const userData = {
+    const userData = { // Prepare user data for update
       fullName: editUser.fullName || user.fullName,
       email: editUser.email || user.email,
       password: editUser.password || user.password,
     };
 
     try {
-      const response = await axios.put(
+      const response = await axios.put( // Send a PUT request to update user data
         `https://backstore-iqcq.onrender.com/auth/update/${id._id}/`,
         userData
       );
@@ -155,7 +155,7 @@ const Edit = ({ id }) => {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton onClick={togglePasswordVisibility} edge="end">
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                    {showPassword ? <VisibilityOff /> : <Visibility />} {/* Toggle password visibility icon */}
                   </IconButton>
                 </InputAdornment>
               ),
@@ -166,7 +166,7 @@ const Edit = ({ id }) => {
           </Button>
 
           {/* Display success message */}
-          {successMessage && (
+          {successMessage && ( // Check if successMessage is not empty
             <Alert severity="success" style={{ marginTop: "20px" }}>
               {successMessage}
             </Alert>

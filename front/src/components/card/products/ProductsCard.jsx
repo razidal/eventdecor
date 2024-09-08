@@ -13,39 +13,39 @@ import { DialogContentText } from "@mui/material";
 import axios from "axios";
 import Edit from "../../../pages/admin/management/edit/Edit";
 
-const ProductsCard = ({ product, fetchProducts }) => {
-  const [open, setOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [showFullDescription, setShowFullDescription] = useState(false);
+const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as a prop
+  const [open, setOpen] = useState(false); // State for the delete confirmation dialog 
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false); // State for the edit dialog
+  const [showFullDescription, setShowFullDescription] = useState(false); // State for the description toggle
 
-  const handleEditDialogOpen = () => {
+  const handleEditDialogOpen = () => { // Function to open the edit dialog
     setIsEditDialogOpen(true);
   };
 
-  const handleEditDialogClose = () => {
+  const handleEditDialogClose = () => { // Function to close the edit dialog
     setIsEditDialogOpen(false);
   };
 
-  const handleClickOpen = () => {
+  const handleClickOpen = () => { // Function to open the delete confirmation dialog
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleClose = () => { // Function to close the delete confirmation dialog
     setOpen(false);
   };
 
-  const deleteProduct = async () => {
-    try {
-      await axios.delete(
-        `https://backstore-iqcq.onrender.com/products/delete/${product._id}`,
-        {
-          timeout: 5000,
+  const deleteProduct = async () => { // Function to delete the product
+    try { // Try-catch block to handle errors
+      await axios.delete( 
+        `https://backstore-iqcq.onrender.com/products/delete/${product._id}`, 
+        { // Request configuration
+          timeout: 5000, // Set a timeout of 5 seconds for the request
         }
-      );
-      alert(" Product deleted successfully");
-      setOpen(false);
+      ); 
+      alert(" Product deleted successfully"); // Show a success message
+      setOpen(false); // Close the dialog
       fetchProducts(); // Refresh the product list after deletion
-    } catch (error) {
+    } catch (error) { // Catch any errors that occur during the request
       console.log(error);
     }
   };
@@ -58,18 +58,18 @@ const ProductsCard = ({ product, fetchProducts }) => {
     fetchProducts();
   };
 
-  const toggleDescription = () => {
+  const toggleDescription = () => { // Function to toggle the description length
     setShowFullDescription(!showFullDescription);
   };
 
   return (
     <div>
-      <Card sx={{ maxWidth: 345 }}>
-        <CardMedia
+      <Card sx={{ maxWidth: 345 }}> {/* Card component from Material-UI */}
+        <CardMedia 
           sx={{ height: 140 }}
           image={product.imageUrl}
           title={product.name}
-        />
+        /> 
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {product.name}
@@ -85,21 +85,21 @@ const ProductsCard = ({ product, fetchProducts }) => {
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Description:{" "}
-            {showFullDescription || product.description.length <= 20
+            {showFullDescription || product.description.length <= 20 // Show full description or a truncated version based on the state and length of the description
               ? product.description
-              : `${product.description.substring(0, 20)}...`}
-            {product.description.length > 20 && (
+              : `${product.description.substring(0, 20)}...`} 
+            {product.description.length > 20 && ( // Show "Read More" button if the description is longer than 20 characters
               <Button size="small" onClick={toggleDescription}>
-                {showFullDescription ? "Show Less" : "Read More"}
-              </Button>
+                {showFullDescription ? "Show Less" : "Read More" } {/* Toggle the button text based on the state */} 
+              </Button> 
             )}
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" onClick={handleEditDialogOpen}>
+          <Button size="small" onClick={handleEditDialogOpen}> {/* Open the edit dialog when the button is clicked */}
             Edit
           </Button>
-          <Button size="small" onClick={handleClickOpen}>
+          <Button size="small" onClick={handleClickOpen}> {/* Open the delete confirmation dialog when the button is clicked */}
             Delete
           </Button>
         </CardActions>
@@ -108,18 +108,18 @@ const ProductsCard = ({ product, fetchProducts }) => {
       {/* Delete confirmation dialog */}
       <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={handleClose} 
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-      >
+      > 
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText id="alert-dialog-description"> {/* Dialog content */}
             Are you sure you want to delete this product?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={deleteProduct} autoFocus>
+          <Button onClick={handleClose}>Cancel</Button> {/* Close the dialog when the button is clicked */}
+          <Button onClick={deleteProduct} autoFocus> {/* Delete the product when the button is clicked */}
             Delete
           </Button>
         </DialogActions>
@@ -132,7 +132,8 @@ const ProductsCard = ({ product, fetchProducts }) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogContent>
+        <DialogContent> 
+          {/* Edit component */}
           <Edit product={product} handleEditSuccess={handleEditSuccess} />
         </DialogContent>
       </Dialog>

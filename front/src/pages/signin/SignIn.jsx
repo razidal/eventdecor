@@ -74,18 +74,18 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const userData = {
+    const userData = { // Define userData object here
       email: email,
       password: password,
     };
     try {
-      const response = await axios.post("https://backstore-iqcq.onrender.com/auth/login", userData);
-      const user = response.data.user;
+      const response = await axios.post("https://backstore-iqcq.onrender.com/auth/login", userData); // Use userData object here
+      const user = response.data.user; // Assuming the user data is in the response.data.user property
       dispatch(login(user));
-      localStorage.setItem("user", JSON.stringify(user));
-      if (user.role === "Admin") {
+      localStorage.setItem("user", JSON.stringify(user)); // Store user data in localStorage
+      if (user.role === "Admin") { // Check user role and navigate accordingly
         navigate("/Admin/Management");
-      } else {
+      } else { // Assuming "User" role for regular users
         navigate("/");
       }
     } catch (err) {
@@ -96,15 +96,15 @@ const SignIn = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      const result = await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, googleProvider); // Use signInWithPopup from Firebase auth
       const user = result.user;
-      const response = await axios.post("https://backstore-iqcq.onrender.com/auth/google-login", {
+      const response = await axios.post("https://backstore-iqcq.onrender.com/auth/google-login", { 
         email: user.email,
         googleId: user.uid,
         fullName: user.displayName,
       });
-      const userData = response.data.user;
-      dispatch(login(userData));
+      const userData = response.data.user; // Assuming the user data is in the response.data.user property
+      dispatch(login(userData)); // Dispatch the login action with userData
       localStorage.setItem("user", JSON.stringify(userData));
       navigate("/");
     } catch (error) {
@@ -114,9 +114,9 @@ const SignIn = () => {
   };
 
   const handleForgotPassword = async () => {
-    try {
+    try { // Send verification code to the provided email
       const response = await axios.post("https://backstore-iqcq.onrender.com/auth/send-code", { email: forgotEmail });
-      setSentCode(response.data.code);
+      setSentCode(response.data.code); // Store the sent code for verification
     } catch (error) {
       setError("Failed to send verification code. Please check the email.");
       console.error(error);
@@ -124,10 +124,10 @@ const SignIn = () => {
   };
 
   const handleVerifyCode = async () => {
-    if (verificationCode === sentCode) {
-      if (newPassword.length>=6 && newPassword === confirmPassword) {
+    if (verificationCode === sentCode) { // Check if the entered code matches the sent code
+      if (newPassword.length>=6 && newPassword === confirmPassword) { // Check if the new password and confirm password match and length is at least 6 characters
         try {
-          await axios.put("https://backstore-iqcq.onrender.com/auth/reset-password", {
+          await axios.put("https://backstore-iqcq.onrender.com/auth/reset-password", { // Send a PUT request to reset the password
             email: forgotEmail,
             password: newPassword,
           });
@@ -136,16 +136,16 @@ const SignIn = () => {
           setSuccess("Password reset successful. You can now sign in with your new password.");
           setNewPassword("");
           setConfirmPassword("");
-          navigate("/SignIn");
+          navigate("/SignIn"); // Redirect to the sign-in page after successful password reset
         } catch (error) {
           setError("Failed to reset password. Please try again.");
         }
-      } else if(newPassword !== confirmPassword) {
+      } else if(newPassword !== confirmPassword) { // Check if the new password and confirm password match
         setError("Passwords do not match.");
-      }else if(newPassword.length<6){
+      }else if(newPassword.length<6){  // Check if the new password length is at least 6 characters
         setError("Password must be at least 6 characters long.");
       }
-    } else {
+    } else { // If the entered code does not match the sent code
       setError("Incorrect verification code.");
     }
   };
@@ -213,7 +213,7 @@ const SignIn = () => {
                 fullWidth
                 margin="normal"
                 value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value)}
+                onChange={(e) => setVerificationCode(e.target.value)} 
               />
               <TextField
                 label="New Password"
@@ -236,12 +236,12 @@ const SignIn = () => {
               </Button>
             </>
           )}
-          {error && (
+          {error && ( // Display error message if there is an error
           <Alert severity="error" style={{ marginTop: "20px", width: "100%" }}>
             {error}
           </Alert>
         )}
-        {success && (
+        {success && ( // Display success message if there is a success
           <Alert severity="success" style={{ marginTop: "20px", width: "100%" }}>
             {success}
           </Alert>

@@ -21,12 +21,13 @@ app.use("/auth", authRoutes);
 app.use("/products", productRoutes);
 app.use("/cart", cardRoutes);
 app.use("/pay", payRoutes);
-const PORT = process.env.PORT || 3000;
-connectDB().then(()=>{
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-}).catch(err=>{
+const PORT = process.env.PORT || 3000; // Use the provided port or default to 3000
+
+connectDB().then(()=>{  // Connect to the database before starting the server
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`)); // Start the server after the database connection is established
+}).catch(err=>{ // Handle any errors that occur during the database connection
     console.error("Faild",err)
-    process.exit(1)
+    process.exit(1) // Exit the process with a failure status code
 })
 
 

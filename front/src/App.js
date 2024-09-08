@@ -19,7 +19,7 @@ import Footer from "./components/footer/footer";
 import { loadFavoritesFromCookies } from "./redux/favoritesSlice";
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); 
   const user = useSelector((state) => state.user.user);
   const [loading, setLoading] = useState(true);
 
@@ -28,15 +28,15 @@ function App() {
     dispatch(loadFavoritesFromCookies());
   }, [dispatch]);
 
-  useEffect(() => {
+  useEffect(() => { // Load user data from cookies when the app initializes
     const savedUser = Cookies.get("user");
-    if (savedUser) {
+    if (savedUser) { // If user data exists in cookies, dispatch the login action to update the Redux store
       dispatch(login(JSON.parse(savedUser)));
     }
     setLoading(false);
   }, [dispatch]);
 
-  if (loading) {
+  if (loading) { // Show a loading indicator while the app is initializing
     return <div>Loading...</div>;
   }
 
@@ -44,27 +44,25 @@ function App() {
     <Router>
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/SignUp" element={<SignUp />} />
-        <Route path="/SignIn" element={<SignIn />} />
+        <Route path="/" element={<Home />} /> {/* Home page */}
+        <Route path="/SignUp" element={<SignUp />} /> {/* Sign up page */}
+        <Route path="/SignIn" element={<SignIn />} /> {/* Sign in page */}
         <Route
-          path="/Admin/*"
+          path="/Admin/*"   // Admin route, only accessible to users with the "Admin" role
           element={user && user.role === "Admin" ? <AdminRoute /> : <Navigate to="/SignIn" />}
         />
         
-        <Route
-          path="/User/*"
+        <Route 
+          path="/User/*" // User route, only accessible to authenticated users
           element={user ? <UserRoute /> : <Navigate to="/SignIn" />}
         />
         <Route path="/Products" element={<Products />} />
         <Route
-          path="/Cart"
+          path="/Cart" // Cart page, only accessible to authenticated users
           element={user ? <Cart /> : <Navigate to="/SignIn" />}
         />
-        <Route path="/Favorites" element={<Favorites />} />
-        <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route
-          path="/VirtualEventDesigner"
+          path="/VirtualEventDesigner" // Virtual event designer page, only accessible to authenticated users
           element={<VirtualEventDesigner />}
         />
       </Routes>

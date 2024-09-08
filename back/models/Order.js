@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
+// IMPORTED SCHEMAS 
 
 const OrderSchema = new mongoose.Schema(
-  {
+  { // ORDER SCHEMA
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

@@ -49,8 +49,8 @@ const PayButton = styled(Button)`
     background-color: #0056b3;
   }
 `;
-
-const cityList = [
+ 
+const cityList = [ // Israel city list 
   "Tel Aviv-Yafo","Jerusalem","Haifa","Rishon LeẔiyyon","Petaẖ Tiqwa","Ashdod","Netanya","Beersheba","Holon","Bené Beraq","Ramat Gan",
   "Ashqelon","Reẖovot","Bat Yam","Bet Shemesh","Kefar Sava","Modi‘in Makkabbim Re‘ut","Hadera","Herẕliyya",
   "Nazareth","Lod","Ramla","Ra‘ananna","Qiryat Gat","Rahat","Nahariyya","Afula","Givatayim","Hod HaSharon",
@@ -59,7 +59,7 @@ const cityList = [
   "Qiryat Yam","Or Yehuda","Ẕefat","Dimona","Tamra","Netivot","Sakhnīn","Be’er Ya‘aqov","Yehud","Ofaqim","Kefar Yona",
 ];
 
-const countries = [
+const countries = [ // List of countries for the autocomplete field
   "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
   "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan",
   "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia",
@@ -98,61 +98,61 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
   const cartData = useSelector((state) => state.cart.items);
   const [validationError, setValidationError] = useState("");
   
-   
-  const handleSubmit = throttle(async (e) => {
+    
+  const handleSubmit = throttle(async (e) => { // Throttle the handleSubmit function to prevent multiple submissions
     e.preventDefault();
     setIsProcessing(true);
     setError("");
     setValidationError("");
 
     // Validation checks
-   const cardNumberRegex = /^\d{16}$/;
-   const cvvRegex = /^\d{3,4}$/;
-   const nameRegex = /^[A-Za-z\s]+$/;
-   const postalCodeRegex = /^\d+$/;
-   const expiryDateRegex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
+   const cardNumberRegex = /^\d{16}$/; // Credit card number should be 16 digits
+   const cvvRegex = /^\d{3,4}$/; // CVV should be 3 or 4 digits
+   const nameRegex = /^[A-Za-z\s]+$/; // Name should only contain letters and spaces
+   const postalCodeRegex = /^\d+$/; // Postal code should only contain numbers
+   const expiryDateRegex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/; // Expiry date should be in MM/YY format
 
-   if (!cardNumberRegex.test(cardNumber)) {
-     setValidationError("Check fields.");
+   if (!cardNumberRegex.test(cardNumber)) { // Check if the card number is valid
+     setValidationError("Check fields."); 
      setIsProcessing(false);
      return;
    }
 
-   if(!expiryDateRegex.test(expiryDate)) {
+   if(!expiryDateRegex.test(expiryDate)) { // Check if the expiry date is valid
       setValidationError("Check fields.");
       setIsProcessing(false);
    }
+ 
+   if (!cvvRegex.test(cvv)) { // Check if the CVV is valid
+     setValidationError("Check fields.");  
+     setIsProcessing(false);
+     return;
+   }
 
-   if (!cvvRegex.test(cvv)) {
+   if (!nameRegex.test(name)) { // Check if the name is valid
      setValidationError("Check fields.");
      setIsProcessing(false);
      return;
    }
 
-   if (!nameRegex.test(name)) {
-     setValidationError("Check fields.");
-     setIsProcessing(false);
-     return;
-   }
-
-   if (!postalCodeRegex.test(postalCode)) {
+   if (!postalCodeRegex.test(postalCode)) { // Check if the postal code is valid
      setValidationError("Check fields.");
      setIsProcessing(false);
      return;
    }
     // Check if all required fields are filled
-    if (!street || !city || !postalCode || !country) {
+    if (!street || !city || !postalCode || !country) { 
       setError("All address fields are required.");
       setIsProcessing(false);
       return;
     }
 
     try {
-      const response = await axios.post(
+      const response = await axios.post( // Send a POST request to the server to process the payment
         "https://backstore-iqcq.onrender.com/pay/process-payment",
         {
           userId: user._id,
-          cartData: cartData.map((item) => ({
+          cartData: cartData.map((item) => ({ // Map the cart data to the required format
             productId: item.id,
             quantity: item.quantity,
             price: item.price,
@@ -160,7 +160,7 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
           totalPrice,
           paymentMethod,
           email: user.email,
-          address: {
+          address: { 
             street,
             city,
             postalCode,
@@ -168,16 +168,16 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
           },
         },
         {
-          timeout: 5000,
+          timeout: 5000, // Set a timeout of 5 seconds for the request
         }
       );
 
-      if (response.data.success) {
+      if (response.data.success) { // Check if the payment was successful
         onSuccess(response.data.orderId);
-      } else {
-        setError("Payment failed. Please try again.");
+      } else { // If the payment was not successful, set the error message
+        setError("Payment failed. Please try again."); 
       }
-    } catch (error) {
+    } catch (error) { // If an error occurred, log the error and set the error message
       console.error("Error processing payment:", error);
       setError("An error occurred. Please try again.");
     } finally {
@@ -189,7 +189,7 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
     <form onSubmit={handleSubmit}>
       <RadioGroup
         value={paymentMethod}
-        onChange={(e) => setPaymentMethod(e.target.value)}
+        onChange={(e) => setPaymentMethod(e.target.value)} // Set the payment method based on the selected radio button
       >
         <FormControlLabel
           value="creditCard"
@@ -198,16 +198,16 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
         />
       </RadioGroup>
 
-      {paymentMethod === "creditCard" && (
+      {paymentMethod === "creditCard" && ( // Render the credit card form if the credit card payment method is selected
         <>
           <TextField
             fullWidth
             label="Card Number"
             value={cardNumber}
-            onChange={(e) => setCardNumber(e.target.value)}
+            onChange={(e) => setCardNumber(e.target.value)} 
             margin="normal"
             required
-            error={!!validationError && !/^\d{16}$/.test(cardNumber)}
+            error={!!validationError && !/^\d{16}$/.test(cardNumber)} 
             helperText="Must be 16 digits."
           />
           <TextField
@@ -271,10 +271,10 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             fullWidth
             options={countries}
             value={country}
-            onChange={(event, newValue) => {
-              setCountry(newValue || "");
+            onChange={(event, newValue) => { // Set the country based on the selected value from the dropdown
+              setCountry(newValue || ""); // If no value is selected, set the country to an empty string
             }}
-            renderInput={(params) => (
+            renderInput={(params) => ( // Render the dropdown input field
               <TextField {...params} label="Country" margin="normal" required />
             )}
           />
@@ -290,9 +290,9 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
         color="primary"
         fullWidth
         sx={{ mt: 2 }}
-        disabled={isProcessing}
+        disabled={isProcessing} 
       >
-        {isProcessing ? <CircularProgress size={24} /> : `Pay $${totalPrice}`}
+        {isProcessing ? <CircularProgress size={24} /> : `Pay $${totalPrice}`} {/* Render a circular progress indicator if the payment is being processed, otherwise render the pay button */}
       </Button>
       <Button onClick={onCancel} variant="outlined" fullWidth sx={{ mt: 1 }}>
         Cancel
@@ -314,34 +314,34 @@ export default function Cart() {
   const cookieCart = Cookies.get("cart");
 
   useEffect(() => {
-    if (cookieCart) {
-      const parsedCart = JSON.parse(cookieCart);
+    if (cookieCart) { // Check if the cart exists in the cookies
+      const parsedCart = JSON.parse(cookieCart); // Parse the cart data from the cookies
       setCartData(parsedCart);
       updateTotalPrice(parsedCart);
     }
-  }, [cookieCart]);
+  }, [cookieCart]); // Run the effect whenever the cart in the cookies changes
 
-  const updateTotalPrice = (cartItems) => {
-    const total = cartItems.reduce(
-      (acc, item) => acc + item.price * item.quantity,
+  const updateTotalPrice = (cartItems) => { // Calculate the total price of the items in the cart
+    const total = cartItems.reduce( // Use the reduce method to calculate the total price
+      (acc, item) => acc + item.price * item.quantity,  
       0
     );
     setTotalPrice(total);
   };
 
-  const deleteItem = (id) => {
-    const cookieCart = Cookies.get("cart");
-    const parsedCookieCart = cookieCart ? JSON.parse(cookieCart) : [];
+  const deleteItem = (id) => { // Remove an item from the cart based on its id
+    const cookieCart = Cookies.get("cart"); // Get the cart data from the cookies
+    const parsedCookieCart = cookieCart ? JSON.parse(cookieCart) : []; 
 
-    const updateCookieCart = parsedCookieCart.filter((item) => item.id !== id);
-    Cookies.set("cart", JSON.stringify(updateCookieCart));
+    const updateCookieCart = parsedCookieCart.filter((item) => item.id !== id); // Filter out the item with the matching id
+    Cookies.set("cart", JSON.stringify(updateCookieCart)); // Update the cart data in the cookies
 
-    dispatch(removeItem(id));
+    dispatch(removeItem(id)); // Dispatch the removeItem action to update the Redux store
 
-    const updatedCart = cartData.filter((item) => item.id !== id);
-    setCartData(updatedCart);
-    updateTotalPrice(updatedCart);
-    handleCloseDialog();
+    const updatedCart = cartData.filter((item) => item.id !== id); // Filter out the item with the matching id from the cart data in the state
+    setCartData(updatedCart); // Update the cart data in the state
+    updateTotalPrice(updatedCart); // Update the total price of the items in the cart
+    handleCloseDialog(); // Close the dialog box
   };
 
   const handleOpenDialog = () => {
@@ -352,11 +352,11 @@ export default function Cart() {
     setOpen(false);
   };
 
-  const handleQuantityChange = (id, newQuantity) => {
+  const handleQuantityChange = (id, newQuantity) => { // Update the quantity of an item in the cart based on its id and the new quantity value
     newQuantity = parseInt(newQuantity, 10);
-    if (newQuantity >= 0) {
+    if (newQuantity >= 0) { // Check if the new quantity is a non-negative integer
       const updatedCart = cartData.map((item) => {
-        if (item.id === id) {
+        if (item.id === id) { // Find the item with the matching id
           return { ...item, quantity: newQuantity };
         }
         return item;
@@ -372,26 +372,22 @@ export default function Cart() {
     setOpenPaymentDialog(false);
     setOpenSnackbar(true);
     setOrderStatus("Processing");
-
- 
-
-
       // Clear cart
       setCartData([]);
-      Cookies.remove("cart");
-      dispatch(clearCart());
+      Cookies.remove("cart"); // Remove cart from cookies
+      dispatch(clearCart()); // Clear cart from Redux store
 
-      setOrderStatus("Completed");
+      setOrderStatus("Completed"); // Update order status to "Completed"
   
   };
 
-  const getStatusMessage = () => {
-    switch (orderStatus) {
-      case "Processing":
+  const getStatusMessage = () => { // Get the status message based on the order status
+    switch (orderStatus) { // Use a switch statement to handle different order statuses
+      case "Processing": 
         return "Your order is being processed...";
-      case "Completed":
+      case "Completed": 
         return "Your order has been successfully placed! Check your email for confirmation.";
-      case "Failed":
+      case "Failed": 
         return "There was an issue with your order. Please contact support.";
       default:
         return "";
@@ -403,7 +399,7 @@ export default function Cart() {
       <Typography variant="h4" gutterBottom>
         Your Shopping Cart
       </Typography>
-      {cartData.length === 0 ? (
+      {cartData.length === 0 ? ( // Check if the cart is empty
         <Typography>Your cart is empty.</Typography>
       ) : (
         <>
@@ -423,7 +419,7 @@ export default function Cart() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {cartData.map((row) => (
+                {cartData.map((row) => ( // Map through the cart data to display each item in a table row
                   <TableRow
                     key={row.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -458,8 +454,8 @@ export default function Cart() {
                     <TableCell align="right">
                       <Button
                         onClick={() => {
-                          setSelectedProduct(row);
-                          handleOpenDialog();
+                          setSelectedProduct(row); // Set the selected product for deletion
+                          handleOpenDialog(); // Open the dialog box for confirmation
                         }}
                       >
                         <DeleteIcon color="error" />
@@ -471,7 +467,7 @@ export default function Cart() {
             </Table>
           </TableContainer>
           <TotalPriceText variant="h6">
-            Total Price: ${totalPrice.toFixed(2)}
+            Total Price: ${totalPrice.toFixed(2)} 
           </TotalPriceText>
           <PayButton
             variant="contained"
@@ -492,7 +488,7 @@ export default function Cart() {
         <DialogActions>
           <Button onClick={handleCloseDialog}>No</Button>
           <Button
-            onClick={() => deleteItem(selectedProduct.id)}
+            onClick={() => deleteItem(selectedProduct.id)} 
             color="error"
             autoFocus
           >
@@ -502,8 +498,8 @@ export default function Cart() {
       </Dialog>
 
       <Dialog
-        open={openPaymentDialog}
-        onClose={() => setOpenPaymentDialog(false)}
+        open={openPaymentDialog} 
+        onClose={() => setOpenPaymentDialog(false)} 
         fullWidth
         maxWidth="sm"
       >
@@ -519,12 +515,12 @@ export default function Cart() {
 
       <Snackbar
         open={openSnackbar}
-        autoHideDuration={3000}
+        autoHideDuration={3000} 
         onClose={() => setOpenSnackbar(false)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }} 
       >
         <Alert
-          onClose={() => setOpenSnackbar(false)}
+          onClose={() => setOpenSnackbar(false)} 
           severity={orderStatus === "Failed" ? "error" : "success"}
           variant="filled"
         >

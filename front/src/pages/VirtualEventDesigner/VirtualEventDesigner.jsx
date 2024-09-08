@@ -24,36 +24,36 @@ const ImageUploader = ({ onImageUpload }) => {
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
+  const handleImageUpload = (event) => { // Handle image upload logic here
+    const file = event.target.files[0]; // Get the selected file
     setError(null);
 
-    if (file) {
-      if (file.type.startsWith("image/")) {
-        if (file.size <= 5 * 1024 * 1024) {
+    if (file) { // Check if a file is selected
+      if (file.type.startsWith("image/")) { // Check if the file is an image
+        if (file.size <= 5 * 1024 * 1024) { // Check if the file size is within the limit (5MB)
           // 5MB limit
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            setPreviewImage(e.target.result);
-            onImageUpload(e.target.result);
+          const reader = new FileReader(); // Create a new FileReader instance
+          reader.onload = (e) => { // Set up the onload event handler
+            setPreviewImage(e.target.result); // Set the preview image source
+            onImageUpload(e.target.result); // Call the onImageUpload callback with the image data
           };
-          reader.readAsDataURL(file);
-        } else {
+          reader.readAsDataURL(file); // Read the file as a data URL
+        } else { // If the file size exceeds the limit, show an error message
           setError("File size exceeds 5MB limit.");
         }
-      } else {
+      } else { // If the file is not an image, show an error message
         setError("Please upload an image file.");
       }
     }
   };
 
-  const handleRemoveImage = () => {
-    setPreviewImage(null);
-    setError(null);
-    if (fileInputRef.current) {
+  const handleRemoveImage = () => { // Handle image removal logic here
+    setPreviewImage(null); // Clear the preview image source
+    setError(null); // Clear any error messages
+    if (fileInputRef.current) { // Clear the file input value
       fileInputRef.current.value = "";
     }
-    onImageUpload(null);
+    onImageUpload(null); // Call the onImageUpload callback with null to indicate that the image has been removed 
   };
 
   return (
@@ -79,13 +79,13 @@ const ImageUploader = ({ onImageUpload }) => {
         </Button>
       </label>
 
-      {error && (
+      {error && ( // Display error message if there is one
         <Alert severity="error" sx={{ mt: 2 }}>
           {error}
         </Alert>
       )}
 
-      {previewImage && (
+      {previewImage && ( // Display preview image if there is one
         <Box sx={{ mt: 2, position: "relative" }}>
           <img
             src={previewImage}
@@ -122,7 +122,7 @@ const VirtualEventDesigner = () => {
   const [currentPage, setCurrentPage] = useState(1); // State for pagination
   const itemsPerPage = 6; // Number of items per page
 
-  const backgroundTemplates = [
+  const backgroundTemplates = [ // Array of background templates
     {
       name: "Living Room",
       url: "https://hgtvhome.sndimg.com/content/dam/images/hgtv/fullset/2023/7/19/3/DOTY2023_Dramatic-Before-And-Afters_Hidden-Hills-11.jpg.rend.hgtvcom.1280.1280.suffix/1689786863909.jpeg",
@@ -133,29 +133,29 @@ const VirtualEventDesigner = () => {
     },
   ];
 
-  const handlePageChange = (event, newPage) => {
+  const handlePageChange = (event, newPage) => { // Handle page change logic here
     setCurrentPage(newPage);
   };
 
-  const currentDecorations = products.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+  const currentDecorations = products.slice( // Slice the products array to get the current page's items
+    (currentPage - 1) * itemsPerPage, // Start index of the slice
+    currentPage * itemsPerPage // End index of the slice
   );
 
   useEffect(() => {
     const handleMouseMove = (event) => {
-      if (isResizing) {
+      if (isResizing) { // Handle resizing logic here
         handleResizeMove(event);
       }
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = () => { // Handle mouse up logic here
       if (isResizing) {
         handleResizeEnd();
       }
     };
 
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event) => { // Handle click outside logic here
       if (
         containerRef.current &&
         !containerRef.current.contains(event.target) &&
@@ -164,12 +164,12 @@ const VirtualEventDesigner = () => {
         setActiveDecoration(null);
       }
     };
-
-    document.addEventListener("mousemove", handleMouseMove);
+  
+    document.addEventListener("mousemove", handleMouseMove); 
     document.addEventListener("mouseup", handleMouseUp);
     document.addEventListener("mousedown", handleClickOutside);
 
-    return () => {
+    return () => { // Clean up event listeners when the component unmounts
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("mousedown", handleClickOutside);
@@ -179,10 +179,10 @@ const VirtualEventDesigner = () => {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const response = await axios.get(
+        const response = await axios.get( // Fetch products from the API
           "https://backstore-iqcq.onrender.com/products/all"
         );
-        setProducts(response.data.decorations);
+        setProducts(response.data.decorations); // Set the products state with the fetched data
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -200,7 +200,7 @@ const VirtualEventDesigner = () => {
   };
 
   const handleDecorationSelect = (decoration) => {
-    setSelectedDecoration({
+    setSelectedDecoration({ // Set the selected decoration state with the clicked decoration object
       ...decoration,
       width: 50,
       height: 50,
@@ -209,44 +209,44 @@ const VirtualEventDesigner = () => {
     });
   };
 
-  const handleContainerClick = (event) => {
-    if (selectedDecoration && containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      const newDecoration = { ...selectedDecoration, x, y };
-      setDecorations([...decorations, newDecoration]);
-      setSelectedDecoration(null);
+  const handleContainerClick = (event) => { // Handle container click logic here
+    if (selectedDecoration && containerRef.current) { // If there is a selected decoration and the container ref is available
+      const rect = containerRef.current.getBoundingClientRect(); // Get the container's bounding rectangle
+      const x = event.clientX - rect.left; // Calculate the x-coordinate of the new decoration relative to the container
+      const y = event.clientY - rect.top;  // Calculate the y-coordinate of the new decoration relative to the container
+      const newDecoration = { ...selectedDecoration, x, y }; // Create a new decoration object with the calculated coordinates
+      setDecorations([...decorations, newDecoration]);  // Add the new decoration to the decorations state array
+      setSelectedDecoration(null); // Reset the selected decoration state to null
     }
   };
 
   const handleDecorationClick = (decoration, event) => {
-    event.stopPropagation();
+    event.stopPropagation(); // Prevent the event from bubbling up to the container
     setActiveDecoration(decoration);
   };
 
   const handleResizeStart = (event, decoration) => {
-    event.stopPropagation();
+    event.stopPropagation(); 
     setIsResizing(true);
     setActiveDecoration(decoration);
   };
 
   const handleResizeMove = (event) => {
-    if (!isResizing || !activeDecoration || !containerRef.current) return;
+    if (!isResizing || !activeDecoration || !containerRef.current) return; // Return early if there is no active decoration or the container ref is not available
 
-    const containerRect = containerRef.current.getBoundingClientRect();
-    const newWidth = Math.max(
+    const containerRect = containerRef.current.getBoundingClientRect(); // Get the container's bounding rectangle
+    const newWidth = Math.max( // Calculate the new width of the active decoration based on the mouse position and the container's
       20,
       event.clientX - containerRect.left - activeDecoration.x
     );
-    const newHeight = Math.max(
-      20,
+    const newHeight = Math.max( // Calculate the new height of the active decoration based on the mouse position and the container's
+      20, 
       event.clientY - containerRect.top - activeDecoration.y
     );
 
-    setDecorations(
+    setDecorations( // Update the decorations state array with the new width and height of the active decoration
       decorations.map((d) =>
-        d.id === activeDecoration.id
+        d.id === activeDecoration.id // Check if the current decoration is the active decoration
           ? { ...d, width: newWidth, height: newHeight }
           : d
       )
@@ -258,12 +258,12 @@ const VirtualEventDesigner = () => {
   };
 
   const handleDeleteDecoration = (id) => {
-    setDecorations(decorations.filter((d) => d.id !== id));
+    setDecorations(decorations.filter((d) => d.id !== id)); // Filter out the decoration with the given id from the decorations state array
   };
 
   const handleDrag = (e, ui, id) => {
     const updatedDecorations = decorations.map((d) =>
-      d.id === id ? { ...d, x: ui.x, y: ui.y } : d
+      d.id === id ? { ...d, x: ui.x, y: ui.y } : d   // Update the x and y coordinates of the decoration with the given id based on the drag event
     );
     setDecorations(updatedDecorations);
   };
@@ -288,23 +288,23 @@ const VirtualEventDesigner = () => {
           <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
             <Box
               ref={containerRef}
-              onClick={handleContainerClick}
+              onClick={handleContainerClick} // Handle container click event
               sx={{
                 position: "relative",
                 width: "100%",
                 height: "calc(100vh - 100px)",
                 overflow: "hidden",
-                backgroundImage: `url(${background})`,
+                backgroundImage: `url(${background})`, // Set the background image based on the selected template or uploaded image
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                cursor: selectedDecoration ? "crosshair" : "default",
+                cursor: selectedDecoration ? "crosshair" : "default", // Change the cursor based on the selected decoration
               }}
             >
               {decorations.map((decoration) => (
                 <Draggable
                   key={decoration.id}
-                  position={{ x: decoration.x, y: decoration.y }}
-                  onDrag={(e, ui) => handleDrag(e, ui, decoration.id)}
+                  position={{ x: decoration.x, y: decoration.y }} // Set the initial position of the decoration based on its x and y coordinates
+                  onDrag={(e, ui) => handleDrag(e, ui, decoration.id)} // Handle drag event for the decoration
                   bounds="parent"
                 >
                   <div
@@ -317,7 +317,7 @@ const VirtualEventDesigner = () => {
                       backgroundPosition: "center",
                       cursor: "move",
                       border:
-                        activeDecoration &&
+                        activeDecoration && // Add a border if the decoration is active
                         activeDecoration.id === decoration.id
                           ? "2px solid blue"
                           : "none",
@@ -336,7 +336,7 @@ const VirtualEventDesigner = () => {
                         zIndex: 1000,
                       }}
                       onClick={(e) => {
-                        e.stopPropagation();
+                        e.stopPropagation(); // Prevent the event from bubbling up to the decoration
                         handleDeleteDecoration(decoration.id);
                       }}
                     >
@@ -391,7 +391,7 @@ const VirtualEventDesigner = () => {
               value={background}
               onChange={handleTemplateSelect}
             >
-              {backgroundTemplates.map((template, index) => (
+              {backgroundTemplates.map((template, index) => ( // Map through the background templates and create a menu item for each one
                 <MenuItem key={index} value={template.url}>
                   {template.name}
                 </MenuItem>
@@ -404,10 +404,10 @@ const VirtualEventDesigner = () => {
               Decorations
             </Typography>
             <Grid container spacing={1}>
-              {currentDecorations.map((product) => (
+              {currentDecorations.map((product) => ( // Map through the current decorations and create a grid item for each one
                 <Grid item key={product._id} xs={4}>
                   <img
-                    src={product.imageUrl}
+                    src={product.imageUrl} // Set the source of the image based on the decoration's image URL
                     alt={product.name}
                     style={{
                       width: "100%",
@@ -427,7 +427,7 @@ const VirtualEventDesigner = () => {
               <Pagination
                 count={Math.ceil(products.length / itemsPerPage)}
                 page={currentPage}
-                onChange={handlePageChange}
+                onChange={handlePageChange} // Handle page change event for the decorations pagination
                 color="primary"
               />
             </Box>

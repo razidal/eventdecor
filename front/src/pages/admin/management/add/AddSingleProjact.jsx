@@ -49,50 +49,50 @@ const AddSingleProjact = ({ setOpen }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
+  useEffect(() => { 
     const fetchProducts = async () => {
-      try {
+      try { // Fetch products from the server
         const response = await axios.get("https://backstore-iqcq.onrender.com/products/all", {
           timeout: 5000,
         });
-        setProducts(response.data.products);
-        setLoading(false);
-      } catch (err) {
+        setProducts(response.data.products); // Update the products state
+        setLoading(false); // Set loading to false
+      } catch (err) { // Handle errors
         console.error("Failed to fetch products:", err);
-        setError("Failed to fetch products");
-        setLoading(false);
+        setError("Failed to fetch products"); // Set error message
+        setLoading(false); // Set loading to false
       }
     };
 
-    fetchProducts();
+    fetchProducts(); // Call the fetchProducts function
   }, []);
   // Fetch categories, themes, and occasions from the server
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async () => { // Define an async function to fetch data
       try {
-        const categoriesRes = await axios.get(
+        const categoriesRes = await axios.get( // Fetch categories
           "https://backstore-iqcq.onrender.com/products/categories",
           {
             timeout: 5000,
           }
         );
-        const themesRes = await axios.get(
+        const themesRes = await axios.get( // Fetch themes
           "https://backstore-iqcq.onrender.com/products/themes",
           {
             timeout: 5000,
           }
         );
-        const occasionsRes = await axios.get(
+        const occasionsRes = await axios.get( // Fetch occasions
           "https://backstore-iqcq.onrender.com/products/occasions",
           {
             timeout: 5000,
           }
         );
-
-        setCategories(categoriesRes.data);
+          // Update the state with the fetched data
+        setCategories(categoriesRes.data); 
         setThemes(themesRes.data);
         setOccasions(occasionsRes.data);
-      } catch (error) {
+      } catch (error) { // Handle errors
         console.error(
           "Failed to fetch categories, themes, or occasions",
           error
@@ -103,49 +103,49 @@ const AddSingleProjact = ({ setOpen }) => {
     fetchData();
   }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setProduct({ ...product, [name]: value });
+  const handleInputChange = (e) => { // Handle input changes
+    const { name, value } = e.target; 
+    setProduct({ ...product, [name]: value }); // Update the product state
   };
 
-  const handleDimensionChange = (e) => {
+  const handleDimensionChange = (e) => { // Handle dimension changes
     const { name, value } = e.target;
-    setProduct({
+    setProduct({ // Update the product state
       ...product,
-      dimensions: { ...product.dimensions, [name]: value },
+      dimensions: { ...product.dimensions, [name]: value }, // Update the dimensions property
     });
   };
 
   const handleCheckboxChange = (e) => {
-    setProduct({ ...product, isReusable: e.target.checked });
+    setProduct({ ...product, isReusable: e.target.checked }); // Update the isReusable property
   };
 
-  const AddProjact = async (e) => {
+  const AddProjact = async (e) => { // Handle form submission
     e.preventDefault();
-    try {
-      const response = await axios.post(
+    try { // Send a POST request to add the product
+      const response = await axios.post( 
         "https://backstore-iqcq.onrender.com/products/add",
         product
       );
-      console.log(response.data);
-
-      alert("Product added successfully");
-      setTimeout(() => {
+      console.log(response.data); 
+ 
+      alert("Product added successfully"); // Show a success message
+      setTimeout(() => { // Close the form after 2 seconds
         setOpen(false);
       }, 2000);
-    } catch (error) {
+    } catch (error) { // Handle errors
       console.log(error);
     }
   };
 
   return (
-    <FormContainer component="form" onSubmit={AddProjact}>
+    <FormContainer component="form" onSubmit={AddProjact}> {}
       <TextField
         label="Product Name"
         variant="outlined"
         name="name"
         value={product.name}
-        onChange={handleInputChange}
+        onChange={handleInputChange} // Update the name property
         fullWidth
       />
       <TextField
@@ -153,7 +153,7 @@ const AddSingleProjact = ({ setOpen }) => {
         variant="outlined"
         name="description"
         value={product.description}
-        onChange={handleInputChange}
+        onChange={handleInputChange} // Update the description property
         fullWidth
       />
       <TextField
@@ -162,7 +162,7 @@ const AddSingleProjact = ({ setOpen }) => {
         variant="outlined"
         name="price"
         value={product.price}
-        onChange={handleInputChange}
+        onChange={handleInputChange} // Update the price property
         fullWidth
       />
       <TextField
@@ -170,7 +170,7 @@ const AddSingleProjact = ({ setOpen }) => {
         variant="outlined"
         name="imageUrl"
         value={product.imageUrl}
-        onChange={handleInputChange}
+        onChange={handleInputChange} // Update the imageUrl property
         fullWidth
       />
       <FormControl fullWidth>
@@ -178,10 +178,10 @@ const AddSingleProjact = ({ setOpen }) => {
         <Select
           name="category"
           value={product.category}
-          onChange={handleInputChange}
+          onChange={handleInputChange} // Update the category property
         >
-          {categories.map((category, index) => (
-            <MenuItem key={index} value={category}>
+          {categories.map((category, index) => ( // Map through the categories and create a MenuItem for each one
+            <MenuItem key={index} value={category}> 
               {category}
             </MenuItem>
           ))}
@@ -193,7 +193,7 @@ const AddSingleProjact = ({ setOpen }) => {
         variant="outlined"
         name="stockQuantity"
         value={product.stockQuantity}
-        onChange={handleInputChange}
+        onChange={handleInputChange} // Update the stockQuantity property
         fullWidth
       />
       <TextField
@@ -201,13 +201,13 @@ const AddSingleProjact = ({ setOpen }) => {
         variant="outlined"
         name="color"
         value={product.color}
-        onChange={handleInputChange}
+        onChange={handleInputChange}  // Update the color property
         fullWidth
       />
       <FormControl fullWidth>
         <InputLabel>Theme</InputLabel>
-        <Select name="theme" value={product.theme} onChange={handleInputChange}>
-          {themes.map((theme, index) => (
+        <Select name="theme" value={product.theme} onChange={handleInputChange}> 
+          {themes.map((theme, index) => ( // Map through the themes and create a MenuItem for each one
             <MenuItem key={index} value={theme}>
               {theme}
             </MenuItem>
@@ -219,9 +219,9 @@ const AddSingleProjact = ({ setOpen }) => {
         <Select
           name="occasion"
           value={product.occasion}
-          onChange={handleInputChange}
+          onChange={handleInputChange} // Update the occasion property
         >
-          {occasions.map((occasion, index) => (
+          {occasions.map((occasion, index) => ( // Map through the occasions and create a MenuItem for each one
             <MenuItem key={index} value={occasion}>
               {occasion}
             </MenuItem>

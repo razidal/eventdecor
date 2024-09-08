@@ -47,7 +47,7 @@ const Home = () => {
     getProducts();
   }, []);
 
-  const getProducts = async () => {
+  const getProducts = async () => { // fetch products from the backend
     try {
       const response = await axios.get("https://backstore-iqcq.onrender.com/products/all", {
         timeout: 5000,
@@ -58,9 +58,9 @@ const Home = () => {
     }
   };
 
-  const addToCart = (product) => {
-    dispatch(
-      addItem({
+  const addToCart = (product) => { // add product to the cart
+    dispatch( 
+      addItem({ // dispatch the addItem action with the product details
         id: product._id,
         name: product.name,
         price: product.price,
@@ -70,14 +70,14 @@ const Home = () => {
     );
   };
 
-  const handleFavoriteToggle = (product) => {
+  const handleFavoriteToggle = (product) => { // toggle favorite status of a product
     const isAlreadyFavorite = favorites.some(
-      (favorite) => favorite._id === product._id
-    );
-    if (isAlreadyFavorite) {
+      (favorite) => favorite._id === product._id 
+    ); 
+    if (isAlreadyFavorite) { // if the product is already in favorites, remove it
       dispatch(removeFromFavorites(product._id));
     } else {
-      dispatch(addToFavorites(product));
+      dispatch(addToFavorites(product)); // otherwise, add it to favorites
     }
   };
 
@@ -93,11 +93,11 @@ const Home = () => {
 
       <Container sx={{ mt: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          Featured Products
+          Featured Products 
         </Typography>
 
         <Grid container spacing={4}>
-          {products.map((product) => (
+          {products.map((product) => ( // map through the products and display them
             <Grid item key={product._id} xs={12} sm={6} md={4}>
               <Card>
                 <CardMedia
@@ -114,9 +114,9 @@ const Home = () => {
                     Price: ${product.price}
                   </Typography>
                   <IconButton
-                    onClick={() => handleFavoriteToggle(product)}
-                    sx={{
-                      color: favorites.some((fav) => fav._id === product._id)
+                    onClick={() => handleFavoriteToggle(product)} 
+                    sx={{ 
+                      color: favorites.some((fav) => fav._id === product._id) // check if the product is in favorites and change the icon color accordingly
                         ? "error.main"
                         : "inherit",
                     }}

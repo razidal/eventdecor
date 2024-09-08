@@ -51,36 +51,36 @@ const SignUp = () => {
 
   const Validate = () => {
     const error = {};
-    if (!fullName) {
+    if (!fullName) { 
       error.fullName = "Required field";
       //only English letters
     } else if (!/^[a-zA-Z]+( [a-zA-Z]+)*$/.test(fullName)) {
       error.fullName =
         "Please enter a valid full name without leading or trailing spaces";
     }
-    if (!email) {
+    if (!email) { //email validation
       error.email = "Required field";
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       error.email = "Invalid email address";
     }
-    if (!password) {
+    if (!password) { //password validation
       error.password = "Required field";
     } else if (password.length < 6) {
       error.password = "Password must be at least 6 characters long";
     }
-    if (!date) {
+    if (!date) { //date validation
       error.date = "Required field";
     }
     setValidationError(error);
-    return Object.keys(error).length === 0;
+    return Object.keys(error).length === 0; // Return true if no errors, false otherwise
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (Validate()) {
+    if (Validate()) { //if validation is true, then submit the form
       const formattedDate = new Date(date).toISOString().split('T')[0];  // Convert date to ISO format without time
       
-      const userData = {
+      const userData = { // Create user data object
         fullName: fullName,
         email: email,
         password: password,
@@ -88,7 +88,7 @@ const SignUp = () => {
       };
 
       try {
-        const response = await axios.post(
+        const response = await axios.post( // Send POST request to the server
           "https://backstore-iqcq.onrender.com/auth/register",
           userData
         );
@@ -97,12 +97,12 @@ const SignUp = () => {
         setTimeout(() => {
           ///after a succeful sign up , go to sign in page
           navigate("/signin");
-        }, 2000);
+        }, 2000); // Redirect to sign-in page after 2 seconds
       } catch (error) {
-        if (error.response && error.response.data) {
+        if (error.response && error.response.data) { // Check if error response exists and has data property
           setError(error.response.data.error || "Registration failed");
         } else {
-          setError("Registration failed");
+          setError("Registration failed"); // Set error message to "Registration failed" if no error response data is available
         }
         console.error(error);
       }
@@ -111,10 +111,10 @@ const SignUp = () => {
 //sign up via Google
   const handleGoogleSignup = async () => {
     try {
-      const result = await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, googleProvider); // Sign in with Google using Firebase authentication
       const user = result.user;
-
-      const response = await axios.post("https://backstore-iqcq.onrender.com/auth/google", {
+ 
+      const response = await axios.post("https://backstore-iqcq.onrender.com/auth/google", { // Send POST request to the server with Google user data
         googleId: user.uid,
         email: user.email,
         fullName: user.displayName,
@@ -124,7 +124,7 @@ const SignUp = () => {
       setError("Google Sign Up successful");
       setTimeout(() => {
         navigate("/"); //go to homepage
-      }, 2000);
+      }, 2000); // Redirect to homepage after 2 seconds
     } catch (error) {
       console.error("Error during Google Sign Up:", error);
       setError("Google Sign Up failed");

@@ -81,31 +81,31 @@ const Products = () => {
   const favorites = useSelector((state) => state.favorites.favorites);
 
   useEffect(() => {
-    const fetchFilterOptions = async () => {
+    const fetchFilterOptions = async () => { // Fetch filter options (categories, themes, occasions) from the backend
       try {
         const [categoriesRes, themesRes, occasionsRes] = await Promise.all([
           axios.get("https://backstore-iqcq.onrender.com/products/categories"),
           axios.get("https://backstore-iqcq.onrender.com/products/themes"),
           axios.get("https://backstore-iqcq.onrender.com/products/occasions"),
         ]);
-        setCategories(categoriesRes.data);
-        setThemes(themesRes.data);
-        setOccasions(occasionsRes.data);
+        setCategories(categoriesRes.data); // Assuming the response structure is the same for all requests
+        setThemes(themesRes.data); // Assuming the response structure is the same for all requests
+        setOccasions(occasionsRes.data); // Assuming the response structure is the same for all requests
       } catch (error) {
         console.error("Error fetching filter options:", error);
       }
     };
 
-    fetchFilterOptions();
-    getProducts();
+    fetchFilterOptions(); // Call the function to fetch filter options
+    getProducts(); // Fetch products when the component mounts
   }, []);
 
-  const getProducts = async () => {
-    try {
+  const getProducts = async () => { // Fetch products from the backend
+    try { 
       const response = await axios.get(
         "https://backstore-iqcq.onrender.com/products/all"
       );
-      setProducts(response.data.decorations);
+      setProducts(response.data.decorations); // Assuming the response structure is the same for all requests
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -113,14 +113,14 @@ const Products = () => {
 
   const handleClose = () => setOpen(false);
 
-  const handleImageClick = (imageUrl) => {
+  const handleImageClick = (imageUrl) => { // Handle image click to open the dialog
     setSelectedProduct(imageUrl);
     setImageDialogOpen(true);
   };
 
-  const addToCart = (product) => {
-    dispatch(
-      addItem({
+  const addToCart = (product) => { // Add product to cart
+    dispatch( 
+      addItem({ 
         id: product._id,
         name: product.name,
         price: product.price,
@@ -132,46 +132,46 @@ const Products = () => {
     setSnackbarOpen(true); 
   };
 
-  const handleFavoriteToggle = (product) => {
+  const handleFavoriteToggle = (product) => { // Toggle favorite status of a product
     const isAlreadyFavorite = favorites.some(
-      (favorite) => favorite._id === product._id
+      (favorite) => favorite._id === product._id 
     );
-    if (isAlreadyFavorite) {
+    if (isAlreadyFavorite) { // Remove from favorites if already favorite
       dispatch(removeFromFavorites(product._id));
-      setSnackbarMessage(`${product.name} removed from favorites!`);
-    } else {
-      dispatch(addToFavorites(product));
-      setSnackbarMessage(`${product.name} added to favorites!`);
+      setSnackbarMessage(`${product.name} removed from favorites!`); //show customer message
+    } else { 
+      dispatch(addToFavorites(product)); // Add to favorites if not already favorite
+      setSnackbarMessage(`${product.name} added to favorites!`); 
     }
     setSnackbarOpen(true);
   };
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = (event) => { // Handle search input change
     setSearch(event.target.value);
     setCurrentPage(1);
   };
 
-  const handleCategoryChange = (event) => {
+  const handleCategoryChange = (event) => { // Handle category change
     setCategory(event.target.value);
     setCurrentPage(1);
   };
 
-  const handleThemeChange = (event) => {
+  const handleThemeChange = (event) => { // Handle theme change
     setTheme(event.target.value);
     setCurrentPage(1);
   };
 
-  const handleOccasionChange = (event) => {
+  const handleOccasionChange = (event) => { // Handle occasion change
     setOccasion(event.target.value);
     setCurrentPage(1);
   };
 
-  const handlePriceChange = (event, newValue) => {
+  const handlePriceChange = (event, newValue) => { // Handle price range change
     setPriceRange(newValue);
     setCurrentPage(1);
   };
 
-  const clearFilters = () => {
+  const clearFilters = () => { // Clear all filters and reset the state
     setCategory("");
     setTheme("");
     setOccasion("");
@@ -179,7 +179,7 @@ const Products = () => {
     setSearch("");
   };
 
-  const filteredProducts = products.filter(
+  const filteredProducts = products.filter( // Filter products based on search, category, theme, occasion, and price range
     (product) =>
       product.name.toLowerCase().includes(search.toLowerCase()) &&
       product.price >= priceRange[0] &&
@@ -188,15 +188,15 @@ const Products = () => {
       (theme === "" || product.theme === theme) &&
       (occasion === "" || product.occasion === occasion)
   );
-
-  const indexOfLastItem = currentPage * itemsPerPage;
+ 
+  const indexOfLastItem = currentPage * itemsPerPage; // Pagination logic
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredProducts.slice(
+  const currentItems = filteredProducts.slice( // Get current items for the current page
     indexOfFirstItem,
     indexOfLastItem
   );
 
-  const paginate = (event, value) => setCurrentPage(value);
+  const paginate = (event, value) => setCurrentPage(value); // Change page
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -208,7 +208,7 @@ const Products = () => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "space-between", // Align items to the start and end of the container
             alignItems: "center",
             mb: 2,
           }}
@@ -218,15 +218,15 @@ const Products = () => {
             <Button
               variant="text"
               startIcon={<FilterListIcon />}
-              onClick={() => setShowFilters(!showFilters)}
+              onClick={() => setShowFilters(!showFilters)} 
               sx={{ mr: 1, color: "primary.main", textTransform: "none" }}
             >
-              {showFilters ? "HIDE FILTERS" : "SHOW FILTERS"}
+              {showFilters ? "HIDE FILTERS" : "SHOW FILTERS"} {/* Toggle button text */}
             </Button>
             <Button
               variant="text"
               startIcon={<ClearIcon />}
-              onClick={clearFilters}
+              onClick={clearFilters} // Clear filters button
               sx={{ color: "primary.main", textTransform: "none" }}
             >
               CLEAR FILTERS
@@ -242,7 +242,7 @@ const Products = () => {
                 label="Search"
                 variant="outlined"
                 value={search}
-                onChange={handleSearchChange}
+                onChange={handleSearchChange} // Search input field
                 sx={{ "& .MuiOutlinedInput-root": { borderRadius: 1 } }}
               />
             </Grid>
@@ -251,11 +251,11 @@ const Products = () => {
                 <InputLabel>Category</InputLabel>
                 <Select
                   value={category}
-                  onChange={handleCategoryChange}
+                  onChange={handleCategoryChange} // Category dropdown
                   sx={{ borderRadius: 1 }}
                 >
                   <MenuItem value="">All</MenuItem>
-                  {categories.map((cat) => (
+                  {categories.map((cat) => ( // Map through categories and create menu items
                     <MenuItem key={cat} value={cat}>
                       {cat}
                     </MenuItem>
@@ -268,7 +268,7 @@ const Products = () => {
                 <InputLabel>Theme</InputLabel>
                 <Select
                   value={theme}
-                  onChange={handleThemeChange}
+                  onChange={handleThemeChange} // Theme dropdown
                   sx={{ borderRadius: 1 }}
                 >
                   <MenuItem value="">All</MenuItem>
@@ -285,11 +285,11 @@ const Products = () => {
                 <InputLabel>Occasion</InputLabel>
                 <Select
                   value={occasion}
-                  onChange={handleOccasionChange}
+                  onChange={handleOccasionChange} // Occasion dropdown
                   sx={{ borderRadius: 1 }}
                 >
                   <MenuItem value="">All</MenuItem>
-                  {occasions.map((occ) => (
+                  {occasions.map((occ) => ( // Map through occasions and create menu items
                     <MenuItem key={occ} value={occ}>
                       {occ}
                     </MenuItem>
@@ -301,12 +301,12 @@ const Products = () => {
               <Typography gutterBottom>Price Range</Typography>
               <Slider
                 value={priceRange}
-                onChange={handlePriceChange}
+                onChange={handlePriceChange} // Price range slider
                 valueLabelDisplay="auto"
                 min={0}
                 max={150}
-                sx={{
-                  "& .MuiSlider-thumb": {
+                sx={{ 
+                  "& .MuiSlider-thumb": { 
                     height: 24,
                     width: 24,
                     backgroundColor: "#fff",
@@ -333,12 +333,12 @@ const Products = () => {
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
             {category && (
               <Chip
-                label={`Category: ${category}`}
-                onDelete={() => setCategory("")}
+                label={`Category: ${category}`} 
+                onDelete={() => setCategory("")} 
               />
             )}
-            {theme && (
-              <Chip label={`Theme: ${theme}`} onDelete={() => setTheme("")} />
+            {theme && ( // Display active filters as chips with delete functionality
+              <Chip label={`Theme: ${theme}`} onDelete={() => setTheme("")} /> 
             )}
             {occasion && (
               <Chip
@@ -358,7 +358,7 @@ const Products = () => {
       </Paper>
 
       <Grid container spacing={3}>
-        {currentItems.map((product) => (
+        {currentItems.map((product) => ( // Map through current items and create product cards
           <Grid item key={product._id} xs={12} sm={6} md={3}>
             <Card
               sx={{ height: "100%", display: "flex", flexDirection: "column" }}
@@ -366,7 +366,7 @@ const Products = () => {
               <ImageWrapper>
                 <StyledCardMedia
                   component="img"
-                  image={product.imageUrl}
+                  image={product.imageUrl} // Product image
                   alt={product.name}
                   onClick={() => handleImageClick(product.imageUrl)} // Handle image click
                 />
@@ -404,15 +404,15 @@ const Products = () => {
                 <Button
                   size="small"
                   onClick={() => {
-                    setSelectedProduct(product);
-                    setOpen(true);
+                    setSelectedProduct(product); // Set selected product for details dialog
+                    setOpen(true);  // Open details dialog 
                   }}
                 >
                   Details
                 </Button>
                 <IconButton
-                  onClick={() => addToCart(product)}
-                  disabled={product.stockQuantity === 0}
+                  onClick={() => addToCart(product)} // Add to cart button
+                  disabled={product.stockQuantity === 0} // Disable if out of stock
                 >
                   <ShoppingCartIcon />
                 </IconButton>
@@ -424,9 +424,9 @@ const Products = () => {
 
       <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
         <Pagination
-          count={Math.ceil(filteredProducts.length / itemsPerPage)}
-          page={currentPage}
-          onChange={paginate}
+          count={Math.ceil(filteredProducts.length / itemsPerPage)} // Calculate total pages
+          page={currentPage} // Current page
+          onChange={paginate}  // Handle page change
           color="primary"
         />
       </Box>
@@ -450,10 +450,10 @@ const Products = () => {
             <Typography
               variant="body1"
               sx={{
-                color: selectedProduct?.stockQuantity > 0 ? "green" : "red",
+                color: selectedProduct?.stockQuantity > 0 ? "green" : "red", // Change color based on stock quantity
               }}
             >
-              In Stock: {selectedProduct?.stockQuantity}
+              In Stock: {selectedProduct?.stockQuantity} 
             </Typography>
             <Typography variant="body2">
               {selectedProduct?.description}
@@ -461,17 +461,17 @@ const Products = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={handleClose}>Close</Button> 
           <Button
             onClick={() => {
-              addToCart(selectedProduct);
-              handleClose();
+              addToCart(selectedProduct); // Add to cart button
+              handleClose(); // Close details dialog
             }}
             variant="contained"
             color="primary"
-            disabled={selectedProduct?.stockQuantity === 0}
+            disabled={selectedProduct?.stockQuantity === 0} // Disable if out of stock
           >
-            {selectedProduct?.stockQuantity > 0
+            {selectedProduct?.stockQuantity > 0 // Change button text based on stock quantity
               ? "Add to Cart"
               : "Out of Stock"}
           </Button>
@@ -498,12 +498,12 @@ const Products = () => {
 
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={3500}
-        onClose={() => setSnackbarOpen(false)}
+        autoHideDuration={3500} // Snackbar duration
+        onClose={() => setSnackbarOpen(false)} // Handle snackbar close
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert
-          onClose={() => setSnackbarOpen(false)}
+          onClose={() => setSnackbarOpen(false)} // Handle snackbar close
           severity="success"
           sx={{ width: "100%" }}
         >

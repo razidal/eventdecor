@@ -11,15 +11,15 @@ const Profile = ({ id }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getUser = async () => {
-      if (id && id._id) {
-        try {
-          const response = await axios.get(
+    const getUser = async () => { // Fetch user data based on the provided ID
+      if (id && id._id) { // Check if id and id._id are defined
+        try { 
+          const response = await axios.get( // Make a GET request to the server to fetch user data
             `https://backstore-iqcq.onrender.com/auth/user/${id._id}`
           );
           setUser(response.data.user);
           setUserId(response.data.user._id);
-        } catch (error) {
+        } catch (error) { // Handle any errors that occur during the fetch request
           console.error("Error fetching user data:", error);
         } finally {
           setLoading(false);
@@ -68,7 +68,7 @@ const Profile = ({ id }) => {
     <Container maxWidth="md">
       <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
         <Typography variant="h4" gutterBottom>
-          User Profile
+          User Profile 
         </Typography>
         <Divider sx={{ mb: 3 }} />
         <Box sx={{ mb: 3 }}>
@@ -76,13 +76,13 @@ const Profile = ({ id }) => {
             Personal Information
           </Typography>
           <Typography variant="body1">
-            Full Name: {user.fullName || "Not available"}
+            Full Name: {user.fullName || "Not available"} {/* Display the user's full name or "Not available" if not provided */}
           </Typography>
           <Typography variant="body1">
-            Email: {user.email || "Not available"}
+            Email: {user.email || "Not available"} {/* Display the user's email or "Not available" if not provided */}
           </Typography>
           <Typography variant="body1">
-            Date of Birth: {formattedDate || "Not available"}
+            Date of Birth: {formattedDate || "Not available"} {/* Display the user's date of birth or "Not available" if not provided */}
           </Typography>
         </Box>
         <Divider sx={{ mb: 3 }} />

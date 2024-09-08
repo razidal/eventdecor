@@ -1,3 +1,7 @@
+// this is not necessary to run in terminal, if you are running at local host, 
+// this was created to just add a mocked items to the database 
+// don't run it because it might ruin the database
+
 const mongoose = require("mongoose");
 const PartyDecoration = require("../models/PartyDecoration"); // Adjust the path as needed
 
@@ -6,7 +10,7 @@ mongoose.connect("mongodb+srv://razidal:eventdecor123@cluster0.eldvn.mongodb.net
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-
+// Handle connection events 
 const decorations = [
   {
     name: "Colorful Balloon Set",

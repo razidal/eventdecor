@@ -34,6 +34,7 @@ import {
   removeFromFavorites,
 } from "../../redux/favoritesSlice";
 
+// Styled components for custom styling
 const StyledAppBar = styled(AppBar)`
   background-color: #3f51b5;
 `;
@@ -134,65 +135,65 @@ const Header = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const userCookies = Cookies.get("user");
-  const userPermission = userCookies ? JSON.parse(userCookies).role : null;
+  const userCookies = Cookies.get("user"); // Get user data from cookies
+  const userPermission = userCookies ? JSON.parse(userCookies).role : null; // Extract user permission from cookies
 
-  useEffect(() => {
+  useEffect(() => { // Check login status based on user cookies
     if (userCookies) {
       setIsLogin(true);
     }
-  }, [userCookies]);
+  }, [userCookies]); // Run the effect whenever userCookies change
 
-  const handleLogout = () => {
+  const handleLogout = () => { // Handle logout action
     dispatch(logout());
-    Cookies.remove("user");
-    Cookies.remove("cart");
-    Cookies.remove("favorites");
-    setIsLogin(false);
-    navigate("/");
-    window.location.reload();
+    Cookies.remove("user"); // Remove user data from cookies
+    Cookies.remove("cart"); // Remove cart data from cookies
+    Cookies.remove("favorites"); // Remove favorites data from cookies
+    setIsLogin(false); // Update login status
+    navigate("/"); // Redirect to home page
+    window.location.reload(); // Reload the page to reflect the changes
   };
 
-  const toggleDrawer = (open) => (event) => {
-    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
+  const toggleDrawer = (open) => (event) => { // Toggle drawer open/close
+    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) { // Ignore if the event is a keyboard event and the key is Tab or Shift
       return;
     }
-    setIsDrawerOpen(open);
+    setIsDrawerOpen(open); // Set drawer open/close state
   };
 
-  const handleMenuClickFavorite = (event) => {
-    if (isPopoverOpen) {
+  const handleMenuClickFavorite = (event) => { // Handle favorite menu click
+    if (isPopoverOpen) { // If the popover is open, close it and reset the anchor element
       setIsPopoverOpen(false);
     } else {
-      setAnchorElFavorite(event.currentTarget);
-      setIsPopoverOpen(true);
+      setAnchorElFavorite(event.currentTarget); // Set the anchor element to the current target
+      setIsPopoverOpen(true);  // Open the popover
     }
   };
 
-  const handleClick = (event) => {
+  const handleClick = (event) => { // Handle user menu click
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleClose = () => { // Close the user menu
+    setAnchorEl(null); 
   };
 
-  const handleNavMenuOpen = (event) => {
-    setAnchorElNav(event.currentTarget);
+  const handleNavMenuOpen = (event) => { // Handle mobile menu open
+    setAnchorElNav(event.currentTarget);  // Set the anchor element to the current target
   };
 
-  const handleNavMenuClose = () => {
-    setAnchorElNav(null);
+  const handleNavMenuClose = () => { // Close the mobile menu
+    setAnchorElNav(null); // Reset the anchor element
   };
   
-  const handleFavoriteToggle = (product) => {
-    const isAlreadyFavorite = favorites.some(
-      (favorite) => favorite._id === product._id
+  const handleFavoriteToggle = (product) => { // Handle favorite toggle for a product
+    const isAlreadyFavorite = favorites.some( // Check if the product is already in favorites
+      (favorite) => favorite._id === product._id // Compare product IDs
     );
-    if (isAlreadyFavorite) {
-      dispatch(removeFromFavorites(product._id));
-    } else {
-      dispatch(addToFavorites(product));
+    if (isAlreadyFavorite) { // If the product is already in favorites, remove it
+      dispatch(removeFromFavorites(product._id)); // Dispatch the removeFromFavorites action with the product ID
+    } else { // If the product is not in favorites, add it
+      dispatch(addToFavorites(product)); // Dispatch the addToFavorites action with the product object
     }
   };
   const isMobile = useMediaQuery("(max-width:600px)");
@@ -202,13 +203,13 @@ const Header = () => {
       <StyledAppBar position="static">
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            {!isMobile ? (
+            {!isMobile ? ( // If not on mobile, display the logo and name
               <>
                 <StyledLink to="/">Home</StyledLink>
                 <StyledLink to="/Products">Products</StyledLink>
                 <StyledLink to="/VirtualEventDesigner">Event Visualizer</StyledLink>
 
-                {userPermission === "Admin" && (
+                {userPermission === "Admin" && ( // If the user is an admin, display admin links
                   <>
                     <StyledLink to="/Admin/Management">Admin Panel</StyledLink>
                     <StyledLink to="/Admin/TableAdmin">Table Admin</StyledLink>
@@ -216,33 +217,33 @@ const Header = () => {
                   </>
                 )}
 
-                {userPermission === "user" && (
+                {userPermission === "user" && ( // If the user is a regular user, display user links
                   <>
                     <StyledLink to="/user/dashboard">Dashboard</StyledLink>
                     <StyledLink to="/user/orders">My Orders</StyledLink>
                   </>
                 )}
               </>
-            ) : (
-              <>
-                <IconButton color="inherit" onClick={handleNavMenuOpen}>
-                  <MenuIcon />
+            ) : ( 
+              <> 
+                <IconButton color="inherit" onClick={handleNavMenuOpen}> {/* Display the mobile menu button */} 
+                  <MenuIcon /> 
                 </IconButton>
                 <Menu
                   anchorEl={anchorElNav}
-                  open={Boolean(anchorElNav)}
-                  onClose={handleNavMenuClose}
+                  open={Boolean(anchorElNav)} 
+                  onClose={handleNavMenuClose}  // Close the mobile menu when an item is selected or the menu is closed
                 >
-                  <MenuItem onClick={handleNavMenuClose} component={Link} to="/">
+                  <MenuItem onClick={handleNavMenuClose} component={Link} to="/"> {/* Display the mobile menu items */} 
                     Home
                   </MenuItem>
-                  <MenuItem onClick={handleNavMenuClose} component={Link} to="/Products">
+                  <MenuItem onClick={handleNavMenuClose} component={Link} to="/Products"> {/* Display the mobile menu items */}  
                     Products
                   </MenuItem>
-                  <MenuItem onClick={handleNavMenuClose} component={Link} to="/VirtualEventDesigner">
+                  <MenuItem onClick={handleNavMenuClose} component={Link} to="/VirtualEventDesigner"> {/* Display the mobile menu items */}  
                     Event Visualizer
                   </MenuItem>
-                  {userPermission === "Admin" && (
+                  {userPermission === "Admin" && ( // If the user is an admin, display admin links in the mobile menu
                     <>
                       <MenuItem onClick={handleNavMenuClose} component={Link} to="/Admin/Management">
                         Admin Panel
@@ -255,7 +256,7 @@ const Header = () => {
                       </MenuItem>
                     </>
                   )}
-                  {userPermission === "user" && (
+                  {userPermission === "user" && ( // If the user is a regular user, display user links in the mobile menu
                     <>
                       <MenuItem onClick={handleNavMenuClose} component={Link} to="/user/dashboard">
                         Dashboard
@@ -270,34 +271,34 @@ const Header = () => {
             )}
           </Typography>
 
-          <StyledIconButton color="inherit" onClick={toggleDrawer(true)}>
+          <StyledIconButton color="inherit" onClick={toggleDrawer(true)}> {/* Display the cart button */}  
             <ShoppingCartIcon color="white" />
-            {cartItems.length > 0 && <CartBadge>{cartItems.length}</CartBadge>}
+            {cartItems.length > 0 && <CartBadge>{cartItems.length}</CartBadge>} {/* Display the cart badge if there are items in the cart */}  
           </StyledIconButton>
 
-          {isLogin ? (
+          {isLogin ? ( // If the user is logged in, display the user menu and logout button
             <>
               <StyledIconButton
                 aria-haspopup="true"
-                onClick={handleMenuClickFavorite}
+                onClick={handleMenuClickFavorite} // Open the favorite menu when clicked
               >
                 <FavoriteIcon />
-                {favorites.length > 0 && (
-                  <CartBadge>{favorites.length}</CartBadge>
+                {favorites.length > 0 && ( // Display the favorite badge if there are favorite items
+                  <CartBadge>{favorites.length}</CartBadge> 
                 )}
-              </StyledIconButton>
+              </StyledIconButton> 
               <StyledPopover
                 open={isPopoverOpen}
                 anchorEl={anchorElFavorite}
-                onClose={() => setIsPopoverOpen(false)}
+                onClose={() => setIsPopoverOpen(false)} // Close the favorite menu when clicked outside of it
               >
                 <Grid container spacing={2}>
-                  {favorites.map((item, index) => (
+                  {favorites.map((item, index) => ( // Map through the favorite items and display them in the favorite menu
                     <Grid item xs={12} key={index}>
                       <FavoriteCard>
                          <FavoriteImage
                             component="img"
-                            image={item.imageUrl && item.imageUrl !== "null" ? item.imageUrl : "https://via.placeholder.com/80"}
+                            image={item.imageUrl && item.imageUrl !== "null" ? item.imageUrl : "https://via.placeholder.com/80"} // Display the item image or a placeholder image if there is no image url
                             alt={item.name}
                             sx={{
                               width: 100,
@@ -313,7 +314,7 @@ const Header = () => {
                           <IconButton onClick={() => handleFavoriteToggle(item)}>
                             <FavoriteIcon
                               color={
-                                favorites.some((fav) => fav._id === item._id) ? "error" : "disabled"
+                                favorites.some((fav) => fav._id === item._id) ? "error" : "disabled" // Change the favorite icon color based on whether the item is in favorites or not
                               }
                             />
                           </IconButton>
@@ -367,11 +368,11 @@ const Header = () => {
           >
             <Typography variant="h6">Shopping Cart</Typography>
             <List>
-              {cartItems.map((item, index) => (
+              {cartItems.map((item, index) => ( // Map through the cart items and display them in the cart drawer
                 <React.Fragment key={index}>
                   <CartItem>
                     <CartItemImage
-                      src={item.image || "/api/placeholder/60/60"}
+                      src={item.image || "/api/placeholder/60/60"} // Display the item image or a placeholder image if there is no image url
                       alt={item.name}
                     />
                     <CartItemDetails>
@@ -380,9 +381,9 @@ const Header = () => {
                         Quantity: {item.quantity}
                       </Typography>
                     </CartItemDetails>
-                    <CartItemPrice>${item.price * item.quantity}</CartItemPrice>
+                    <CartItemPrice>${item.price * item.quantity}</CartItemPrice> {/* Display the item price */} 
                   </CartItem>
-                  {index < cartItems.length - 1 && <Divider />}
+                  {index < cartItems.length - 1 && <Divider />} {/* Display a divider between cart items */}  
                 </React.Fragment>
               ))}
             </List>

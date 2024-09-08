@@ -23,18 +23,18 @@ const Management = () => {
     setOpen(false);
   };
 
-  const fetchProducts = async () => {
+  const fetchProducts = async () => { // Fetch all products from the server
     try {
       const response = await axios.get("https://backstore-iqcq.onrender.com/products/all", {
         timeout: 5000,
       });
-      setAllProducts(response?.data.decorations);
+      setAllProducts(response?.data.decorations); // Set the fetched products in the state
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
+  useEffect(() => { // Fetch products when the component mounts
     fetchProducts();
   }, []);
 
@@ -43,13 +43,13 @@ const Management = () => {
       <Container>
         <h1>Products</h1>
         <Stack direction="row" spacing={2}>
-          <Button variant="contained" onClick={handleClickOpen}>
+          <Button variant="contained" onClick={handleClickOpen}> 
             Add
           </Button>
         </Stack>
         <Container sx={{ marginTop: 2 }}>
           <Grid container spacing={3}>
-            {allProducts?.map((product) => (
+            {allProducts?.map((product) => ( // Map through the fetched products and render a card for each one
               <Grid item xs={12} sm={6} md={4} key={product._id}>
                 <ProductsCard product={product} fetchProducts={fetchProducts} />
               </Grid>
@@ -57,7 +57,7 @@ const Management = () => {
           </Grid>
           <Dialog
             open={open}
-            onClose={handleClose}
+            onClose={handleClose} // Handle the dialog close event
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
