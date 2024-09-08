@@ -40,7 +40,10 @@ const UserSchema = new mongoose.Schema(
       postalCode: { type: String, required: false },
       country: { type: String, required: false },
     },
-    dateOfBirth: { type: Date, required: true },
+    dateOfBirth: 
+    { type: Date,
+      required: true
+    },
   },
   { timestamps: true }
 );

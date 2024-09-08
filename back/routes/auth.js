@@ -31,10 +31,10 @@ const sendRegistrationConfirmationEmail = async (userEmail, userName) => {
 };
 
 router.post("/register", async (req, res) => {
-  const { fullName, email, password } = req.body;
+  const { fullName, email, password , dateOfBirth } = req.body;
 
   //checking all input fields 
-  if (!fullName || !email || !password) {
+  if (!fullName || !email || !password || !dateOfBirth) {
     return res.status(400).json({ error: "All fields are required" });
   }
 
@@ -108,7 +108,6 @@ router.post("/google-login", async (req, res) => {
         googleId: googleId || '', //to check if googleId is null or not
         authType: "google",
         role: "User",
-        dateOfBirth,
       });
       await user.save();
     } else if (!user.googleId) {
