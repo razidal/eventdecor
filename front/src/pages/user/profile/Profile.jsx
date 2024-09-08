@@ -9,16 +9,14 @@ const Profile = ({ id }) => {
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState("");
   const navigate = useNavigate();
-  console.log("id", id);
+
   useEffect(() => {
     const getUser = async () => {
       if (id && id._id) {
-    // Check if id is set before continuing the call
         try {
           const response = await axios.get(
             `https://backstore-iqcq.onrender.com/auth/user/${id._id}`
           );
-
           setUser(response.data.user);
           setUserId(response.data.user._id);
         } catch (error) {
@@ -63,6 +61,9 @@ const Profile = ({ id }) => {
     );
   }
 
+  // Format the date of birth
+  const formattedDate = new Date(user.dateOfBirth).toLocaleDateString();
+
   return (
     <Container maxWidth="md">
       <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
@@ -81,7 +82,7 @@ const Profile = ({ id }) => {
             Email: {user.email || "Not available"}
           </Typography>
           <Typography variant="body1">
-            Date of Birth: {Date(user.dateOfBirth).toISOString().split('T')[0]  || "Not available"}
+            Date of Birth: {formattedDate || "Not available"}
           </Typography>
         </Box>
         <Divider sx={{ mb: 3 }} />
