@@ -78,7 +78,7 @@ const SignUp = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     if (Validate()) {
-      const formattedDate = new Date(dateOfBirth).toISOString().split('T')[0];  // Convert date to ISO format without time
+      const formattedDate = new Date(date).toISOString().split('T')[0];  // Convert date to ISO format without time
       
       const userData = {
         fullName: fullName,
