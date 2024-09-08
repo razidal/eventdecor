@@ -37,9 +37,6 @@ const OrderSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    deliveryDate: {
-      type: Date,
-    },
     address: {
       street: {
         type: String,

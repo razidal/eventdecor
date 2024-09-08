@@ -80,6 +80,9 @@ const Profile = ({ id }) => {
           <Typography variant="body1">
             Email: {user.email || "Not available"}
           </Typography>
+          <Typography variant="body1">
+            Email: {user.dateOfBirth || "Not available"}
+          </Typography>
         </Box>
         <Divider sx={{ mb: 3 }} />
         <Typography variant="h6" gutterBottom>
