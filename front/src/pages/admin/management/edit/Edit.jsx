@@ -64,7 +64,7 @@ const Edit = ({ product, handleEditSuccess }) => {
 
   return (
     <form onSubmit={handleSubmit}> 
-      <Box component="form">
+      <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         <TextField
           id="name"
           label="Product Name"
