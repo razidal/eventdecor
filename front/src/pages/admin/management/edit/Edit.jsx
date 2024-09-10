@@ -139,25 +139,39 @@ const Edit = ({ product, handleEditSuccess }) => {
           value={editProduct.color}
           onChange={handleInputChange}
         />
-        <TextField
-          id="theme"
-          label="Theme"
-          variant="outlined"
-          fullWidth
-          name="theme"
-          value={editProduct.theme}
-          onChange={handleInputChange}
-        />
-        <TextField
-          id="occasion"
-          label="Occasion"
-          variant="outlined"
-          fullWidth
-          required
-          name="occasion"
-          value={editProduct.occasion}
-          onChange={handleInputChange}
-        />
+        <FormControl fullWidth>
+          <InputLabel id="theme-label">Theme</InputLabel>
+          <Select
+            labelId="theme-label"
+            id="theme"
+            fullWidth
+            required
+            name="theme"
+            value={editProduct.theme}
+            onChange={handleInputChange}
+          >
+            <MenuItem value="Birthday">Birthday</MenuItem>
+            <MenuItem value="Celebration">Celebration</MenuItem>
+            <MenuItem value="Floral">Floral</MenuItem>
+            <MenuItem value="Wedding">Wedding</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <InputLabel id="occasion-label">Occasion</InputLabel>
+          <Select
+            labelId="occasion-label"
+            id="occasion"
+            fullWidth
+            required
+            name="occasion"
+            value={editProduct.occasion}
+            onChange={handleInputChange}
+          >
+            <MenuItem value="All">All</MenuItem>
+            <MenuItem value="Birthday">Birthday</MenuItem>
+            <MenuItem value="Wedding">Wedding</MenuItem>
+          </Select>
+        </FormControl>
         <TextField
           id="material"
           label="Material"
