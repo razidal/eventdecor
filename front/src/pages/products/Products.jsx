@@ -447,6 +447,34 @@ const Products = () => {
             <Typography variant="body1">
               Occasion: {selectedProduct?.occasion}
             </Typography>
+            {products.map((product) => ( // Map through products and display related products based on category and theme
+              <Box>
+            <Typography>
+                Color : {product.color}
+            </Typography>
+            <Typography>
+              Material : {product.material}
+            </Typography>
+            <Typography>
+            Dimensions : {product.dimensions.length}cm x {product.dimensions.width}cm x {product.dimensions.height}cm
+            </Typography>
+            <Typography>
+              is Reusable : {product.isReusable ? "Yes" : "No"}
+            </Typography>
+            <Typography>
+              Age Group : {product.ageGroup}
+            </Typography>
+            <Typography>
+              Brand : {product.brand}
+            </Typography>
+            <Typography>
+              Weight : {product.weight}
+            </Typography>
+            <Typography>
+              Package Quantity : {product.packageQuantity}
+            </Typography>
+            </Box>
+         ))}
             <Typography
               variant="body1"
               sx={{
@@ -456,7 +484,7 @@ const Products = () => {
               In Stock: {selectedProduct?.stockQuantity} 
             </Typography>
             <Typography variant="body2">
-              {selectedProduct?.description}
+              Description: {selectedProduct?.description}
             </Typography>
           </DialogContentText>
         </DialogContent>

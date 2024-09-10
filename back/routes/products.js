@@ -120,30 +120,5 @@ router.delete("/delete/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to delete decoration" });
   }
 });
-router.get("/categories", async (req, res) => {
-  try { // Fetch all unique categories from the database
-    const categories = await PartyDecoration.distinct("category");
-    res.json(categories);
-  } catch (error) { // Handle any errors that occur during the process
-    res.status(500).json({ message: error.message });
-  }
-});
 
-router.get("/themes", async (req, res) => {
-  try { // Fetch all unique themes from the database
-    const themes = await PartyDecoration.distinct("theme");
-    res.json(themes);
-  } catch (error) { // Handle any errors that occur during the process
-    res.status(500).json({ message: error.message });
-  }
-});
-
-router.get("/occasions", async (req, res) => {
-  try { // Fetch all unique occasions from the database
-    const occasions = await PartyDecoration.distinct("occasion");
-    res.json(occasions);
-  } catch (error) {   // Handle any errors that occur during the process
-    res.status(500).json({ message: error.message });
-  }
-});
 module.exports = router;
