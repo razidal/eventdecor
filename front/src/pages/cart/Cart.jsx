@@ -115,10 +115,13 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
     const cvvRegex = /^\d{3,4}$/;
     const nameRegex = /^[A-Za-z\s]+$/;
     const postalCodeRegex = /^\d+$/;
-
-    if (!cardNumberRegex.test(cardNumber) || !selectedMonth || !selectedYear || !cvvRegex.test(cvv) || !nameRegex.test(name) || !postalCodeRegex.test(postalCode)) {
-      setValidationError("Check fields.");
-      setIsProcessing(false);
+   
+    // Check if any field is empty or invalid
+    if (!cardNumberRegex.test(cardNumber) ||
+     !selectedMonth || !selectedYear || !cvvRegex.test(cvv) || !nameRegex.test(name) ||
+     !postalCodeRegex.test(postalCode)) {
+      setValidationError("Check fields."); // Set validation error message
+      setIsProcessing(false);   // Reset processing state
       return;
     }
 
@@ -144,22 +147,22 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
           expiryDate: `${selectedMonth}/${selectedYear}`, // Combine month and year into expiryDate
         },
         {
-          timeout: 5000,
+          timeout: 5000, // Set a timeout of 5 seconds for the request
         }
       );
 
-      if (response.data.success) {
+      if (response.data.success) { // Check if the payment was successful
         onSuccess(response.data.orderId);
-      } else {
+      } else { // If the payment failed, set an error message
         setError("Payment failed. Please try again.");
       }
-    } catch (error) {
+    } catch (error) { // Catch any errors that occurred during the request
       console.error("Error processing payment:", error);
       setError("An error occurred. Please try again.");
-    } finally {
+    } finally { // Reset processing state after the request is complete
       setIsProcessing(false);
     }
-  }, 5000);
+  }, 5000); // Throttle the handleSubmit function to limit it to once every 5 seconds
 
   return (
     <form onSubmit={handleSubmit}>
@@ -167,16 +170,16 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
         <FormControlLabel value="creditCard" control={<Radio />} label="Credit Card" />
       </RadioGroup>
 
-      {paymentMethod === "creditCard" && (
+      {paymentMethod === "creditCard" && ( // Render credit card fields 
         <>
           <TextField
             fullWidth
             label="Card Number"
             value={cardNumber}
-            onChange={(e) => setCardNumber(e.target.value)}
+            onChange={(e) => setCardNumber(e.target.value)} 
             margin="normal"
             required
-            error={!!validationError && !/^\d{16}$/.test(cardNumber)}
+            error={!!validationError && !/^\d{16}$/.test(cardNumber)} // Show error if card number is invalid
             helperText="Must be 16 digits."
           />
 
@@ -195,9 +198,9 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
                     required
                     label="Month"
                   >
-                    {Array.from({ length: 12 }, (_, index) => (
-                      <MenuItem key={index + 1} value={index + 1}>
-                        {index + 1 < 10 ? `0${index + 1}` : index + 1}
+                    {Array.from({ length: 12 }, (_, index) => ( // Generate options for months
+                      <MenuItem key={index + 1} value={index + 1}> {/* Use index + 1 to start from 1 */}
+                        {index + 1 < 10 ? `0${index + 1}` : index + 1} {/* Add leading zero for single-digit months */}
                       </MenuItem>
                     ))}
                   </Select>
@@ -215,9 +218,9 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
                     required
                     label="Year"
                   >
-                    {Array.from({ length: 10 }, (_, index) => (
-                      <MenuItem key={index} value={new Date().getFullYear() + index}>
-                        {new Date().getFullYear() + index}
+                    {Array.from({ length: 10 }, (_, index) => ( // Generate options for years
+                      <MenuItem key={index} value={new Date().getFullYear() + index}> {/* Use current year + index to generate future years */}
+                        {new Date().getFullYear() + index} {/* Display the year */}
                       </MenuItem>
                     ))}
                   </Select>
