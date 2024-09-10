@@ -53,6 +53,11 @@ const Edit = ({ product, handleEditSuccess }) => {
     }
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditProduct({ ...editProduct, [name]: value });
+  };
+
   const handleCheckboxChange = (e) => {
     setEditProduct({ ...editProduct, isReusable: e.target.checked });
   };
@@ -182,17 +187,6 @@ const Edit = ({ product, handleEditSuccess }) => {
           value={editProduct.material}
           onChange={handleInputChange}
         />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={editProduct.isReusable}
-              onChange={handleCheckboxChange}
-              name="isReusable"
-              color="primary"
-            />
-          }
-          label="Reusable"
-        />
         <Box sx={{ display: "flex", gap: 2 }}>
           <TextField
             id="length"
@@ -249,7 +243,17 @@ const Edit = ({ product, handleEditSuccess }) => {
             }
           />
         </Box>
-      
+      <FormControlLabel
+          control={
+            <Checkbox
+              checked={editProduct.isReusable}
+              onChange={handleCheckboxChange}
+              name="isReusable"
+              color="primary"
+            />
+          }
+          label="Reusable"
+        />
         <FormControl fullWidth>
           <InputLabel id="ageGroup-label">Age Group</InputLabel>
           <Select
