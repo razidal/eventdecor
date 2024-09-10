@@ -51,6 +51,8 @@ const SignUp = () => {
 
   const Validate = () => {
     const error = {};
+    const today = new Date(); // Get today's date
+
     if (!fullName) { 
       error.fullName = "Required field";
       //only English letters
@@ -70,6 +72,8 @@ const SignUp = () => {
     }
     if (!date) { //date validation
       error.date = "Required field";
+    }else if (new Date(date)> today) { //Check if the selected date is in the future
+      error.date = "Date of birth cannot be in the future";
     }
     setValidationError(error);
     return Object.keys(error).length === 0; // Return true if no errors, false otherwise
