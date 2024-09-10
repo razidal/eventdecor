@@ -53,12 +53,12 @@ const Edit = ({ product, handleEditSuccess }) => {
     }
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e) => { //a function to handle input changes
     const { name, value } = e.target;
     setEditProduct({ ...editProduct, [name]: value });
   };
 
-  const handleCheckboxChange = (e) => {
+  const handleCheckboxChange = (e) => { //a function to handle checkbox changes
     setEditProduct({ ...editProduct, isReusable: e.target.checked });
   };
 
@@ -107,7 +107,7 @@ const Edit = ({ product, handleEditSuccess }) => {
         />
         <FormControl fullWidth>
           <InputLabel id="category-label">Category</InputLabel>
-          <Select
+          <Select 
             labelId="category-label"
             id="category"
             fullWidth
@@ -115,7 +115,7 @@ const Edit = ({ product, handleEditSuccess }) => {
             name="category"
             value={editProduct.category}
             onChange={handleInputChange}
-          >
+          > {/* Call handleInputChange function on select change */}
             <MenuItem value="Balloons">Balloons</MenuItem>
             <MenuItem value="Banners">Banners</MenuItem>
             <MenuItem value="Tableware">Tableware</MenuItem>
@@ -145,7 +145,7 @@ const Edit = ({ product, handleEditSuccess }) => {
           value={editProduct.color}
           onChange={handleInputChange}
         />
-        <FormControl fullWidth>
+        <FormControl fullWidth> 
           <InputLabel id="theme-label">Theme</InputLabel>
           <Select
             labelId="theme-label"
@@ -197,7 +197,7 @@ const Edit = ({ product, handleEditSuccess }) => {
             name="length"
             value={editProduct.dimensions.length}
             onChange={(e) =>
-              setEditProduct({
+              setEditProduct({ // Update the editProduct state with the new value for length
                 ...editProduct,
                 dimensions: {
                   ...editProduct.dimensions,
@@ -243,11 +243,11 @@ const Edit = ({ product, handleEditSuccess }) => {
             }
           />
         </Box>
-      <FormControlLabel
+      <FormControlLabel 
           control={
             <Checkbox
-              checked={editProduct.isReusable}
-              onChange={handleCheckboxChange}
+              checked={editProduct.isReusable} // Set the checked property based on the value of isReusable in editProduct state
+              onChange={handleCheckboxChange} // Call handleCheckboxChange function on checkbox change
               name="isReusable"
               color="primary"
             />
