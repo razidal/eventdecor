@@ -454,7 +454,7 @@ const Products = () => {
               Material : {selectedProduct?.material}
             </Typography>
             <Typography>
-            Dimensions : {selectedProduct?.dimensions.length}cm x {product.dimensions.width}cm x {product.dimensions.height}cm
+            Dimensions : {selectedProduct?.dimensions.length}cm x {selectedProduct?.dimensions.width}cm x {selectedProduct?.dimensions.height}cm
             </Typography>
             <Typography>
               is Reusable : {selectedProduct?.isReusable ? "Yes" : "No"}
