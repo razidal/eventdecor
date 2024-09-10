@@ -58,7 +58,6 @@ const Edit = ({ product, handleEditSuccess }) => {
     setEditProduct({ ...editProduct, [name]: value }); // Update the editProduct state with the new value
   };
 
- 
   return (
     <form onSubmit={handleSubmit}> 
       <Box component="form">
@@ -243,8 +242,8 @@ const Edit = ({ product, handleEditSuccess }) => {
         <FormControlLabel
         control={
           <Checkbox
-            checked={editProduct.isReusable}
-            onChange={handleInputChange}
+            checked={product.isReusable}
+            onChange={handleCheckboxChange}
             name="isReusable"
           />
         }
