@@ -179,40 +179,51 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             error={!!validationError && !/^\d{16}$/.test(cardNumber)}
             helperText="Must be 16 digits."
           />
-          <FormControl fullWidth margin="normal">
-            <InputLabel id="month-label">Month</InputLabel>
-            <Select
-              labelId="month-label"
-              id="month"
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-              required
-              label="Month"
-            >
-              {Array.from({ length: 12 }, (_, index) => (
-                <MenuItem key={index + 1} value={index + 1}>
-                  {index + 1 < 10 ? `0${index + 1}` : index + 1}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
 
+          {/* Expiry Date Section */}
           <FormControl fullWidth margin="normal">
-            <InputLabel id="year-label">Year</InputLabel>
-            <Select
-              labelId="year-label"
-              id="year"
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
-              required
-              label="Year"
-            >
-              {Array.from({ length: 10 }, (_, index) => (
-                <MenuItem key={index} value={new Date().getFullYear() + index}>
-                  {new Date().getFullYear() + index}
-                </MenuItem>
-              ))}
-            </Select>
+            <InputLabel shrink>Expiry Date</InputLabel>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <FormControl fullWidth>
+                  <InputLabel id="month-label">Month</InputLabel>
+                  <Select
+                    labelId="month-label"
+                    id="month"
+                    value={selectedMonth}
+                    onChange={(e) => setSelectedMonth(e.target.value)}
+                    required
+                    label="Month"
+                  >
+                    {Array.from({ length: 12 }, (_, index) => (
+                      <MenuItem key={index + 1} value={index + 1}>
+                        {index + 1 < 10 ? `0${index + 1}` : index + 1}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={6}>
+                <FormControl fullWidth>
+                  <InputLabel id="year-label">Year</InputLabel>
+                  <Select
+                    labelId="year-label"
+                    id="year"
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(e.target.value)}
+                    required
+                    label="Year"
+                  >
+                    {Array.from({ length: 10 }, (_, index) => (
+                      <MenuItem key={index} value={new Date().getFullYear() + index}>
+                        {new Date().getFullYear() + index}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
           </FormControl>
 
           <TextField
