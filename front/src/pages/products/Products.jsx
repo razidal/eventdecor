@@ -447,34 +447,30 @@ const Products = () => {
             <Typography variant="body1">
               Occasion: {selectedProduct?.occasion}
             </Typography>
-            {products.map((product) => ( // Map through products and display related products based on category and theme
-              <Box>
             <Typography>
-                Color : {product.color}
+                Color : {selectedProduct?.color}
             </Typography>
             <Typography>
-              Material : {product.material}
+              Material : {selectedProduct?.material}
             </Typography>
             <Typography>
-            Dimensions : {product.dimensions.length}cm x {product.dimensions.width}cm x {product.dimensions.height}cm
+            Dimensions : {selectedProduct?.dimensions.length}cm x {product.dimensions.width}cm x {product.dimensions.height}cm
             </Typography>
             <Typography>
-              is Reusable : {product.isReusable ? "Yes" : "No"}
+              is Reusable : {selectedProduct?.isReusable ? "Yes" : "No"}
             </Typography>
             <Typography>
-              Age Group : {product.ageGroup}
+              Age Group : {selectedProduct?.ageGroup}
             </Typography>
             <Typography>
-              Brand : {product.brand}
+              Brand : {selectedProduct?.brand}
             </Typography>
             <Typography>
-              Weight : {product.weight}
+              Weight : {selectedProduct?.weight}
             </Typography>
             <Typography>
-              Package Quantity : {product.packageQuantity}
+              Package Quantity : {selectedProduct?.packageQuantity}
             </Typography>
-            </Box>
-         ))}
             <Typography
               variant="body1"
               sx={{
