@@ -300,7 +300,7 @@ const Edit = ({ product, handleEditSuccess }) => {
           onChange={handleInputChange}
         />
       </Box>
-      <Button variant="contained" type="submit" marginTop="20px">
+      <Button variant="contained" type="submit" paddingTop="10px">
         Update
       </Button>
     </form>
