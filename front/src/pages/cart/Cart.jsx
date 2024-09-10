@@ -18,10 +18,15 @@ import {
   Alert,
   RadioGroup,
   FormControlLabel,
+  FormControl,
+  InputLabel,
+  Select,
   Radio,
   CircularProgress,
   Typography,
   Box,
+  MenuItem,
+
   Autocomplete,
 } from "@mui/material";
 import { throttle } from "lodash";
@@ -85,74 +90,44 @@ const countries = [ // List of countries for the autocomplete field
 const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
   const [paymentMethod, setPaymentMethod] = useState("creditCard");
   const [cardNumber, setCardNumber] = useState("");
-  const [expiryDate, setExpiryDate] = useState("");
   const [cvv, setCvv] = useState("");
   const [name, setName] = useState("");
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [country, setCountry] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState(""); // For month dropdown
+  const [selectedYear, setSelectedYear] = useState(""); // For year dropdown
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState("");
+  const [validationError, setValidationError] = useState("");
   const user = useSelector((state) => state.user.user);
   const cartData = useSelector((state) => state.cart.items);
-  const [validationError, setValidationError] = useState("");
-  
-    
-  const handleSubmit = throttle(async (e) => { // Throttle the handleSubmit function to prevent multiple submissions
+
+  const handleSubmit = throttle(async (e) => {
     e.preventDefault();
     setIsProcessing(true);
     setError("");
     setValidationError("");
 
-    // Validation checks
-   const cardNumberRegex = /^\d{16}$/; // Credit card number should be 16 digits
-   const cvvRegex = /^\d{3,4}$/; // CVV should be 3 or 4 digits
-   const nameRegex = /^[A-Za-z\s]+$/; // Name should only contain letters and spaces
-   const postalCodeRegex = /^\d+$/; // Postal code should only contain numbers
-   const expiryDateRegex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/; // Expiry date should be in MM/YY format
+    // Validation regex
+    const cardNumberRegex = /^\d{16}$/;
+    const cvvRegex = /^\d{3,4}$/;
+    const nameRegex = /^[A-Za-z\s]+$/;
+    const postalCodeRegex = /^\d+$/;
 
-   if (!cardNumberRegex.test(cardNumber)) { // Check if the card number is valid
-     setValidationError("Check fields."); 
-     setIsProcessing(false);
-     return;
-   }
-
-   if(!expiryDateRegex.test(expiryDate)) { // Check if the expiry date is valid
+    if (!cardNumberRegex.test(cardNumber) || !selectedMonth || !selectedYear || !cvvRegex.test(cvv) || !nameRegex.test(name) || !postalCodeRegex.test(postalCode)) {
       setValidationError("Check fields.");
-      setIsProcessing(false);
-   }
- 
-   if (!cvvRegex.test(cvv)) { // Check if the CVV is valid
-     setValidationError("Check fields.");  
-     setIsProcessing(false);
-     return;
-   }
-
-   if (!nameRegex.test(name)) { // Check if the name is valid
-     setValidationError("Check fields.");
-     setIsProcessing(false);
-     return;
-   }
-
-   if (!postalCodeRegex.test(postalCode)) { // Check if the postal code is valid
-     setValidationError("Check fields.");
-     setIsProcessing(false);
-     return;
-   }
-    // Check if all required fields are filled
-    if (!street || !city || !postalCode || !country) { 
-      setError("All address fields are required.");
       setIsProcessing(false);
       return;
     }
 
     try {
-      const response = await axios.post( // Send a POST request to the server to process the payment
+      const response = await axios.post(
         "https://backstore-iqcq.onrender.com/pay/process-payment",
         {
           userId: user._id,
-          cartData: cartData.map((item) => ({ // Map the cart data to the required format
+          cartData: cartData.map((item) => ({
             productId: item.id,
             quantity: item.quantity,
             price: item.price,
@@ -160,24 +135,25 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
           totalPrice,
           paymentMethod,
           email: user.email,
-          address: { 
+          address: {
             street,
             city,
             postalCode,
             country,
           },
+          expiryDate: `${selectedMonth}/${selectedYear}`, // Combine month and year into expiryDate
         },
         {
-          timeout: 5000, // Set a timeout of 5 seconds for the request
+          timeout: 5000,
         }
       );
 
-      if (response.data.success) { // Check if the payment was successful
+      if (response.data.success) {
         onSuccess(response.data.orderId);
-      } else { // If the payment was not successful, set the error message
-        setError("Payment failed. Please try again."); 
+      } else {
+        setError("Payment failed. Please try again.");
       }
-    } catch (error) { // If an error occurred, log the error and set the error message
+    } catch (error) {
       console.error("Error processing payment:", error);
       setError("An error occurred. Please try again.");
     } finally {
@@ -187,39 +163,58 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <RadioGroup
-        value={paymentMethod}
-        onChange={(e) => setPaymentMethod(e.target.value)} // Set the payment method based on the selected radio button
-      >
-        <FormControlLabel
-          value="creditCard"
-          control={<Radio />}
-          label="Credit Card"
-        />
+      <RadioGroup value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
+        <FormControlLabel value="creditCard" control={<Radio />} label="Credit Card" />
       </RadioGroup>
 
-      {paymentMethod === "creditCard" && ( // Render the credit card form if the credit card payment method is selected
+      {paymentMethod === "creditCard" && (
         <>
           <TextField
             fullWidth
             label="Card Number"
             value={cardNumber}
-            onChange={(e) => setCardNumber(e.target.value)} 
+            onChange={(e) => setCardNumber(e.target.value)}
             margin="normal"
             required
-            error={!!validationError && !/^\d{16}$/.test(cardNumber)} 
+            error={!!validationError && !/^\d{16}$/.test(cardNumber)}
             helperText="Must be 16 digits."
           />
-          <TextField
-            fullWidth
-            label="Expiry Date (MM/YY)"
-            value={expiryDate}
-            onChange={(e) => setExpiryDate(e.target.value)}
-            margin="normal"
-            required
-            error={!!validationError && !/^(0[1-9]|1[0-2])\/([0-9]{2})$/.test(expiryDate)}
-            helperText="Must be in MM/YY format."
-          />
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="month-label">Month</InputLabel>
+            <Select
+              labelId="month-label"
+              id="month"
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              required
+              label="Month"
+            >
+              {Array.from({ length: 12 }, (_, index) => (
+                <MenuItem key={index + 1} value={index + 1}>
+                  {index + 1 < 10 ? `0${index + 1}` : index + 1}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="year-label">Year</InputLabel>
+            <Select
+              labelId="year-label"
+              id="year"
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(e.target.value)}
+              required
+              label="Year"
+            >
+              {Array.from({ length: 10 }, (_, index) => (
+                <MenuItem key={index} value={new Date().getFullYear() + index}>
+                  {new Date().getFullYear() + index}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
           <TextField
             fullWidth
             label="CVV"
@@ -271,10 +266,8 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             fullWidth
             options={countries}
             value={country}
-            onChange={(event, newValue) => { // Set the country based on the selected value from the dropdown
-              setCountry(newValue || ""); // If no value is selected, set the country to an empty string
-            }}
-            renderInput={(params) => ( // Render the dropdown input field
+            onChange={(event, newValue) => setCountry(newValue || "")}
+            renderInput={(params) => (
               <TextField {...params} label="Country" margin="normal" required />
             )}
           />
@@ -284,15 +277,8 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
       {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
       {validationError && <Alert severity="error" sx={{ mt: 2 }}>{validationError}</Alert>}
 
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        fullWidth
-        sx={{ mt: 2 }}
-        disabled={isProcessing} 
-      >
-        {isProcessing ? <CircularProgress size={24} /> : `Pay $${totalPrice}`} {/* Render a circular progress indicator if the payment is being processed, otherwise render the pay button */}
+      <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }} disabled={isProcessing}>
+        {isProcessing ? <CircularProgress size={24} /> : `Pay $${totalPrice}`}
       </Button>
       <Button onClick={onCancel} variant="outlined" fullWidth sx={{ mt: 1 }}>
         Cancel
