@@ -435,42 +435,53 @@ const Products = () => {
         <DialogContent>
           <DialogContentText>
             <Typography variant="h5">{selectedProduct?.name}</Typography>
-            <Typography variant="body1">
-              Price: ${selectedProduct?.price}
-            </Typography>
+            {selectedProduct?.price && (                        
+            <Typography variant="body1">Price: ${selectedProduct?.price}</Typography>
+            )}
+            {selectedProduct?.category && (                       
             <Typography variant="body1">
               Category: {selectedProduct?.category}
-            </Typography>
+            </Typography>) }
+            {selectedProduct?.theme&& (
             <Typography variant="body1">
               Theme: {selectedProduct?.theme}
-            </Typography>
+            </Typography>)}
+            {selectedProduct?.occasion && (                     
             <Typography variant="body1">
               Occasion: {selectedProduct?.occasion}
-            </Typography>
+            </Typography>)}
+            {selectedProduct?.color && (                        
             <Typography>
                 Color : {selectedProduct?.color}
-            </Typography>
+            </Typography>)}
+            {selectedProduct?.material && (                   
             <Typography>
               Material : {selectedProduct?.material}
-            </Typography>
+            </Typography>)}
+            {selectedProduct?.dimensions.length && selectedProduct?.dimensions.width && selectedProduct?.dimensions.height && (
             <Typography>
             Dimensions : {selectedProduct?.dimensions.length}cm x {selectedProduct?.dimensions.width}cm x {selectedProduct?.dimensions.height}cm
-            </Typography>
-            <Typography>
+            </Typography>)}
+            {selectedProduct?.isReusable !== undefined && ( 
+            <Typography> 
               is Reusable : {selectedProduct?.isReusable ? "Yes" : "No"}
-            </Typography>
+            </Typography>)}
+            {selectedProduct?.ageGroup && (                    
             <Typography>
               Age Group : {selectedProduct?.ageGroup}
-            </Typography>
+            </Typography>)} 
+            {selectedProduct?.brand && (                   
             <Typography>
               Brand : {selectedProduct?.brand}
-            </Typography>
+            </Typography> )}
+            {selectedProduct?.weight && (                   
             <Typography>
               Weight : {selectedProduct?.weight}
-            </Typography>
+            </Typography>)}
+            {selectedProduct?.packageQuantity && (                   
             <Typography>
               Package Quantity : {selectedProduct?.packageQuantity}
-            </Typography>
+            </Typography>)}
             <Typography
               variant="body1"
               sx={{
@@ -479,9 +490,10 @@ const Products = () => {
             >
               In Stock: {selectedProduct?.stockQuantity} 
             </Typography>
+            {selectedProduct?.description && (                  
             <Typography variant="body2">
               Description: {selectedProduct?.description}
-            </Typography>
+            </Typography> )}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -8,6 +8,8 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 
 const Edit = ({ product, handleEditSuccess }) => {
@@ -56,6 +58,7 @@ const Edit = ({ product, handleEditSuccess }) => {
     setEditProduct({ ...editProduct, [name]: value }); // Update the editProduct state with the new value
   };
 
+ 
   return (
     <form onSubmit={handleSubmit}> 
       <Box component="form">
@@ -237,6 +240,16 @@ const Edit = ({ product, handleEditSuccess }) => {
             }
           />
         </Box>
+        <FormControlLabel
+        control={
+          <Checkbox
+            checked={editProduct.isReusable}
+            onChange={handleInputChange}
+            name="isReusable"
+          />
+        }
+        label="Is Reusable"
+      />
         <FormControl fullWidth>
           <InputLabel id="ageGroup-label">Age Group</InputLabel>
           <Select
