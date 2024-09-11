@@ -236,30 +236,33 @@ const VirtualEventDesigner = () => {
   
     const containerRect = containerRef.current.getBoundingClientRect();
   
-    // Calculate the new width and height, ensuring they don't go below 20 or beyond the container's bounds
-    const newWidth = Math.min(
-      Math.max(20, event.clientX - containerRect.left - activeDecoration.x),
-      containerRect.width - activeDecoration.x
-    );
+    // Calculate the current aspect ratio of the image
+    const aspectRatio = activeDecoration.width / activeDecoration.height;
   
-    const newHeight = Math.min(
-      Math.max(20, event.clientY - containerRect.top - activeDecoration.y),
-      containerRect.height - activeDecoration.y
-    );
+    // Get the new width and height based on mouse position, but constrain to the container bounds
+    let newWidth = Math.max(20, event.clientX - containerRect.left - activeDecoration.x);
+    let newHeight = newWidth / aspectRatio; // Set the height based on the aspect ratio
   
-    // Adjust the x and y position to prevent cropping when resizing smaller
-    const newX = Math.max(0, activeDecoration.x + (activeDecoration.width - newWidth));
-    const newY = Math.max(0, activeDecoration.y + (activeDecoration.height - newHeight));
+    // Ensure the resized image stays within container bounds
+    if (activeDecoration.x + newWidth > containerRect.width) {
+      newWidth = containerRect.width - activeDecoration.x;
+      newHeight = newWidth / aspectRatio; // Adjust height based on aspect ratio
+    }
+    if (activeDecoration.y + newHeight > containerRect.height) {
+      newHeight = containerRect.height - activeDecoration.y;
+      newWidth = newHeight * aspectRatio; // Adjust width based on aspect ratio
+    }
   
-    // Update the decorations array with the new width, height, x, and y
+    // Update the decorations state with the new width and height while maintaining the position
     setDecorations(
       decorations.map((d) =>
         d.id === activeDecoration.id
-          ? { ...d, width: newWidth, height: newHeight, x: newX, y: newY }
+          ? { ...d, width: newWidth, height: newHeight }
           : d
       )
     );
   };
+  
 
   const handleResizeEnd = () => {
     setIsResizing(false);
