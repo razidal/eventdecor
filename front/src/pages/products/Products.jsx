@@ -458,17 +458,14 @@ const Products = () => {
             <Typography>
               Material : {selectedProduct?.material}
             </Typography>)}
-            {selectedProduct?.dimensions && 
-              (selectedProduct.dimensions.length !== undefined &&
-              selectedProduct.dimensions.width !== undefined &&
-              selectedProduct.dimensions.height !== undefined) ? (
-                <Typography>
-                  Dimensions: {selectedProduct?.dimensions.length ?? 0}cm x 
-                  {selectedProduct?.dimensions.width ?? 0}cm x 
-                  {selectedProduct?.dimensions.height ?? 0}cm
-                </Typography>
-              ) : (
-                <Typography>No dimensions available</Typography>
+            {selectedProduct?.dimensions?.length &&
+            selectedProduct?.dimensions?.width &&
+            selectedProduct?.dimensions?.height && (
+            <Typography>
+            Dimensions: {selectedProduct?.dimensions.length}cm x 
+            {selectedProduct?.dimensions.width}cm x 
+            {selectedProduct?.dimensions.height}cm
+            </Typography>
             )}
             {selectedProduct?.isReusable !== undefined && ( 
             <Typography> 
