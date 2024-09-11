@@ -121,6 +121,7 @@ const VirtualEventDesigner = () => {
   const containerRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1); // State for pagination
   const itemsPerPage = 6; // Number of items per page
+  const [showIcons, setShowIcons] = useState(true);
 
   const backgroundTemplates = [ // Array of background templates
     {
@@ -162,6 +163,7 @@ const VirtualEventDesigner = () => {
         activeDecoration
       ) {
         setActiveDecoration(null);
+        setShowIcons(false); // Hide icons when clicking outside
       }
     };
   
@@ -223,6 +225,7 @@ const VirtualEventDesigner = () => {
   const handleDecorationClick = (decoration, event) => {
     event.stopPropagation(); // Prevent the event from bubbling up to the container
     setActiveDecoration(decoration);
+    setShowIcons(true); // Show icons when a decoration is clicked
   };
 
   const handleResizeStart = (event, decoration) => {
@@ -264,7 +267,7 @@ const VirtualEventDesigner = () => {
   };
   
 
-  const handleResizeEnd = () => {
+  const handleResizeEnd = () => { // Handle resize end logic here
     setIsResizing(false);
   };
 
@@ -312,79 +315,83 @@ const VirtualEventDesigner = () => {
               }}
             >
               {decorations.map((decoration) => (
-                <Draggable
-                  key={decoration.id}
-                  position={{ x: decoration.x, y: decoration.y }} // Set the initial position of the decoration based on its x and y coordinates
-                  onDrag={(e, ui) => handleDrag(e, ui, decoration.id)} // Handle drag event for the decoration
-                  bounds="parent"
-                >
-                  <div
-                    style={{
-                      width: decoration.width,
-                      height: decoration.height,
-                      position: "absolute",
-                      backgroundImage: `url(${decoration.image})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      cursor: "move",
-                      border:
-                        activeDecoration && // Add a border if the decoration is active
-                        activeDecoration.id === decoration.id
-                          ? "2px solid blue"
-                          : "none",
-                    }}
-                    onClick={(event) =>
-                      handleDecorationClick(decoration, event)
-                    }
-                  >
-                    <IconButton
-                      size="small"
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        right: 0,
-                        backgroundColor: "rgba(255, 255, 255, 0.7)",
-                        zIndex: 1000,
-                      }}
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent the event from bubbling up to the decoration
-                        handleDeleteDecoration(decoration.id);
-                      }}
-                    >
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                    <div
-                      style={{
-                        position: "absolute",
-                        right: 0,
-                        bottom: 0,
-                        width: 20,
-                        height: 20,
-                        backgroundColor: "rgba(0, 0, 255, 0.5)",
-                        cursor: "se-resize",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        transition: "background-color 0.3s",
-                      }}
-                      onMouseDown={(event) =>
-                        handleResizeStart(event, decoration)
-                      }
-                      onMouseEnter={(e) =>
-                        (e.target.style.backgroundColor =
-                          "rgba(0, 0, 255, 0.8)")
-                      }
-                      onMouseLeave={(e) =>
-                        (e.target.style.backgroundColor =
-                          "rgba(0, 0, 255, 0.5)")
-                      }
-                    >
-                      <ZoomOutMapIcon
-                        style={{ fontSize: 16, color: "white" }}
-                      />
-                    </div>
-                  </div>
-                </Draggable>
+                 <Draggable
+                 key={decoration.id}
+                 position={{ x: decoration.x, y: decoration.y }} // Set the initial position of the decoration based on its x and y coordinates
+                 onDrag={(e, ui) => handleDrag(e, ui, decoration.id)} // Handle drag event for the decoration
+                 bounds="parent"
+               >
+                 <div
+                   style={{
+                     width: decoration.width,
+                     height: decoration.height,
+                     position: "absolute",
+                     backgroundImage: `url(${decoration.image})`,
+                     backgroundSize: "cover",
+                     backgroundPosition: "center",
+                     cursor: "move",
+                     border:
+                       activeDecoration && // Add a border if the decoration is active
+                       activeDecoration.id === decoration.id
+                         ? "2px solid blue"
+                         : "none",
+                   }}
+                   onClick={(event) =>
+                     handleDecorationClick(decoration, event)
+                   }
+                 >
+                   {showIcons && activeDecoration && activeDecoration.id === decoration.id && (
+                     <>
+                       <IconButton
+                         size="small"
+                         style={{
+                           position: "absolute",
+                           top: 0,
+                           right: 0,
+                           backgroundColor: "rgba(255, 255, 255, 0.7)",
+                           zIndex: 1000,
+                         }}
+                         onClick={(e) => {
+                           e.stopPropagation(); // Prevent the event from bubbling up to the decoration
+                           handleDeleteDecoration(decoration.id);
+                         }}
+                       >
+                         <DeleteIcon fontSize="small" />
+                       </IconButton>
+                       <div
+                         style={{
+                           position: "absolute",
+                           right: 0,
+                           bottom: 0,
+                           width: 20,
+                           height: 20,
+                           backgroundColor: "rgba(0, 0, 255, 0.5)",
+                           cursor: "se-resize",
+                           display: "flex",
+                           justifyContent: "center",
+                           alignItems: "center",
+                           transition: "background-color 0.3s",
+                         }}
+                         onMouseDown={(event) =>
+                           handleResizeStart(event, decoration)
+                         }
+                         onMouseEnter={(e) =>
+                           (e.target.style.backgroundColor =
+                             "rgba(0, 0, 255, 0.8)")
+                         }
+                         onMouseLeave={(e) =>
+                           (e.target.style.backgroundColor =
+                             "rgba(0, 0, 255, 0.5)")
+                         }
+                       >
+                         <ZoomOutMapIcon
+                           style={{ fontSize: 16, color: "white" }}
+                         />
+                       </div>
+                     </>
+                   )}
+                 </div>
+               </Draggable>
               ))}
             </Box>
           </Paper>
