@@ -232,22 +232,30 @@ const VirtualEventDesigner = () => {
   };
 
   const handleResizeMove = (event) => {
-    if (!isResizing || !activeDecoration || !containerRef.current) return; // Return early if there is no active decoration or the container ref is not available
-
-    const containerRect = containerRef.current.getBoundingClientRect(); // Get the container's bounding rectangle
-    const newWidth = Math.max( // Calculate the new width of the active decoration based on the mouse position and the container's
-      20,
-      event.clientX - containerRect.left - activeDecoration.x
+    if (!isResizing || !activeDecoration || !containerRef.current) return;
+  
+    const containerRect = containerRef.current.getBoundingClientRect();
+  
+    // Calculate the new width and height, ensuring they don't go below 20 or beyond the container's bounds
+    const newWidth = Math.min(
+      Math.max(20, event.clientX - containerRect.left - activeDecoration.x),
+      containerRect.width - activeDecoration.x
     );
-    const newHeight = Math.max( // Calculate the new height of the active decoration based on the mouse position and the container's
-      20, 
-      event.clientY - containerRect.top - activeDecoration.y
+  
+    const newHeight = Math.min(
+      Math.max(20, event.clientY - containerRect.top - activeDecoration.y),
+      containerRect.height - activeDecoration.y
     );
-
-    setDecorations( // Update the decorations state array with the new width and height of the active decoration
+  
+    // Adjust the x and y position to prevent cropping when resizing smaller
+    const newX = Math.max(0, activeDecoration.x + (activeDecoration.width - newWidth));
+    const newY = Math.max(0, activeDecoration.y + (activeDecoration.height - newHeight));
+  
+    // Update the decorations array with the new width, height, x, and y
+    setDecorations(
       decorations.map((d) =>
-        d.id === activeDecoration.id // Check if the current decoration is the active decoration
-          ? { ...d, width: newWidth, height: newHeight }
+        d.id === activeDecoration.id
+          ? { ...d, width: newWidth, height: newHeight, x: newX, y: newY }
           : d
       )
     );
