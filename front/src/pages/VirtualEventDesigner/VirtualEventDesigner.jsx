@@ -314,7 +314,7 @@ const VirtualEventDesigner = () => {
                 cursor: selectedDecoration ? "crosshair" : "default", // Change the cursor based on the selected decoration
               }}
             >
-              {products.map((decoration) => (
+              {decorations.map((decoration) => (
                  <Draggable
                  key={decoration.id}
                  position={{ x: decoration.x, y: decoration.y }} // Set the initial position of the decoration based on its x and y coordinates
@@ -330,6 +330,7 @@ const VirtualEventDesigner = () => {
                      backgroundSize: "cover",
                      backgroundPosition: "center",
                      cursor: "move",
+                     zIndex:10,
                      border:
                        activeDecoration && // Add a border if the decoration is active
                        activeDecoration.id === decoration.id
