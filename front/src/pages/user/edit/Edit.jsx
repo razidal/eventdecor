@@ -17,6 +17,7 @@ const Edit = ({ id }) => {
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const [errors, setErrors] = useState({}); // State to store validation errors
   const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [editUser, setEditUser] = useState({ // State to store edited user data
     fullName: id.fullName || "",
@@ -98,8 +99,10 @@ const Edit = ({ id }) => {
       window.location.reload();
     } catch (error) {
       console.error("Error updating user:", error);
+      setErrorMessage("An error occurred while updating the user.");
       if (error.response) {
         console.error("Server Error Response:", error.response.data);
+        setErrorMessage("Server error occurred while updating the user.");
       }
     }
   };
@@ -170,6 +173,12 @@ const Edit = ({ id }) => {
           {successMessage && ( // Check if successMessage is not empty
             <Alert severity="success" style={{ marginTop: "20px" }}>
               {successMessage}
+            </Alert>
+          )}
+          {/* Display error message */}
+          {errorMessage && ( // Check if successMessage is not empty
+            <Alert severity="success" style={{ marginTop: "20px" }}>
+              {errorMessage}
             </Alert>
           )}
         </Box>
