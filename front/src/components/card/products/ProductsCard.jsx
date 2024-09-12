@@ -90,10 +90,18 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
     <div>
       <Card sx={{ maxWidth: 345 }}> {/* Card component from Material-UI */}
         <CardMedia 
-           className={classes.media} // Apply the hover effect styles
-           image={product.imageUrl}
-           title={product.name}
-           onClick={handleImageDialogOpen}  
+            sx={{
+              height: 140,
+              cursor: "pointer",
+              transition: "transform 0.3s ease, box-shadow 0.3s ease",
+              '&:hover': {
+                transform: "scale(1.05)",
+                boxShadow: `0px 4px 8px rgba(0, 0, 0, 0.3)`,
+              },
+            }}
+            image={product.imageUrl}
+            title={product.name}
+            onClick={handleImageDialogOpen}  
         />        
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
