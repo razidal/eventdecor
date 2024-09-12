@@ -327,9 +327,8 @@ const VirtualEventDesigner = () => {
                      height: decoration.height,
                      position: "absolute",
                      backgroundImage: `url(${decoration.image})`,
-                     backgroundSize: "contain",
+                     backgroundSize: "cover",
                      backgroundPosition: "center center",
-                     backgroundRepeat: "no-repeat",
                      cursor: "move",
                      border:
                        activeDecoration && // Add a border if the decoration is active
