@@ -71,15 +71,16 @@ const TableAdmin = () => {
 
   const updateOrderStatus = async (orderId, status) => {
     try {
-      await axios.put(`https://backstore-iqcq.onrender.com/order/update-status/${orderId}`, {
+      const response = await axios.put(`https://backstore-iqcq.onrender.com/order/update-status/${orderId}`, {
         status: status
       });
+      console.log("Response:", response.data);
       alert(`Order status updated to ${status}`);
     } catch (error) {
-      console.error("Error updating order status:", error);
+      console.error("Error updating order status:", error.response?.data || error);
       alert("Failed to update order status.");
     }
-  };
+  };;
 
   return (
     <div>

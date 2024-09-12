@@ -5,55 +5,48 @@ const User = require('../models/User'); // Ensure the path to your User model is
 // Route to delete an order
 
 router.put("/update-status/:id", async (req, res) => {
-  const { status } = req.body; // New status to update
-
+  const { status } = req.body;
   try {
-    // Find the order by ID
     const order = await Order.findById(req.params.id);
-
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }
 
-    // Fetch the user associated with the order
-    const user = await User.findById(order.userId);
-    
+    // Update order status
+    order.status = status;
+    await order.save(); // Ensure the order is saved after updating status
+
+    const user = await User.findById(order.userId); // Retrieve user details
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Update the order status
-    order.status = status;
-    await order.save();
-
-    // Set up the email sending process
+    // Send email notification
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
         user: "eventdeocr@gmail.com",
-        pass: "qbuw ncuc xwxl snsh", // Gmail app-specific password
+        pass: "qbuw ncuc xwxl snsh",
       },
     });
 
     const mailOptions = {
       from: "eventdeocr@gmail.com",
-      to: user.email, // User's email from the User model
-      subject: "Order Status Update",
-      text: `Your order has been ${status}. Order ID: ${req.params.id}`,
+      to: user.email, // Send to the user's email
+      subject: "Order Update Notification",
+      text: `Your order status has been updated to ${status}. Order ID: ${order._id}`,
     };
 
-    // Send the email
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.error("Error while sending email:", error);
         return res.status(500).json({ error: "Failed to send email." });
       }
-
+      console.log("Email sent:", info.response);
       res.status(200).json({ message: "Order status updated and email sent." });
     });
-
   } catch (error) {
-    console.error("Unexpected error:", error);
+    console.error("Error updating order status:", error);
     res.status(500).json({ error: "Failed to update order status." });
   }
 });
