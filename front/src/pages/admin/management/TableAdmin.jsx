@@ -51,23 +51,6 @@ const TableAdmin = () => {
     fetchData();
   }, []);
 
-  // const deleteOrder = async (orderId) => { // Function to handle order deletion
-  //   const confirmDelete = window.confirm("Are you sure you want to delete this order?"); // Confirmation dialog before deletion
-  //   if (!confirmDelete) return; // If the user cancels the deletion, do nothing
-
-  //   setDeleting(true); // Set deleting state to true to show loading indicator or disable buttons
-  //   try {
-  //     await axios.delete(`https://backstore-iqcq.onrender.com/order/delete/${orderId}`); // Make a DELETE request to the server to delete the order
-  //     setUserData((prevData) => prevData.filter((order) => order._id !== orderId)); // Remove the deleted order from the local state to update the UI instantly
-  //     setDeleting(false);
-  //     alert("Order deleted successfully."); // Show success message
-  //   } catch (error) {
-  //     setDeleting(false);   
-  //     alert("Failed to delete order. Please try again."); // Show error message
-  //     console.error("Error deleting order:", error);
-  //   }
-  // };
-
   const updateOrderStatus = async (orderId, status) => {
     try {
       const response = await axios.put(`https://backstore-iqcq.onrender.com/order/update-status/${orderId}`, {
@@ -128,6 +111,7 @@ const TableAdmin = () => {
                       value={user.status}
                       onChange={(e) => updateOrderStatus(user._id, e.target.value)}
                     >
+                      <MenuItem value="Pending">Pending</MenuItem>
                       <MenuItem value="Completed">Completed</MenuItem>
                       <MenuItem value="Cancelled">Cancelled</MenuItem>
                     </Select>
