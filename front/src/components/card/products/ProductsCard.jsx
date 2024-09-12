@@ -35,6 +35,12 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
     setOpen(false);
   };
 
+  const ImageWrapper = styled("div")({
+    overflow: "hidden",
+    position: "relative",
+    paddingTop: "56.25%", // 16:9 Aspect Ratio
+  });
+  
   const deleteProduct = async () => { // Function to delete the product
     try { // Try-catch block to handle errors
       await axios.delete( 
@@ -74,6 +80,7 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
   return (
     <div>
       <Card sx={{ maxWidth: 345 }}> {/* Card component from Material-UI */}
+        <ImageWrapper></ImageWrapper>
         <CardMedia 
           sx={{ height: 140 }}
           image={product.imageUrl}
@@ -147,12 +154,12 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
           <Edit product={product} handleEditSuccess={handleEditSuccess} />
         </DialogContent>
       </Dialog>
-      
+
       {/* Image preview dialog */}
       <Dialog
         open={isImageDialogOpen}
         onClose={handleImageDialogClose}
-        maxWidth="md" // Adjust size as needed
+        maxWidth="md" 
         fullWidth
       >
         <DialogContent>
