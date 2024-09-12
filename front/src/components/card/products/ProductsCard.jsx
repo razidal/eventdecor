@@ -19,8 +19,6 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
   const [showFullDescription, setShowFullDescription] = useState(false); // State for the description toggle
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
 
-  const classes = useStyles(); // Use the styles
-
   const handleEditDialogOpen = () => { // Function to open the edit dialog
     setIsEditDialogOpen(true);
   };
