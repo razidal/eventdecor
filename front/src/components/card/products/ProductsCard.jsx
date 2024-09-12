@@ -40,7 +40,7 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
     position: "relative",
     paddingTop: "56.25%", // 16:9 Aspect Ratio
   });
-  
+
   const deleteProduct = async () => { // Function to delete the product
     try { // Try-catch block to handle errors
       await axios.delete( 
@@ -80,13 +80,14 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
   return (
     <div>
       <Card sx={{ maxWidth: 345 }}> {/* Card component from Material-UI */}
-        <ImageWrapper></ImageWrapper>
+        <ImageWrapper>
         <CardMedia 
           sx={{ height: 140 }}
           image={product.imageUrl}
           title={product.name}
           onClick={handleImageDialogOpen} 
-        /> 
+        />        
+        </ImageWrapper>    
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {product.name}
