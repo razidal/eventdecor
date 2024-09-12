@@ -17,6 +17,7 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
   const [open, setOpen] = useState(false); // State for the delete confirmation dialog 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false); // State for the edit dialog
   const [showFullDescription, setShowFullDescription] = useState(false); // State for the description toggle
+  const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
 
   const handleEditDialogOpen = () => { // Function to open the edit dialog
     setIsEditDialogOpen(true);
@@ -62,6 +63,14 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
     setShowFullDescription(!showFullDescription);
   };
 
+  const handleImageDialogOpen = () => {
+    setIsImageDialogOpen(true);
+  };
+
+  const handleImageDialogClose = () => {
+    setIsImageDialogOpen(false);
+  };
+
   return (
     <div>
       <Card sx={{ maxWidth: 345 }}> {/* Card component from Material-UI */}
@@ -69,6 +78,7 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
           sx={{ height: 140 }}
           image={product.imageUrl}
           title={product.name}
+          onClick={handleImageDialogOpen} 
         /> 
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
@@ -136,6 +146,25 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
           {/* Edit component */}
           <Edit product={product} handleEditSuccess={handleEditSuccess} />
         </DialogContent>
+      </Dialog>
+      
+      {/* Image preview dialog */}
+      <Dialog
+        open={isImageDialogOpen}
+        onClose={handleImageDialogClose}
+        maxWidth="md" // Adjust size as needed
+        fullWidth
+      >
+        <DialogContent>
+          <img
+            src={product.imageUrl}
+            alt={product.name}
+            style={{ width: "100%", height: "auto" }} // Make image responsive
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleImageDialogClose}>Close</Button>
+        </DialogActions>
       </Dialog>
     </div>
   );
