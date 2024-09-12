@@ -306,7 +306,7 @@ const VirtualEventDesigner = () => {
               sx={{
                 position: "relative",
                 width: "100%",
-                height: "calc(100vh - 100px)",
+                height: "100%",
                 overflow: "visible",
                 backgroundImage: `url(${background})`, // Set the background image based on the selected template or uploaded image
                 backgroundSize: "cover",
