@@ -3,52 +3,58 @@ const router = express.Router();
 const Order = require('../models/Order'); // Ensure the path to your Order model is correct
 const User = require('../models/User'); // Ensure the path to your User model is correct
 // Route to delete an order
+
 router.put("/update-status/:id", async (req, res) => {
-  const { status } = req.body; //  getting email from the request body
-  // Log the received delete request for debugging purposes
-  console.log(`Received delete request for order ID: ${req.params.id}`);
-  try { // Attempt to delete the order
-    const order = await User.findOne(req.params.id); 
+  const { status } = req.body; // New status to update
+
+  try {
+    // Find the order by ID
+    const order = await Order.findById(req.params.id);
+
     if (!order) {
-      return res.status(400).send({ error: "User does not exist" });
+      return res.status(404).json({ error: "Order not found" });
     }
-    res.status(200).json({  // If the order is successfully deleted, return a 200 OK response
-      message: "Order deleted successfully",
-      order: order  // Include the deleted order in the response
-    });
-    order.status = status; // Update the status of order
+
+    // Fetch the user associated with the order
+    const user = await User.findById(order.userId);
+    
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Update the order status
+    order.status = status;
+    await order.save();
+
+    // Set up the email sending process
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
         user: "eventdeocr@gmail.com",
-        pass: "qbuw ncuc xwxl snsh", // Use an app-specific password if using Gmail 2FA
+        pass: "qbuw ncuc xwxl snsh", // Gmail app-specific password
       },
     });
 
-    // Send the email with the verification code
     const mailOptions = {
       from: "eventdeocr@gmail.com",
-      to: email, // recipient's email address
-      subject: "Order Cancellation", // subject of the email
-      text: `Your order has been ${status}, order id: ${req.params.id}`,
+      to: user.email, // User's email from the User model
+      subject: "Order Status Update",
+      text: `Your order has been ${status}. Order ID: ${req.params.id}`,
     };
 
-    transporter.sendMail(mailOptions, (error, info) => { //callback function to check if the email is sent or not
+    // Send the email
+    transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.error("Error while sending email:", error);
-        return res.status(500).send({ error: "Failed to send email." });
+        return res.status(500).json({ error: "Failed to send email." });
       }
-      console.log("Email sent:", info.response); //log the response if the email is sent successfully
 
-      // Respond with the generated code (or store it for comparison later)
-      res.status(200).send({ code });
+      res.status(200).json({ message: "Order status updated and email sent." });
     });
-  } catch (err) { // If an error occurs during the delete operation, log the error and return a 500 error
-    console.error(err);
-    if (err.kind === "ObjectId") { // If the error is due to an invalid ObjectId, return a 400 error
-      return res.status(400).json({ error: "Invalid order ID" });
-    }
-    res.status(500).json({ error: "Failed to delete order" });
+
+  } catch (error) {
+    console.error("Unexpected error:", error);
+    res.status(500).json({ error: "Failed to update order status." });
   }
 });
 

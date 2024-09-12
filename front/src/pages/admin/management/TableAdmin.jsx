@@ -72,7 +72,7 @@ const TableAdmin = () => {
   const updateOrderStatus = async (orderId, status) => {
     try {
       await axios.put(`https://backstore-iqcq.onrender.com/order/update-status/${orderId}`, {
-        status
+        status: status
       });
       alert(`Order status updated to ${status}`);
     } catch (error) {
