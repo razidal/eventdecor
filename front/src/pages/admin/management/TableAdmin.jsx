@@ -21,7 +21,6 @@ const TableAdmin = () => {
   const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null); // State to store the ID of the selected user
-  const [deleting, setDeleting] = useState(false); // State to manage deletion process
 
   const handleOpenModal = (user) => {
     setSelectedUser(user);
@@ -76,6 +75,7 @@ const TableAdmin = () => {
       });
       console.log("Response:", response.data);
       alert(`Order status updated to ${status}`);
+      window.location.reload();
     } catch (error) {
       console.error("Error updating order status:", error.response?.data || error);
       alert("Failed to update order status.");
