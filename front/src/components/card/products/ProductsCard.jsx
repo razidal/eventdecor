@@ -19,18 +19,6 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
   const [showFullDescription, setShowFullDescription] = useState(false); // State for the description toggle
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
 
-  const useStyles = makeStyles((theme) => ({
-    media: {
-      height: 140,
-      cursor: "pointer",
-      transition: "transform 0.3s ease, box-shadow 0.3s ease",
-      '&:hover': {
-        transform: "scale(1.05)",
-        boxShadow: `0px 4px 8px rgba(0, 0, 0, 0.3)`,
-      },
-    },
-  }));
-
   const classes = useStyles(); // Use the styles
 
   const handleEditDialogOpen = () => { // Function to open the edit dialog
