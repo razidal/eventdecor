@@ -327,15 +327,16 @@ const VirtualEventDesigner = () => {
                      height: decoration.height,
                      position: "absolute",
                      backgroundImage: `url(${decoration.image})`,
-                     backgroundSize: "cover",
-                     backgroundPosition: "center",
+                     backgroundSize: "contain",
+                     backgroundPosition: "center center",
+                     backgroundRepeat: "no-repeat",
                      cursor: "move",
-                     zIndex:10,
                      border:
                        activeDecoration && // Add a border if the decoration is active
                        activeDecoration.id === decoration.id
                          ? "2px solid blue"
                          : "none",
+                     overflow: "hidden", // Hide overflow for decorations to prevent clipping of their images
                    }}
                    onClick={(event) =>
                      handleDecorationClick(decoration, event)
