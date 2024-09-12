@@ -12,6 +12,7 @@ import DialogContent from "@mui/material/DialogContent";
 import { DialogContentText } from "@mui/material";
 import axios from "axios";
 import Edit from "../../../pages/admin/management/edit/Edit";
+import styled from "styled-components";
 
 const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as a prop
   const [open, setOpen] = useState(false); // State for the delete confirmation dialog 
