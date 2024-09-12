@@ -314,7 +314,7 @@ const VirtualEventDesigner = () => {
                 cursor: selectedDecoration ? "crosshair" : "default", // Change the cursor based on the selected decoration
               }}
             >
-              {decorations.map((decoration) => (
+              {products.map((decoration) => (
                  <Draggable
                  key={decoration.id}
                  position={{ x: decoration.x, y: decoration.y }} // Set the initial position of the decoration based on its x and y coordinates
@@ -428,7 +428,7 @@ const VirtualEventDesigner = () => {
                     src={product.imageUrl} // Set the source of the image based on the decoration's image URL
                     alt={product.name}
                     style={{
-                      width: "50%",
+                      width: "100%",
                       cursor: "pointer",
                       border:
                       selectedDecoration &&
