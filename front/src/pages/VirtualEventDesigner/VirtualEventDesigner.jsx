@@ -306,8 +306,8 @@ const VirtualEventDesigner = () => {
               sx={{
                 position: "relative",
                 width: "100%",
-                height: "100%",
-                overflow: "visible",
+                height: "calc(100vh - 100px)",
+                overflow: "hidden",
                 backgroundImage: `url(${background})`, // Set the background image based on the selected template or uploaded image
                 backgroundSize: "cover",
                 backgroundPosition: "center",
@@ -428,7 +428,7 @@ const VirtualEventDesigner = () => {
                     src={product.imageUrl} // Set the source of the image based on the decoration's image URL
                     alt={product.name}
                     style={{
-                      width: "100%",
+                      width: "50%",
                       cursor: "pointer",
                       border:
                       selectedDecoration &&
