@@ -95,6 +95,7 @@ const Edit = ({ id }) => {
         password: "",
       });
       setErrors({}); // Clear errors after successful update
+      window.location.reload();
     } catch (error) {
       console.error("Error updating user:", error);
       if (error.response) {
