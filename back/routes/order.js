@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../models/Order'); // Ensure the path to your Order model is correct
 const User = require('../models/User'); // Ensure the path to your User model is correct
+const nodemailer = require("nodemailer");
 // Route to delete an order
 
 router.put("/update-status/:id", async (req, res) => {
