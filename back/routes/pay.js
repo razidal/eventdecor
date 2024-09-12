@@ -149,7 +149,7 @@ router.post("/process-payment", async (req, res) => {
       })),
       totalAmount: totalPrice,
       paymentMethod,
-      status: "Completed",
+      status: "Pending",
       address,
     });
 

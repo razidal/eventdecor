@@ -9,6 +9,8 @@ import {
   Modal,
   Box,
   Container,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import axios from "axios";
 import Typography from '@mui/material/Typography';
@@ -50,20 +52,32 @@ const TableAdmin = () => {
     fetchData();
   }, []);
 
-  const deleteOrder = async (orderId) => { // Function to handle order deletion
-    const confirmDelete = window.confirm("Are you sure you want to delete this order?"); // Confirmation dialog before deletion
-    if (!confirmDelete) return; // If the user cancels the deletion, do nothing
+  // const deleteOrder = async (orderId) => { // Function to handle order deletion
+  //   const confirmDelete = window.confirm("Are you sure you want to delete this order?"); // Confirmation dialog before deletion
+  //   if (!confirmDelete) return; // If the user cancels the deletion, do nothing
 
-    setDeleting(true); // Set deleting state to true to show loading indicator or disable buttons
+  //   setDeleting(true); // Set deleting state to true to show loading indicator or disable buttons
+  //   try {
+  //     await axios.delete(`https://backstore-iqcq.onrender.com/order/delete/${orderId}`); // Make a DELETE request to the server to delete the order
+  //     setUserData((prevData) => prevData.filter((order) => order._id !== orderId)); // Remove the deleted order from the local state to update the UI instantly
+  //     setDeleting(false);
+  //     alert("Order deleted successfully."); // Show success message
+  //   } catch (error) {
+  //     setDeleting(false);   
+  //     alert("Failed to delete order. Please try again."); // Show error message
+  //     console.error("Error deleting order:", error);
+  //   }
+  // };
+
+  const updateOrderStatus = async (orderId, status) => {
     try {
-      await axios.delete(`https://backstore-iqcq.onrender.com/order/delete/${orderId}`); // Make a DELETE request to the server to delete the order
-      setUserData((prevData) => prevData.filter((order) => order._id !== orderId)); // Remove the deleted order from the local state to update the UI instantly
-      setDeleting(false);
-      alert("Order deleted successfully."); // Show success message
+      await axios.put(`https://backstore-iqcq.onrender.com/order/update-status/${orderId}`, {
+        status
+      });
+      alert(`Order status updated to ${status}`);
     } catch (error) {
-      setDeleting(false);   
-      alert("Failed to delete order. Please try again."); // Show error message
-      console.error("Error deleting order:", error);
+      console.error("Error updating order status:", error);
+      alert("Failed to update order status.");
     }
   };
 
@@ -107,16 +121,15 @@ const TableAdmin = () => {
                       Order Details
                     </Button>
                   </TableCell>
-                  <TableCell>Confirmed</TableCell>
+                  <TableCell>{user.status}</TableCell>
                   <TableCell>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      onClick={() => deleteOrder(user._id)} // Call deleteOrder function with the user's ID
-                      disabled={deleting}
+                    <Select
+                      value={user.status}
+                      onChange={(e) => updateOrderStatus(user._id, e.target.value)}
                     >
-                      {deleting ? "Deleting..." : "Delete"} {/* Show loading indicator or "Delete" button text based on deleting state */}
-                    </Button>
+                      <MenuItem value="Completed">Completed</MenuItem>
+                      <MenuItem value="Cancelled">Cancelled</MenuItem>
+                    </Select>
                   </TableCell>
                 </TableRow>
               ))}
