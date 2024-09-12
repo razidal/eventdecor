@@ -48,6 +48,7 @@ const Edit = ({ product, handleEditSuccess }) => {
 
       alert("Product updated successfully"); // Show success alert
       handleEditSuccess(); // Call handleEditSuccess function to update the product list in the parent component
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
