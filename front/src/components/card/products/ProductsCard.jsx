@@ -12,13 +12,27 @@ import DialogContent from "@mui/material/DialogContent";
 import { DialogContentText } from "@mui/material";
 import axios from "axios";
 import Edit from "../../../pages/admin/management/edit/Edit";
-import styled from "styled-components";
+import { makeStyles } from '@mui/styles';
 
 const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as a prop
   const [open, setOpen] = useState(false); // State for the delete confirmation dialog 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false); // State for the edit dialog
   const [showFullDescription, setShowFullDescription] = useState(false); // State for the description toggle
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
+
+  const useStyles = makeStyles((theme) => ({
+    media: {
+      height: 140,
+      cursor: "pointer",
+      transition: "transform 0.3s ease, box-shadow 0.3s ease",
+      '&:hover': {
+        transform: "scale(1.05)",
+        boxShadow: `0px 4px 8px rgba(0, 0, 0, 0.3)`,
+      },
+    },
+  }));
+
+  const classes = useStyles(); // Use the styles
 
   const handleEditDialogOpen = () => { // Function to open the edit dialog
     setIsEditDialogOpen(true);
@@ -35,12 +49,6 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
   const handleClose = () => { // Function to close the delete confirmation dialog
     setOpen(false);
   };
-
-  const ImageWrapper = styled("div")({
-    overflow: "hidden",
-    position: "relative",
-    paddingTop: "56.25%", // 16:9 Aspect Ratio
-  });
 
   const deleteProduct = async () => { // Function to delete the product
     try { // Try-catch block to handle errors
@@ -81,14 +89,12 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
   return (
     <div>
       <Card sx={{ maxWidth: 345 }}> {/* Card component from Material-UI */}
-        <ImageWrapper>
         <CardMedia 
-          sx={{ height: 140 }}
-          image={product.imageUrl}
-          title={product.name}
-          onClick={handleImageDialogOpen} 
+           className={classes.media} // Apply the hover effect styles
+           image={product.imageUrl}
+           title={product.name}
+           onClick={handleImageDialogOpen}  
         />        
-        </ImageWrapper>    
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {product.name}
