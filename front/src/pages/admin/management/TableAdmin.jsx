@@ -75,7 +75,7 @@ const TableAdmin = () => {
       });
       console.log("Response:", response.data);
       alert(`Order status updated to ${status}`);
-      window.location.reload();
+      window.location.reload(); // Reload the page to reflect the updated order status
     } catch (error) {
       console.error("Error updating order status:", error.response?.data || error);
       alert("Failed to update order status.");

@@ -43,6 +43,7 @@ const ManageUsers = () => {
           user._id === id ? { ...user, role: newRole } : user // If the user ID matches, create a new object with the updated role; otherwise, return the
         )
       );
+      window.location.reload(); // Reload the page to reflect the updated user roles
     } catch (error) {
       console.error("Error updating user role:", error);
     }
