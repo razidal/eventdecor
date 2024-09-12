@@ -204,8 +204,8 @@ const VirtualEventDesigner = () => {
   const handleDecorationSelect = (decoration) => {
     setSelectedDecoration({ // Set the selected decoration state with the clicked decoration object
       ...decoration,
-      width: "100%",
-      height: "100%",
+      width: "40%",
+      height: "40%",
       id: Date.now(),
       image: decoration.imageUrl,
     });
