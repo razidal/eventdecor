@@ -204,8 +204,8 @@ const VirtualEventDesigner = () => {
   const handleDecorationSelect = (decoration) => {
     setSelectedDecoration({ // Set the selected decoration state with the clicked decoration object
       ...decoration,
-      width: 100,
-      height: 100,
+      width: 50,
+      height: 50,
       id: Date.now(),
       image: decoration.imageUrl,
     });
@@ -307,9 +307,10 @@ const VirtualEventDesigner = () => {
                 position: "relative",
                 width: "100%",
                 height: "calc(100vh - 100px)",
-                overflow: "hidden",
+                overflow: "visible",
+                padding: "20px",
                 backgroundImage: `url(${background})`, // Set the background image based on the selected template or uploaded image
-                backgroundSize: "cover",
+                backgroundSize: "contian",
                 backgroundPosition: "center",
                 cursor: selectedDecoration ? "crosshair" : "default", // Change the cursor based on the selected decoration
               }}
