@@ -308,9 +308,8 @@ const VirtualEventDesigner = () => {
                 width: "100%",
                 height: "calc(100vh - 100px)",
                 overflow: "visible",
-                padding: "20px",
                 backgroundImage: `url(${background})`, // Set the background image based on the selected template or uploaded image
-                backgroundSize: "contian",
+                backgroundSize: "cover",
                 backgroundPosition: "center",
                 cursor: selectedDecoration ? "crosshair" : "default", // Change the cursor based on the selected decoration
               }}
@@ -430,7 +429,6 @@ const VirtualEventDesigner = () => {
                     alt={product.name}
                     style={{
                       width: "100%",
-                      height: "100%",
                       cursor: "pointer",
                       border:
                       selectedDecoration &&
