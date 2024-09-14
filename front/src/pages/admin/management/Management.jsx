@@ -9,6 +9,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import AddSingleProjact from "./add/AddSingleProjact";
 import axios from "axios";
 import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 import ProductsCard from "../../../components/card/products/ProductsCard";
 
 const Management = () => {
@@ -53,7 +54,7 @@ const Management = () => {
               <Grid item xs={12} sm={6} md={4} key={product._id}>
                 <Box sx={{ height: "100%" }}> {/* Ensure card takes full height */}
                   <ProductsCard product={product} fetchProducts={fetchProducts} />
-               </Box>
+                </Box>
               </Grid>
             ))}
           </Grid>
