@@ -62,12 +62,7 @@ const UserRoute = () => {
           ml: { xs: 0, sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar>
-          <Typography variant="h6">Header</Typography>
-          {/* Add other buttons or components here */}
-        </Toolbar>
       </AppBar>
-
       <Drawer
         variant="permanent"
         sx={{
