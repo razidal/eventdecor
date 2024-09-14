@@ -74,14 +74,14 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
 
   return (
     <div>
-      <Card sx={{ maxWidth: 345 }}> {/* Card component from Material-UI */}
+      <Card sx={{ maxWidth: 345, height: "100%", minHeight: 300 }}> {/* Card component from Material-UI */}
         <CardMedia 
             sx={{
-              height: 140,
+              height: 100,
               cursor: "pointer",
               transition: "transform 0.3s ease, box-shadow 0.3s ease",
               '&:hover': {
-                transform: "scale(1.05)",
+                transform: "scale(1.1)",
                 boxShadow: `0px 4px 8px rgba(0, 0, 0, 0.3)`,
               },
             }}
