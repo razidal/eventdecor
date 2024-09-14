@@ -108,7 +108,7 @@ const Edit = ({ id }) => {
   };
 
   return (
-    <Container>
+    <Container maxWidth="xs" sx={{padding:2}}>
       <Typography variant="h4">Edit User</Typography>
       <form onSubmit={handleSubmit}>
         <Box
@@ -165,19 +165,19 @@ const Edit = ({ id }) => {
               ),
             }}
           />
-          <Button variant="contained" type="submit" fullWidth>
+          <Button variant="contained" type="submit" fullWidth sx={{mt:2}}>
             Update
           </Button>
 
           {/* Display success message */}
           {successMessage && ( // Check if successMessage is not empty
-            <Alert severity="success" style={{ marginTop: "20px" }}>
+            <Alert severity="success" style={{ marginTop: "20px" }} sx={{ mt: 2 }}>
               {successMessage}
             </Alert>
           )}
           {/* Display error message */}
           {errorMessage && ( // Check if successMessage is not empty
-            <Alert severity="error" style={{ marginTop: "20px" }}>
+            <Alert severity="error" style={{ marginTop: "20px" }} sx={{ mt: 2 }}>
               {errorMessage}
             </Alert>
           )}

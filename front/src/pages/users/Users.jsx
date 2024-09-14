@@ -27,7 +27,7 @@ const ManageUsers = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchUsers = async () => { // Fetch users from the server
       try {
         const response = await axios.get("https://backstore-iqcq.onrender.com/users/get");
         setUsers(response.data);
@@ -40,29 +40,29 @@ const ManageUsers = () => {
     fetchUsers();
   }, []);
 
-  const handleRoleChange = async (id, newRole) => {
+  const handleRoleChange = async (id, newRole) => { // Update user role on the server
     try {
       await axios.put(`https://backstore-iqcq.onrender.com/users/update-role/${id}`, {
         role: newRole,
       });
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user._id === id ? { ...user, role: newRole } : user
+      setUsers((prevUsers) => 
+        prevUsers.map((user) => // Update the user's role in the state
+          user._id === id ? { ...user, role: newRole } : user 
         )
       );
-      window.location.reload();
+      window.location.reload(); // Reload the page to reflect the updated user role
     } catch (error) {
       console.error("Error updating user role:", error);
     }
   };
 
-  const handleDeleteUser = async (id) => {
+  const handleDeleteUser = async (id) => { // Delete user from the server
     const confirmDelete = window.confirm("Are you sure you want to delete this user?");
     if (!confirmDelete) return;
     setDeleting(true);
     try {
       await axios.delete(`https://backstore-iqcq.onrender.com/users/delete/${id}`);
-      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id));
+      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id)); // Remove the user from the state
       setDeleting(false);
       alert("User deleted successfully.");
     } catch (error) {
@@ -79,10 +79,10 @@ const ManageUsers = () => {
           Manage Users
         </Typography>
       </Box>
-      {loading ? (
+      {loading ? ( // Display a loading message while fetching users
         <Typography>Loading...</Typography>
       ) : (
-        <TableContainer component={Paper} sx={{ overflowX: "auto" }}>
+        <TableContainer component={Paper} sx={{ overflowX: "auto" }}> 
           <Table size="small">
             <TableHead>
               <TableRow>
@@ -117,7 +117,7 @@ const ManageUsers = () => {
                       size="small"
                       fullWidth
                     >
-                      {deleting ? "Deleting..." : "Delete"}
+                      {deleting ? "Deleting..." : "Delete"} {/* Display a loading message while deleting user*/}
                     </Button>
                   </TableCell>
                 </TableRow>
