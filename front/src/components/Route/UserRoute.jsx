@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import Edit from "../../pages/user/edit/Edit";
+import Profile from "../../pages/user/profile/Profile";
 import {
   Drawer,
   List,
