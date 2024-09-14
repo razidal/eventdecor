@@ -11,9 +11,6 @@ import {
   Container,
   Box,
   Typography,
-  Grid,
-  useMediaQuery,
-  useTheme,
   Paper,
   TableContainer,
 } from "@mui/material";
@@ -23,8 +20,6 @@ const ManageUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     const fetchUsers = async () => { // Fetch users from the server

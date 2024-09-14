@@ -1,17 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { Container, Typography, Paper, Box, Divider, useMediaQuery } from "@mui/material";
+import { Container, Typography, Paper, Box, Divider, useMediaQuery, useTheme } from "@mui/material";
 import TableOrder from "./TableOrder";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import {createTheme } from "@mui/material/styles";
 
 const Profile = ({ id }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState("");
   const navigate = useNavigate();
-
-  // Use media query to check for mobile view
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+  
+  const theme =  createTheme({
+    // Define your theme customization here
+    breakpoints: {
+      values: {
+        xs: 0,
+        sm: 600,
+        md: 960,
+        lg: 1280,
+        xl: 1920,
+      },
+    },
+  });
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Use breakpoints from theme
 
   useEffect(() => {
     const getUser = async () => {
