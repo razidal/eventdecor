@@ -12,7 +12,6 @@ import {
   Box,
   Typography,
   useMediaQuery,
-  useTheme,
 } from "@mui/material";
 import axios from "axios";
 
@@ -21,9 +20,9 @@ const ManageUsers = () => {
   const [loading, setLoading] = useState(true);
   const [deleting,setDeleting]=useState(false);
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  
+
+  const isMobile = useMediaQuery("(max-width:600px)"); // for mobile devices
+
   useEffect(() => {
     const fetchUsers = async () => { // Fetch all users
       try {
