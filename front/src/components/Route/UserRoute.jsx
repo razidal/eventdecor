@@ -17,7 +17,8 @@ import {
   Person as PersonIcon,
   Edit as EditIcon,
   ExitToApp as LogoutIcon,
-  Menu as MenuIcon,
+  ArrowForward as ArrowForwardIcon,
+  ArrowBack as ArrowBackIcon,
 } from "@mui/icons-material";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
@@ -46,39 +47,29 @@ const UserRoute = () => {
     Cookies.remove("favorites");
     navigate("/");
     window.location.reload();
-  };
+  }
 
   const menuItems = [ // Define your menu items
     { text: "Profile", icon: <PersonIcon />, path: "profile/" },
     { text: "Edit Profile", icon: <EditIcon />, path: "edit/" },
-    { text: "Logout", icon: <LogoutIcon />, path: "/", action: handleLogout }, // Attach the logout action
+    { text: "Logout", icon: <LogoutIcon />, path: "/" ,action: handleLogout }, // Attach the logout action
   ];
 
-  return (
+  return ( 
     <Box sx={{ display: "flex" }}>
-      <IconButton
-        onClick={() => setOpen(!open)}
-        sx={{
-          position: "fixed",
-          top: 16,
-          left: 16,
-          zIndex: 1200, // Make sure the button is on top of other content
-        }}
-      >
-        <MenuIcon />
-      </IconButton>
       <Drawer
-        variant="persistent"
-        open={open}
+        variant="permanent"
         sx={{
-          width: drawerWidth,
+          width: open ? drawerWidth : 0, // Toggle width based on open state
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: drawerWidth,
+            width: open ? drawerWidth : 0,
             boxSizing: "border-box",
             top: "64px",
             height: "calc(100% - 64px)",
             backgroundColor: "#f5f5f5",
+            transition: "width 0.3s ease",
+            position: "relative", // Position relative for absolute positioning of the button
           },
         }}
       >
@@ -89,7 +80,7 @@ const UserRoute = () => {
         </Box>
         <Divider />
         <List>
-          {menuItems.map((item, index) => (
+          {menuItems.map((item, index) => ( // Map through the menu items and create ListItems
             <ListItem
               button
               key={item.text}
@@ -111,14 +102,27 @@ const UserRoute = () => {
             </ListItem>
           ))}
         </List>
+        <IconButton
+          onClick={() => setOpen(!open)} // Toggle drawer open/close
+          sx={{
+            position: "absolute",
+            right: -30,
+            top: "50%",
+            transform: "translateY(-50%)",
+            transition: "right 0.3s ease",
+            zIndex: 1200, // Ensure button is above other content
+          }}
+        >
+          {open ? <ArrowBackIcon /> : <ArrowForwardIcon />} {/* Toggle icon based on drawer state */}
+        </IconButton>
       </Drawer>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` }, // Adjust the main content width based on the drawer width
-          marginLeft: { sm: `${drawerWidth}px` }, // Adjust margin based on screen size
+          width: `calc(100% - ${open ? drawerWidth : 0}px)`, // Adjust width based on drawer state
+          marginLeft: open ? `${drawerWidth}px` : 0,
           marginTop: "64px",
         }}
       >
