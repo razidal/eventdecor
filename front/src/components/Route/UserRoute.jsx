@@ -54,14 +54,15 @@ const UserRoute = () => {
       <Drawer
         variant="permanent"
         sx={{
-          width: drawerWidth,
+          width: { xs: "100%", sm: drawerWidth }, // Make the drawer full width on small screens
           flexShrink: 0,
-          "& .MuiDrawer-paper": {   // Apply styles to the drawer paper
-            width: drawerWidth,
+          "& .MuiDrawer-paper": {
+            width: { xs: "100%", sm: drawerWidth },
             boxSizing: "border-box",
             top: "64px",
             height: "calc(100% - 64px)",
             backgroundColor: "#f5f5f5",
+            position: { xs: "relative", sm: "fixed" }, // Adjust drawer position on small screens
           },
         }}
       >
@@ -100,9 +101,8 @@ const UserRoute = () => {
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` }, // Adjust the main content width based on the drawer width
-
-          marginLeft: ``,
+          width: { xs: "100%", sm: `calc(100% - ${drawerWidth}px)` }, // Adjust width based on screen size
+          marginLeft: { xs: 0, sm: `${drawerWidth}px` }, // Adjust margin based on screen size
           marginTop: "64px",
         }}
       >
