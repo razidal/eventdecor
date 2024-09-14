@@ -395,7 +395,7 @@ export default function Cart() {
   };
 
   return (
-    <Box sx={{ maxWidth: 800, margin: "auto", mt: 4 }}>
+    <Box sx={{ maxWidth: { xs: "100%", sm: 800 }, margin: "auto", mt: 4, px: { xs: 2, sm: 0 } }}>
       <Typography variant="h4" gutterBottom>
         Your Shopping Cart
       </Typography>

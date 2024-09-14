@@ -359,7 +359,7 @@ const Header = () => {
         <StyledDrawer
           PaperProps={{
             sx: {
-              width: isMobile ? '80vw' : '400px', // 80% width on mobile, 400px on larger screens
+              width: isMobile ? '70vw' : '400px', // 80% width on mobile, 400px on larger screens
               maxWidth: '80vw', // Limits the maximum width to 80% on mobile
               height: '100vh', // Full height but not fullscreen
               overflowX: 'hidden', // Prevents horizontal scrolling
@@ -370,7 +370,7 @@ const Header = () => {
           onClose={toggleDrawer(false)}
         >
           <Box
-            sx={{ width: isMobile ? '80vw': 400, padding: 2 }}
+            sx={{ width: 400, padding: 2 }}
             role="presentation"
             onKeyDown={toggleDrawer(false)}
           >
