@@ -11,16 +11,11 @@ import {
   Typography,
   ListItemIcon,
   Divider,
-  IconButton,
-  useMediaQuery,
-  AppBar,
-  Toolbar,
 } from "@mui/material";
 import {
   Person as PersonIcon,
   Edit as EditIcon,
   ExitToApp as LogoutIcon,
-  Menu as MenuIcon
 } from "@mui/icons-material";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
@@ -30,11 +25,9 @@ const drawerWidth = 240;
 
 const UserRoute = () => {
   const [id, setId] = useState("");
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
   useEffect(() => {
     const token = Cookies.get("user");
@@ -58,40 +51,23 @@ const UserRoute = () => {
     { text: "Logout", icon: <LogoutIcon />, path: "/", action: handleLogout },
   ];
 
-  const handleDrawerToggle = () => {
-    setDrawerOpen(!drawerOpen);
-  };
-
   return (
     <Box sx={{ display: "flex" }}>
-      <AppBar position="fixed">
-        <Toolbar>
-          {isMobile && (
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-          )}
-          <Typography variant="h6" noWrap>
-            User Dashboard
-          </Typography>
-        </Toolbar>
-      </AppBar>
-
       <Drawer
-        variant="temporary"
-        open={drawerOpen}
-        onClose={handleDrawerToggle}
+        variant="permanent"
         sx={{
-          display: { xs: 'block', sm: 'none' },
-          '& .MuiDrawer-paper': {
+          width: drawerWidth,
+          flexShrink: 0,
+          position: "fixed",
+          "& .MuiDrawer-paper": {
             width: drawerWidth,
-            boxSizing: 'border-box',
+            boxSizing: "border-box",
+            top: "64px",
+            height: "calc(100% - 64px)",
+            backgroundColor: "#f5f5f5",
+            position: "fixed", // Keep the drawer fixed on the left
+            left: 0,
+            zIndex: 1200, // Ensure it stays above other content
           },
         }}
       >
@@ -99,41 +75,40 @@ const UserRoute = () => {
           <Typography variant="h6" sx={{ mb: 2 }}>
             User Menu
           </Typography>
-          <Divider />
-          <List>
-            {menuItems.map((item) => (
-              <ListItem
-                button
-                key={item.text}
-                component={item.action ? "div" : Link}
-                to={item.path}
-                onClick={item.action ? item.action : null}
-                selected={location.pathname.includes(item.path)}
-                sx={{
-                  "&.Mui-selected": {
-                    backgroundColor: "primary.light",
-                    "&:hover": {
-                      backgroundColor: "primary.light",
-                    },
-                  },
-                }}
-              >
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItem>
-            ))}
-          </List>
         </Box>
+        <Divider />
+        <List>
+          {menuItems.map((item, index) => (
+            <ListItem
+              button
+              key={item.text}
+              component={item.action ? "div" : Link}
+              to={item.path}
+              onClick={item.action ? item.action : null}
+              selected={location.pathname.includes(item.path)}
+              sx={{
+                "&.Mui-selected": {
+                  backgroundColor: "primary.light",
+                  "&:hover": {
+                    backgroundColor: "primary.light",
+                  },
+                },
+              }}
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItem>
+          ))}
+        </List>
       </Drawer>
-
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { xs: "100%", sm: `calc(100% - ${drawerWidth}px)` },
-          marginLeft: { xs: 0, sm: `${drawerWidth}px` },
+          marginLeft: `${drawerWidth}px`, // Adjust margin to account for the drawer width
           marginTop: "64px",
+          overflowX: "auto", // Ensure horizontal scrolling is allowed if needed
         }}
       >
         <Routes>
@@ -141,9 +116,7 @@ const UserRoute = () => {
           <Route path="edit/" element={<Edit id={id} />} />
           <Route
             path="/"
-            element={
-              <Navigate to="profile/" />
-            }
+            element={<Navigate to="profile/" />}
           />
         </Routes>
       </Box>
