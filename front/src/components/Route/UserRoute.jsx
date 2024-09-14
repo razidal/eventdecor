@@ -11,11 +11,15 @@ import {
   Typography,
   ListItemIcon,
   Divider,
+  IconButton,
+  AppBar,
+  Toolbar,
 } from "@mui/material";
 import {
   Person as PersonIcon,
   Edit as EditIcon,
   ExitToApp as LogoutIcon,
+  Menu as MenuIcon,
 } from "@mui/icons-material";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
@@ -51,76 +55,143 @@ const UserRoute = () => {
 
   return ( 
     <Box sx={{ display: "flex" }}>
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: { xs: "100%", sm: drawerWidth }, // Make the drawer full width on small screens
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: { xs: "100%", sm: drawerWidth },
-            boxSizing: "border-box",
-            top: "64px",
-            height: "calc(100% - 64px)",
-            backgroundColor: "#f5f5f5",
-            position: { xs: "relative", sm: "fixed" }, // Adjust drawer position on small screens
-          },
-        }}
-      >
-        <Box sx={{ p: 2 }}>
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            User Menu
-          </Typography>
-        </Box>
-        <Divider />
-        <List>
-        {menuItems.map((item, index) => ( // Map through the menu items and create ListItems
-            <ListItem
-              button
-              key={item.text}
-              component={item.action ? "div" : Link} // Use "div" if there's an action, otherwise Link
-              to={item.path}
-              onClick={item.action ? item.action : null} // Attach the action if it exists
-              selected={location.pathname.includes(item.path)} // Highlight the selected item
-              sx={{
-                "&.Mui-selected": {
-                  backgroundColor: "primary.light", // Apply a background color when selected
-                  "&:hover": {
-                    backgroundColor: "primary.light", // Keep the background color on hover
-                  },
-                },
-              }}
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { xs: "100%", sm: `calc(100% - ${drawerWidth}px)` }, // Adjust width based on screen size
-          marginLeft: { xs: 0, sm: `${drawerWidth}px` }, // Adjust margin based on screen size
-          marginTop: "64px",
-        }}
-      >
-        <Routes>
-          <Route path="profile/" element={<Profile id={id} />} /> 
-          <Route path="edit/" element={<Edit id={id} />} />
-          <Route
-            path="/"
-            element={
-              <Navigate
-                to="profile
-          /"
-              />
-            }
-          />
-        </Routes>
+    <AppBar
+      position="fixed"
+      sx={{
+        display: { xs: "flex", sm: "none" }, // Show only on small screens
+        width: "100%",
+        top: 0,
+        left: 0
+      }}
+    >
+      <Toolbar>
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          onClick={() => setOpen(true)}
+          sx={{ mr: 2 }}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography variant="h6">User Menu</Typography>
+      </Toolbar>
+    </AppBar>
+
+    <Drawer
+      variant="temporary" // Use temporary drawer for mobile
+      open={open}
+      onClose={() => setOpen(false)}
+      sx={{
+        display: { xs: "block", sm: "none" }, // Show only on small screens
+        "& .MuiDrawer-paper": {
+          width: drawerWidth,
+          boxSizing: "border-box",
+          top: "64px", // Adjust if you have a fixed header
+          height: "calc(100% - 64px)",
+          backgroundColor: "#f5f5f5",
+        },
+      }}
+    >
+      <Box sx={{ p: 2 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          User Menu
+        </Typography>
       </Box>
+      <Divider />
+      <List>
+        {menuItems.map((item, index) => (
+          <ListItem
+            button
+            key={item.text}
+            component={item.action ? "div" : Link}
+            to={item.path}
+            onClick={item.action ? item.action : null}
+            selected={location.pathname.includes(item.path)}
+            sx={{
+              "&.Mui-selected": {
+                backgroundColor: "primary.light",
+                "&:hover": {
+                  backgroundColor: "primary.light",
+                },
+              },
+            }}
+          >
+            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.text} />
+          </ListItem>
+        ))}
+      </List>
+    </Drawer>
+
+    <Drawer
+      variant="permanent" // Use permanent drawer for larger screens
+      sx={{
+        width: drawerWidth,
+        flexShrink: 0,
+        "& .MuiDrawer-paper": {
+          width: drawerWidth,
+          boxSizing: "border-box",
+          top: "64px",
+          height: "calc(100% - 64px)",
+          backgroundColor: "#f5f5f5",
+          position: "fixed",
+        },
+      }}
+    >
+      <Box sx={{ p: 2 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          User Menu
+        </Typography>
+      </Box>
+      <Divider />
+      <List>
+        {menuItems.map((item, index) => (
+          <ListItem
+            button
+            key={item.text}
+            component={item.action ? "div" : Link}
+            to={item.path}
+            onClick={item.action ? item.action : null}
+            selected={location.pathname.includes(item.path)}
+            sx={{
+              "&.Mui-selected": {
+                backgroundColor: "primary.light",
+                "&:hover": {
+                  backgroundColor: "primary.light",
+                },
+              },
+            }}
+          >
+            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.text} />
+          </ListItem>
+        ))}
+      </List>
+    </Drawer>
+
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        p: 3,
+        width: { xs: "100%", sm: `calc(100% - ${drawerWidth}px)` },
+        marginLeft: { xs: 0, sm: `${drawerWidth}px` },
+        marginTop: "64px",
+      }}
+    >
+      <Routes>
+        <Route path="profile/" element={<Profile id={id} />} />
+        <Route path="edit/" element={<Edit id={id} />} />
+        <Route
+          path="/"
+          element={
+            <Navigate to="profile/" />
+          }
+        />
+      </Routes>
     </Box>
+  </Box>
   );
 };
 
