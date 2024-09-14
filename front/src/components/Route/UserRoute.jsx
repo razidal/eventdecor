@@ -11,13 +11,13 @@ import {
   Typography,
   ListItemIcon,
   Divider,
-  IconButton
+  IconButton,
 } from "@mui/material";
 import {
   Person as PersonIcon,
   Edit as EditIcon,
   ExitToApp as LogoutIcon,
-  Menu as MenuIcon
+  Menu as MenuIcon,
 } from "@mui/icons-material";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
@@ -27,39 +27,49 @@ const drawerWidth = 240;
 
 const UserRoute = () => {
   const [id, setId] = useState("");
-  const [drawerOpen, setDrawerOpen] = useState(true); // State to manage drawer open/close
+  const [open, setOpen] = useState(true); // State to manage drawer open/close
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    // Fetch user ID from cookies when the component mounts
-    const token = Cookies.get("user");
-    if (token) {
-      setId(JSON.parse(token));
+  useEffect(() => { // Fetch user ID from cookies when the component mounts
+    const token = Cookies.get("user"); // Replace 'userToken' with your actual cookie name
+    if (token) { // If the token exists, parse it and set the user ID
+      setId(JSON.parse(token)); // Assuming the token is a JSON string containing the user ID
     }
   }, []);
 
-  const handleLogout = () => {
-    dispatch(logout());
+  const handleLogout = () => { // Handle logout action
+    dispatch(logout()); 
     Cookies.remove("user");
-    Cookies.remove("cart");
+    Cookies.remove("cart"); 
     Cookies.remove("favorites");
     navigate("/");
     window.location.reload();
   };
 
-  const menuItems = [
+  const menuItems = [ // Define your menu items
     { text: "Profile", icon: <PersonIcon />, path: "profile/" },
     { text: "Edit Profile", icon: <EditIcon />, path: "edit/" },
-    { text: "Logout", icon: <LogoutIcon />, path: "/", action: handleLogout },
+    { text: "Logout", icon: <LogoutIcon />, path: "/", action: handleLogout }, // Attach the logout action
   ];
 
   return (
     <Box sx={{ display: "flex" }}>
+      <IconButton
+        onClick={() => setOpen(!open)}
+        sx={{
+          position: "fixed",
+          top: 16,
+          left: 16,
+          zIndex: 1200, // Make sure the button is on top of other content
+        }}
+      >
+        <MenuIcon />
+      </IconButton>
       <Drawer
         variant="persistent"
-        open={drawerOpen}
+        open={open}
         sx={{
           width: drawerWidth,
           flexShrink: 0,
@@ -76,25 +86,22 @@ const UserRoute = () => {
           <Typography variant="h6" sx={{ mb: 2 }}>
             User Menu
           </Typography>
-          <IconButton onClick={() => setDrawerOpen(!drawerOpen)} sx={{ display: { xs: 'block', sm: 'none' } }}>
-            <MenuIcon />
-          </IconButton>
         </Box>
         <Divider />
         <List>
-          {menuItems.map((item) => (
+          {menuItems.map((item, index) => (
             <ListItem
               button
               key={item.text}
-              component={item.action ? "div" : Link}
+              component={item.action ? "div" : Link} // Use "div" if there's an action, otherwise Link
               to={item.path}
-              onClick={item.action ? item.action : null}
-              selected={location.pathname.includes(item.path)}
+              onClick={item.action ? item.action : null} // Attach the action if it exists
+              selected={location.pathname.includes(item.path)} // Highlight the selected item
               sx={{
                 "&.Mui-selected": {
-                  backgroundColor: "primary.light",
+                  backgroundColor: "primary.light", // Apply a background color when selected
                   "&:hover": {
-                    backgroundColor: "primary.light",
+                    backgroundColor: "primary.light", // Keep the background color on hover
                   },
                 },
               }}
@@ -110,13 +117,13 @@ const UserRoute = () => {
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          marginLeft: { sm: `${drawerWidth}px` },
+          width: { sm: `calc(100% - ${drawerWidth}px)` }, // Adjust the main content width based on the drawer width
+          marginLeft: { sm: `${drawerWidth}px` }, // Adjust margin based on screen size
           marginTop: "64px",
         }}
       >
         <Routes>
-          <Route path="profile/" element={<Profile id={id} />} />
+          <Route path="profile/" element={<Profile id={id} />} /> 
           <Route path="edit/" element={<Edit id={id} />} />
           <Route path="/" element={<Navigate to="profile/" />} />
         </Routes>
