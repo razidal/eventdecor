@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Typography, Paper, Box, Divider, TableContainer } from "@mui/material";
+import { Container, Typography, Paper, Box, Divider, useMediaQuery } from "@mui/material";
 import TableOrder from "./TableOrder";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -10,16 +10,19 @@ const Profile = ({ id }) => {
   const [userId, setUserId] = useState("");
   const navigate = useNavigate();
 
+  // Use media query to check for mobile view
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+
   useEffect(() => {
-    const getUser = async () => { // Fetch user data based on the provided ID
-      if (id && id._id) { // Check if id and id._id are defined
-        try { 
-          const response = await axios.get( // Make a GET request to the server to fetch user data
+    const getUser = async () => {
+      if (id && id._id) {
+        try {
+          const response = await axios.get(
             `https://backstore-iqcq.onrender.com/auth/user/${id._id}`
           );
           setUser(response.data.user);
           setUserId(response.data.user._id);
-        } catch (error) { // Handle any errors that occur during the fetch request
+        } catch (error) {
           console.error("Error fetching user data:", error);
         } finally {
           setLoading(false);
@@ -61,15 +64,13 @@ const Profile = ({ id }) => {
     );
   }
 
-  // Format the date of birth
   const formattedDate = new Date(user.dateOfBirth).toLocaleDateString();
 
   return (
-    <TableContainer component={Paper} sx={{ overflowX: "auto" }}> 
-    <Container maxWidth="md">
+    <Container maxWidth="md" sx={{ px: isMobile ? 2 : 4 }}>
       <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
         <Typography variant="h4" gutterBottom>
-          User Profile 
+          User Profile
         </Typography>
         <Divider sx={{ mb: 3 }} />
         <Box sx={{ mb: 3 }}>
@@ -77,13 +78,13 @@ const Profile = ({ id }) => {
             Personal Information
           </Typography>
           <Typography variant="body1">
-            Full Name: {user.fullName || "Not available"} {/* Display the user's full name or "Not available" if not provided */}
+            Full Name: {user.fullName || "Not available"}
           </Typography>
           <Typography variant="body1">
-            Email: {user.email || "Not available"} {/* Display the user's email or "Not available" if not provided */}
+            Email: {user.email || "Not available"}
           </Typography>
           <Typography variant="body1">
-            Date of Birth: {formattedDate || "Not available"} {/* Display the user's date of birth or "Not available" if not provided */}
+            Date of Birth: {formattedDate || "Not available"}
           </Typography>
         </Box>
         <Divider sx={{ mb: 3 }} />
@@ -93,7 +94,6 @@ const Profile = ({ id }) => {
         <TableOrder id={userId} />
       </Paper>
     </Container>
-    </TableContainer>
   );
 };
 
