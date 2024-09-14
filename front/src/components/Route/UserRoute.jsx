@@ -103,6 +103,7 @@ const UserRoute = () => {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
+          zIndex: (theme) => theme.zIndex.drawer + 1, // Ensure AppBar is on top
         }}
       >
         <Toolbar>
