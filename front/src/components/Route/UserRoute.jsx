@@ -106,8 +106,8 @@ const UserRoute = () => {
           zIndex: (theme) => theme.zIndex.drawer + 1, // Ensure AppBar is on top
         }}
       >
+         {isMobile && (
         <Toolbar>
-          {isMobile && (
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -117,12 +117,11 @@ const UserRoute = () => {
             >
               <MenuIcon />
             </IconButton>
-          )}
+          
           <Typography variant="h6" noWrap component="div">
             User Dashboard
           </Typography>
-          {/* Add your other header buttons here */}
-        </Toolbar>
+        </Toolbar>)}
       </AppBar>
       <Drawer
         variant={isMobile ? "temporary" : "permanent"}
