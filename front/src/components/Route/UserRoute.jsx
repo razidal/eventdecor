@@ -105,12 +105,14 @@ const UserRoute = () => {
         <IconButton
           onClick={() => setOpen(!open)} // Toggle drawer open/close
           sx={{
-            position: "absolute",
-            right: -30,
+            position: "fixed",
+            right: open ? `${drawerWidth}px` : "0",
             top: "50%",
             transform: "translateY(-50%)",
-            transition: "right 0.3s ease",
-            zIndex: 1200, // Ensure button is above other content
+            zIndex: 1200,
+            backgroundColor: "#fff",
+            borderRadius: "50%",
+            boxShadow: 1,
           }}
         >
           {open ? <ArrowBackIcon /> : <ArrowForwardIcon />} {/* Toggle icon based on drawer state */}
