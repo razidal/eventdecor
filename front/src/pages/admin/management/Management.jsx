@@ -51,7 +51,9 @@ const Management = () => {
           <Grid container spacing={3}>
             {allProducts?.map((product) => ( // Map through the fetched products and render a card for each one
               <Grid item xs={12} sm={6} md={4} key={product._id}>
-                <ProductsCard product={product} fetchProducts={fetchProducts} />
+                <Box sx={{ height: "100%" }}> {/* Ensure card takes full height */}
+                  <ProductsCard product={product} fetchProducts={fetchProducts} />
+               </Box>
               </Grid>
             ))}
           </Grid>

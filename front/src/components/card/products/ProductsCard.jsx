@@ -46,6 +46,7 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
       alert(" Product deleted successfully"); // Show a success message
       setOpen(false); // Close the dialog
       fetchProducts(); // Refresh the product list after deletion
+      window.location.reload();
     } catch (error) { // Catch any errors that occur during the request
       console.log(error);
     }
