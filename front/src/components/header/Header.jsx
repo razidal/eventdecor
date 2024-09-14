@@ -357,12 +357,13 @@ const Header = () => {
           )}
         </Toolbar>
         <StyledDrawer
+          sx={{ width: isMobile ? '80vw': 400 }}
           anchor="right"
           open={isDrawerOpen}
           onClose={toggleDrawer(false)}
         >
           <Box
-            sx={{ width: isMobile ?  50: 400, padding: 2 }}
+            sx={{ width: isMobile ? '80vw': 400, padding: 2 }}
             role="presentation"
             onKeyDown={toggleDrawer(false)}
           >
