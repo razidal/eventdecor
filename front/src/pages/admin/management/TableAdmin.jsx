@@ -71,7 +71,7 @@ const TableAdmin = () => {
   return (
     <div>
       <Box sx={{ textAlign: 'center' }}>
-        <Typography variant= {isMobile? 'h6' : 'h4'}
+        <Typography variant='h4'
         sx={{ paddingTop: '50px', paddingBottom:'30px', display: 'inline-block' }}>
           Orders
         </Typography>

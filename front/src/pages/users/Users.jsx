@@ -11,6 +11,8 @@ import {
   Container,
   Box,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import axios from "axios";
 
@@ -19,6 +21,9 @@ const ManageUsers = () => {
   const [loading, setLoading] = useState(true);
   const [deleting,setDeleting]=useState(false);
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  
   useEffect(() => {
     const fetchUsers = async () => { // Fetch all users
       try {
@@ -73,7 +78,7 @@ const ManageUsers = () => {
       {loading ? ( // Show a loading message while fetching data
         <Typography>Loading...</Typography>
       ) : ( // Render the user table once data is fetched
-        <Table>
+        <Table size={isMobile? "small" : "medium"}>
           <TableHead>
             <TableRow>
               <TableCell>Full Name</TableCell>
@@ -91,6 +96,7 @@ const ManageUsers = () => {
                   <Select
                     value={user.role}
                     onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                    size={isMobile ? "small" : "medium"}
                   >
                     <MenuItem value="User">User</MenuItem>
                     <MenuItem value="Admin">Admin</MenuItem>
@@ -102,6 +108,7 @@ const ManageUsers = () => {
                     variant="contained"
                     onClick={() => handleDeleteUser(user._id)}
                     disabled={deleting}
+                    size={isMobile ? "small" : "medium"}
                   >
                      {deleting ? "Deleting..." : "Delete"} {/* Show a loading message while deleting the user*/}
                   </Button>

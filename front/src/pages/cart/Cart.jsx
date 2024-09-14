@@ -354,7 +354,7 @@ export default function Cart() {
 
   const handleQuantityChange = (id, newQuantity) => { // Update the quantity of an item in the cart based on its id and the new quantity value
     newQuantity = parseInt(newQuantity, 10);
-    if (newQuantity >= 0) { // Check if the new quantity is a non-negative integer
+    if (newQuantity >= 1) { // Check if the new quantity is a non-negative integer
       const updatedCart = cartData.map((item) => {
         if (item.id === id) { // Find the item with the matching id
           return { ...item, quantity: newQuantity };
@@ -447,7 +447,7 @@ export default function Cart() {
                         onChange={(e) =>
                           handleQuantityChange(row.id, e.target.value)
                         }
-                        inputProps={{ min: "0", step: "1" }}
+                        inputProps={{ min: "1", step: "1" }}
                         size="small"
                       />
                     </TableCell>
