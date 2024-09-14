@@ -177,7 +177,7 @@ const Edit = ({ id }) => {
           )}
           {/* Display error message */}
           {errorMessage && ( // Check if successMessage is not empty
-            <Alert severity="success" style={{ marginTop: "20px" }}>
+            <Alert severity="error" style={{ marginTop: "20px" }}>
               {errorMessage}
             </Alert>
           )}
