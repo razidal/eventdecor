@@ -357,7 +357,14 @@ const Header = () => {
           )}
         </Toolbar>
         <StyledDrawer
-          sx={{ width: isMobile ? '80vw': 400 }}
+          PaperProps={{
+            sx: {
+              width: isMobile ? '80vw' : '400px', // 80% width on mobile, 400px on larger screens
+              maxWidth: '80vw', // Limits the maximum width to 80% on mobile
+              height: '100vh', // Full height but not fullscreen
+              overflowX: 'hidden', // Prevents horizontal scrolling
+            }
+          }}
           anchor="right"
           open={isDrawerOpen}
           onClose={toggleDrawer(false)}
@@ -392,7 +399,7 @@ const Header = () => {
               variant="contained"
               to="/Cart"
               component={Link}
-              sx={{ marginTop: 2, width: isMobile? "90%": "100%" }}
+              sx={{ marginTop: 2, width:"100%" }}
               onClick={toggleDrawer(false)}
             >
               Proceed to Payment
