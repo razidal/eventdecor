@@ -11,6 +11,7 @@ import {
   Container,
   Select,
   MenuItem,
+  useMediaQuery,
 } from "@mui/material";
 import axios from "axios";
 import Typography from '@mui/material/Typography';
@@ -21,6 +22,8 @@ const TableAdmin = () => {
   const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null); // State to store the ID of the selected user
+
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm")); // Check if the screen size is smaller than or equal to sm breakpoint (for mobile devices)
 
   const handleOpenModal = (user) => {
     setSelectedUser(user);
@@ -68,7 +71,8 @@ const TableAdmin = () => {
   return (
     <div>
       <Box sx={{ textAlign: 'center' }}>
-        <Typography variant="h4" sx={{ paddingTop: '50px', paddingBottom:'30px', display: 'inline-block' }}>
+        <Typography variant= {isMobile? 'h6' : 'h4'}
+        sx={{ paddingTop: '50px', paddingBottom:'30px', display: 'inline-block' }}>
           Orders
         </Typography>
       </Box>
@@ -82,8 +86,15 @@ const TableAdmin = () => {
       ) : error ? ( // Show error message if there was an error during the fetch request
         <p>Error: {error.message}</p>
       ) : ( // Render the table with user data if data is available and there was no error
-        <Container>
-          <Table>
+        <Container sx={{ padding: isMobile ? "0 10px" : "0" }}>
+        <Table
+          sx={{
+            width: "100%",
+            tableLayout: isMobile ? "auto" : "fixed",
+            display: isMobile ? "block" : "table",
+            overflowX: "auto",
+          }}
+        >
             <TableHead>
               <TableRow>
                 <TableCell>Order Number</TableCell>
@@ -110,7 +121,8 @@ const TableAdmin = () => {
                     <Select
                       value={user.status}
                       onChange={(e) => updateOrderStatus(user._id, e.target.value)}
-                    >
+                      sx= {{ width: isMobile? "100%" : "auto" }}  // Mobile
+                    > 
                       <MenuItem value="Pending">Pending</MenuItem>
                       <MenuItem value="Completed">Completed</MenuItem>
                       <MenuItem value="Cancelled">Cancelled</MenuItem>
@@ -125,22 +137,29 @@ const TableAdmin = () => {
 
       <Modal open={openModal} onClose={handleCloseModal}>
         <div>
-          <Box
-            component="form"
-            sx={{
-              "& > :not(style)": { m: 1, width: "25ch" },
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              backgroundColor: "white",
-              justifyContent: "center",
-              gap: "1rem",
-              width: "50%",
-              margin: "auto",
-            }}
-          >
+        <Box
+          component="form"
+          sx={{
+            "& > :not(style)": { m: 1, width: isMobile ? "90%" : "25ch" },
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            backgroundColor: "white",
+            justifyContent: "center",
+            gap: "1rem",
+            width: isMobile ? "95%" : "50%",
+            margin: "auto",
+            padding: isMobile ? "20px" : "40px",
+          }}
+        >
             <h2>Order Details</h2>
-            <Table>
+            <Table
+              sx={{
+              tableLayout: "auto",
+              width: isMobile ? "100%" : "auto",
+              overflowX: isMobile ? "auto" : "visible",
+            }}
+            >
               <TableHead>
                 <TableRow>
                   <TableCell>Product Name</TableCell>

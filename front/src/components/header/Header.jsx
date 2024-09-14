@@ -362,7 +362,7 @@ const Header = () => {
           onClose={toggleDrawer(false)}
         >
           <Box
-            sx={{ width: 400, padding: 2 }}
+            sx={{ width: isMobile ? '100vw': 400, padding: 2 }}
             role="presentation"
             onKeyDown={toggleDrawer(false)}
           >
