@@ -12,7 +12,6 @@ const Profile = ({ id }) => {
   const navigate = useNavigate();
   
   const theme =  createTheme({
-    // Define your theme customization here
     breakpoints: {
       values: {
         xs: 0,

@@ -13,7 +13,9 @@ import {
   Divider,
   IconButton,
   AppBar,
-  Toolbar
+  Toolbar,
+  useMediaQuery, 
+  useTheme,
 } from "@mui/material";
 import {
   Person as PersonIcon,
@@ -24,7 +26,6 @@ import {
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/userSlice";
-import { useMediaQuery } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -34,7 +35,18 @@ const UserRoute = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isMobile = useMediaQuery("(max-width:600px)");
+  const theme =  createTheme({
+    breakpoints: {
+      values: {
+        xs: 0,
+        sm: 600,
+        md: 960,
+        lg: 1280,
+        xl: 1920,
+      },
+    },
+  });
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Use breakpoints from theme
 
   useEffect(() => {
     const token = Cookies.get("user");
@@ -62,103 +74,70 @@ const UserRoute = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const drawer = (
-    <Box sx={{ width: 250 }} role="presentation">
-      <Box sx={{ p: 2 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          User Menu
-        </Typography>
-      </Box>
-      <Divider />
-      <List>
-        {menuItems.map((item) => (
-          <ListItem
-            button
-            key={item.text}
-            component={item.action ? "div" : Link}
-            to={item.path}
-            onClick={item.action ? item.action : null}
-            selected={location.pathname.includes(item.path)}
-            sx={{
-              "&.Mui-selected": {
-                backgroundColor: "primary.light",
-                "&:hover": {
-                  backgroundColor: "primary.light",
-                },
-              },
-            }}
-          >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.text} />
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
-
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: 'flex' }}>
       <AppBar
         position="fixed"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          zIndex: (theme) => theme.zIndex.drawer + 1, // Ensure AppBar is on top
+          zIndex: theme => theme.zIndex.drawer + 1,
         }}
       >
-         {isMobile && (
         <Toolbar>
+          {isMobile && (
             <IconButton
               color="inherit"
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: "none" } }}
+              sx={{ mr: 2, display: { sm: 'none' } }}
             >
               <MenuIcon />
             </IconButton>
-          
-          <Typography variant="h6" noWrap component="div">
+          )}
+          <Typography variant="h6" noWrap>
             User Dashboard
           </Typography>
-        </Toolbar>)}
+        </Toolbar>
       </AppBar>
+      {isMobile && (
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+              boxSizing: 'border-box',
+            },
+          }}
+        >
+          {/* Drawer content */}
+        </Drawer>
+      )}
       <Drawer
-        variant={isMobile ? "temporary" : "permanent"}
-        open={isMobile ? mobileOpen : true}
-        onClose={handleDrawerToggle}
+        variant="permanent"
         sx={{
-          display: { xs: "block", sm: "block" },
-          "& .MuiDrawer-paper": {
+          display: { xs: 'none', sm: 'block' },
+          '& .MuiDrawer-paper': {
             width: drawerWidth,
-            boxSizing: "border-box",
-            top: "64px",
-            height: "calc(100% - 64px)",
-            backgroundColor: "#f5f5f5",
-            position: { xs: "relative", sm: "fixed" },
+            boxSizing: 'border-box',
           },
         }}
       >
-        {drawer}
+        {/* Drawer content */}
       </Drawer>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { xs: "100%", sm: `calc(100% - ${drawerWidth}px)` },
-          marginLeft: { xs: 0, sm: `${drawerWidth}px` },
-          marginTop: "64px",
+          marginTop: '64px', // Adjust this to account for your header height
         }}
       >
-        <Routes>
-          <Route path="profile/" element={<Profile id={id} />} />
-          <Route path="edit/" element={<Edit id={id} />} />
-          <Route
-            path="/"
-            element={<Navigate to="profile/" />}
-          />
-        </Routes>
+        {/* Your page content goes here */}
       </Box>
     </Box>
   );
