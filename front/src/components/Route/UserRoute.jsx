@@ -23,19 +23,19 @@ import { logout } from "../../redux/userSlice";
 
 const drawerWidth = 240;
 
-const UserRoute = () => {
+const UserRoute = () => { 
   const [id, setId] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  
   useEffect(() => {
     const token = Cookies.get("user");
     if (token) {
       setId(JSON.parse(token));
     }
   }, []);
-
+  
   const handleLogout = () => {
     dispatch(logout());
     Cookies.remove("user");
@@ -44,30 +44,34 @@ const UserRoute = () => {
     navigate("/");
     window.location.reload();
   };
-
+  
   const menuItems = [
     { text: "Profile", icon: <PersonIcon />, path: "profile/" },
     { text: "Edit Profile", icon: <EditIcon />, path: "edit/" },
     { text: "Logout", icon: <LogoutIcon />, path: "/", action: handleLogout },
   ];
 
-  return (
+  return ( 
     <Box sx={{ display: "flex" }}>
       <Drawer
         variant="permanent"
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          position: "fixed",
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
             top: "64px",
             height: "calc(100% - 64px)",
             backgroundColor: "#f5f5f5",
-            position: "fixed", // Keep the drawer fixed on the left
-            left: 0,
-            zIndex: 1200, // Ensure it stays above other content
+            position: "fixed", // Fix the drawer in place
+            overflow: "auto", // Allow scrolling if content exceeds drawer height
+          },
+          "@media (max-width: 600px)": {
+            width: '100%', // Make drawer full-width on mobile
+            height: 'auto', // Allow height to adjust based on content
+            position: 'relative', // Make drawer relative on mobile
+            top: 0, // Reset top position on mobile
           },
         }}
       >
@@ -106,17 +110,23 @@ const UserRoute = () => {
         sx={{
           flexGrow: 1,
           p: 3,
-          marginLeft: `${drawerWidth}px`, // Adjust margin to account for the drawer width
+          marginLeft: { xs: 0, sm: `${drawerWidth}px` }, // Adjust margin for responsiveness
           marginTop: "64px",
-          overflowX: "auto", // Ensure horizontal scrolling is allowed if needed
+          "@media (max-width: 600px)": {
+            marginLeft: 0, // No margin on mobile
+          },
         }}
       >
         <Routes>
-          <Route path="profile/" element={<Profile id={id} />} />
+          <Route path="profile/" element={<Profile id={id} />} /> 
           <Route path="edit/" element={<Edit id={id} />} />
           <Route
             path="/"
-            element={<Navigate to="profile/" />}
+            element={
+              <Navigate
+                to="profile/"
+              />
+            }
           />
         </Routes>
       </Box>
