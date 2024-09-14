@@ -8,6 +8,9 @@ import {
   Button,
   Modal,
   Box,
+  useMediaQuery,
+  useTheme,
+  Container,
 } from "@mui/material";
 import axios from "axios";
 
@@ -18,7 +21,10 @@ const TableOrder = ({ id }) => {
   const [openModal, setOpenModal] = useState(false);
   const [idPerson, setIdPerson] = useState("");
   const [selectedOrder, setSelectedOrder] = useState([]);
-  console.log("selectedOrder", selectedOrder);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   const handleOpenModal = (order) => {
     setOpenModal(true);
     setSelectedOrder(order);
@@ -34,47 +40,17 @@ const TableOrder = ({ id }) => {
     }
   }, [id]);
 
-  useEffect(() => { // Fetch data when idPerson changes
+  useEffect(() => {
     const fetchData = async () => {
       if (!idPerson) {
         console.error("ID is undefined");
         return;
       }
 
-      console.log("Fetching data for ID:", idPerson);
-
-      try { // Fetch data from the API
+      try {
         const response = await axios.get(
           `https://backstore-iqcq.onrender.com/cart/user/${idPerson}/getOrders`
         );
-        console.log("API Response:", response.data);
-
-        if (response.data.orders) { // Check if orders exist in the response
-          setUserData(response.data.orders);
-        } else {
-          setUserData([]);
-        }
-      } catch (error) { // Handle errors
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [idPerson]);
-
-  useEffect(() => {
-    const fetchData = async () => { // Fetch data when idPerson changes
-      if (!id) return;
-      console.log("Fetching data for ID:", idPerson);
-
-      try {
-        const response = await axios.get( // Fetch data from the API
-          `https://backstore-iqcq.onrender.com/cart/user/${id}/getOrders`
-        );
-        console.log("API Response:", response.data);
-
         if (response.data.orders) {
           setUserData(response.data.orders);
         } else {
@@ -88,58 +64,71 @@ const TableOrder = ({ id }) => {
     };
 
     fetchData();
-  }, [id, idPerson]);
+  }, [idPerson]);
 
   return (
-    <div>
+    <Container sx={{ mt: 4 }}>
       <h2>Orders</h2>
-      {loading ? (  // Display loading state
+      {loading ? (
         <p>Loading...</p>
-      ) : error ? ( // Display error state
+      ) : error ? (
         <p>Error: {error.message}</p>
-      ) : userData.length === 0 ? ( // Display no orders state
+      ) : userData.length === 0 ? (
         <p>No orders available.</p>
-      ) : ( // Display orders table
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Order Number</TableCell>
-              <TableCell>Total Price</TableCell>
-              <TableCell>Order Details</TableCell>
-              <TableCell>Order Confirmation</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {userData.map((order) => ( // Map through orders and display each one
-              <TableRow key={order._id}>
-                <TableCell>{order._id}</TableCell>
-                <TableCell>{order.totalAmount}$</TableCell>
-                <TableCell>
-                  <Button onClick={() => handleOpenModal(order)}>
-                    View Order
-                  </Button>
-                </TableCell>
-                <TableCell>Confirmed</TableCell>
+      ) : (
+        <Box
+          sx={{
+            overflowX: "auto",
+            "& table": {
+              minWidth: isMobile ? 600 : "auto",
+            },
+          }}
+        >
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Order Number</TableCell>
+                <TableCell>Total Price</TableCell>
+                <TableCell>Order Details</TableCell>
+                <TableCell>Order Confirmation</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {userData.map((order) => (
+                <TableRow key={order._id}>
+                  <TableCell>{order._id}</TableCell>
+                  <TableCell>{order.totalAmount}$</TableCell>
+                  <TableCell>
+                    <Button onClick={() => handleOpenModal(order)}>
+                      View Order
+                    </Button>
+                  </TableCell>
+                  <TableCell>Confirmed</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Box>
       )}
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box
           component="div"
           sx={{
-            "& > :not(style)": { m: 1, width: "25ch" },
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             backgroundColor: "white",
             justifyContent: "center",
             gap: "1rem",
-            width: "50%",
+            width: isMobile ? "90%" : "50%",
+            maxWidth: "600px",
             margin: "auto",
             padding: "2rem",
             borderRadius: "8px",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            position: "absolute",
           }}
         >
           <h2>Order Details</h2>
@@ -152,7 +141,7 @@ const TableOrder = ({ id }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {selectedOrder?.products?.map((product) => ( // Map through products in the selected order and display each one
+              {selectedOrder?.products?.map((product) => (
                 <TableRow key={product._id}>
                   <TableCell>{product.productId.name}</TableCell>
                   <TableCell>{product.productId.price}$</TableCell>
@@ -163,8 +152,8 @@ const TableOrder = ({ id }) => {
           </Table>
         </Box>
       </Modal>
-    </div>
+    </Container>
   );
 };
 
-export default TableOrder;
+export default TableOrder;
