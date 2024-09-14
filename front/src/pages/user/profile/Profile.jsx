@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Typography, Paper, Box, Divider } from "@mui/material";
+import { Container, Typography, Paper, Box, Divider, TableContainer } from "@mui/material";
 import TableOrder from "./TableOrder";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -65,6 +65,7 @@ const Profile = ({ id }) => {
   const formattedDate = new Date(user.dateOfBirth).toLocaleDateString();
 
   return (
+    <TableContainer component={Paper} sx={{ overflowX: "auto" }}> 
     <Container maxWidth="md">
       <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
         <Typography variant="h4" gutterBottom>
@@ -92,6 +93,7 @@ const Profile = ({ id }) => {
         <TableOrder id={userId} />
       </Paper>
     </Container>
+    </TableContainer>
   );
 };
 
