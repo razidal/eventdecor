@@ -126,9 +126,9 @@ const UserRoute = () => {
           User Dashboard
         </Typography>
         <Routes>
-          <Route path="profile/" element={<Profile id={id} />} />
-          <Route path="edit/" element={<Edit id={id} />} />
-          <Route path="/" element={<Navigate to="profile/" />} />
+          <Route path="/profile" element={<Profile id={id} />} />
+          <Route path="/edit" element={<Edit id={id} />} />
+          <Route path="/" element={<Navigate to="/profile" />} />
         </Routes>
       </Box>
     </Box>

@@ -132,7 +132,7 @@ const TableOrder = ({ id }) => {
                     View Order
                   </Button>
                 </TableCell>
-                <TableCell>Confirmed</TableCell>
+                <TableCell>{order.status}</TableCell>
               </TableRow>
             ))}
           </TableBody>
