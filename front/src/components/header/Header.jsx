@@ -362,7 +362,7 @@ const Header = () => {
           onClose={toggleDrawer(false)}
         >
           <Box
-            sx={{ width: isMobile ? '100vw': 400, padding: 2 }}
+            sx={{ width: isMobile ? '80vw': 400, padding: 2 }}
             role="presentation"
             onKeyDown={toggleDrawer(false)}
           >
@@ -391,7 +391,7 @@ const Header = () => {
               variant="contained"
               to="/Cart"
               component={Link}
-              sx={{ marginTop: 2, width: "100%" }}
+              sx={{ marginTop: 2, width: isMobile? "90%": "100%" }}
               onClick={toggleDrawer(false)}
             >
               Proceed to Payment

@@ -23,7 +23,7 @@ const TableAdmin = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null); // State to store the ID of the selected user
 
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm")); // Check if the screen size is smaller than or equal to sm breakpoint (for mobile devices)
+  const isMobile = useMediaQuery("(max-width:600px)"); // for mobile devices
 
   const handleOpenModal = (user) => {
     setSelectedUser(user);
