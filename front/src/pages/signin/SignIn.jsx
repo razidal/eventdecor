@@ -137,7 +137,6 @@ const SignIn = () => {
           setNewPassword("");
           setConfirmPassword("");
           navigate("/SignIn"); // Redirect to the sign-in page after successful password reset
-          window.location.reload();
         } catch (error) {
           setError("Failed to reset password. Please try again.");
         }
