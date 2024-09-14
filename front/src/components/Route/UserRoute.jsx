@@ -34,8 +34,8 @@ const UserRoute = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
+  const isMobile = useMediaQuery("(max-width:600px)");
   useEffect(() => {
     const token = Cookies.get("user");
     if (token) {
