@@ -101,7 +101,7 @@ const UserRoute = () => {
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { xs: "100%", sm: calc(100% - `${drawerWidth}px`) }, // Adjust width based on screen size
+          width: { xs: "100%",  sm: `calc(100% - ${drawerWidth}px)`}, // Adjust width based on screen size
           marginLeft: { xs: 0, sm: `${drawerWidth}px` }, // Adjust margin based on screen size
           marginTop: "64px",
         }}
@@ -109,14 +109,7 @@ const UserRoute = () => {
         <Routes>
           <Route path="profile/" element={<Profile id={id} />} /> 
           <Route path="edit/" element={<Edit id={id} />} />
-          <Route
-            path="/"
-            element={
-              <Navigate
-                to="profile
-          /"
-              />
-            }
+          <Route path="/" element={<Navigate to="profile/"/>}
           />
         </Routes>
       </Box>
