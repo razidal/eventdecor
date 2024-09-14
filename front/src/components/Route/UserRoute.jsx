@@ -12,8 +12,9 @@ import {
   ListItemIcon,
   Divider,
   IconButton,
+  useMediaQuery,
   AppBar,
-  Toolbar
+  Toolbar,
 } from "@mui/material";
 import {
   Person as PersonIcon,
@@ -27,28 +28,29 @@ import { logout } from "../../redux/userSlice";
 
 const drawerWidth = 240;
 
-const UserRoute = () => { 
+const UserRoute = () => {
   const [id, setId] = useState("");
-  const [open, setOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
-  useEffect(() => { 
+  useEffect(() => {
     const token = Cookies.get("user");
     if (token) {
       setId(JSON.parse(token));
     }
   }, []);
 
-  const handleLogout = () => { 
-    dispatch(logout()); 
+  const handleLogout = () => {
+    dispatch(logout());
     Cookies.remove("user");
-    Cookies.remove("cart"); 
+    Cookies.remove("cart");
     Cookies.remove("favorites");
     navigate("/");
     window.location.reload();
-  }
+  };
 
   const menuItems = [
     { text: "Profile", icon: <PersonIcon />, path: "profile/" },
@@ -56,45 +58,40 @@ const UserRoute = () => {
     { text: "Logout", icon: <LogoutIcon />, path: "/", action: handleLogout },
   ];
 
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
-      {/* AppBar for mobile */}
-      <AppBar
-        position="fixed"
-        sx={{
-          display: { xs: "flex", sm: "none" }, // Show only on small screens
-          width: "100%",
-          top: 0,
-          left: 0
-        }}
-      >
+      <AppBar position="fixed">
         <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={() => setOpen(true)}
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6">User Menu</Typography>
+          {isMobile && (
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
+          <Typography variant="h6" noWrap>
+            User Dashboard
+          </Typography>
         </Toolbar>
       </AppBar>
 
-      {/* Drawer for mobile */}
       <Drawer
-        variant="temporary" // Use temporary drawer for mobile
-        open={open}
-        onClose={() => setOpen(false)}
+        variant="temporary"
+        open={drawerOpen}
+        onClose={handleDrawerToggle}
         sx={{
-          display: { xs: "block", sm: "none" }, // Show only on small screens
-          "& .MuiDrawer-paper": {
+          display: { xs: 'block', sm: 'none' },
+          '& .MuiDrawer-paper': {
             width: drawerWidth,
-            boxSizing: "border-box",
-            top: "64px", // Adjust if you have a fixed header
-            height: "calc(100% - 64px)",
-            backgroundColor: "#f5f5f5",
+            boxSizing: 'border-box',
           },
         }}
       >
@@ -102,80 +99,31 @@ const UserRoute = () => {
           <Typography variant="h6" sx={{ mb: 2 }}>
             User Menu
           </Typography>
-        </Box>
-        <Divider />
-        <List>
-          {menuItems.map((item, index) => (
-            <ListItem
-              button
-              key={item.text}
-              component={item.action ? "div" : Link}
-              to={item.path}
-              onClick={item.action ? item.action : null}
-              selected={location.pathname.includes(item.path)}
-              sx={{
-                "&.Mui-selected": {
-                  backgroundColor: "primary.light",
-                  "&:hover": {
+          <Divider />
+          <List>
+            {menuItems.map((item) => (
+              <ListItem
+                button
+                key={item.text}
+                component={item.action ? "div" : Link}
+                to={item.path}
+                onClick={item.action ? item.action : null}
+                selected={location.pathname.includes(item.path)}
+                sx={{
+                  "&.Mui-selected": {
                     backgroundColor: "primary.light",
+                    "&:hover": {
+                      backgroundColor: "primary.light",
+                    },
                   },
-                },
-              }}
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-
-      {/* Drawer for larger screens */}
-      <Drawer
-        variant="permanent" // Use permanent drawer for larger screens
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
-            top: "64px",
-            height: "calc(100% - 64px)",
-            backgroundColor: "#f5f5f5",
-            position: "fixed", // Make the drawer fixed
-            left: 0, // Align to the left
-            zIndex: 1200 // Ensure the drawer stays on top
-          },
-        }}
-      >
-        <Box sx={{ p: 2 }}>
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            User Menu
-          </Typography>
+                }}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            ))}
+          </List>
         </Box>
-        <Divider />
-        <List>
-          {menuItems.map((item, index) => (
-            <ListItem
-              button
-              key={item.text}
-              component={item.action ? "div" : Link}
-              to={item.path}
-              onClick={item.action ? item.action : null}
-              selected={location.pathname.includes(item.path)}
-              sx={{
-                "&.Mui-selected": {
-                  backgroundColor: "primary.light",
-                  "&:hover": {
-                    backgroundColor: "primary.light",
-                  },
-                },
-              }}
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
       </Drawer>
 
       <Box
