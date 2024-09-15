@@ -156,17 +156,6 @@ const VirtualEventDesigner = () => {
       }
     };
 
-    const handleTouchMove = (event) => {
-      if (isResizing && event.touches.length === 1) {
-        handleResizeMove(event.touches[0]); // Use touch event for resizing
-      }
-    };
-  
-    const handleTouchEnd = () => {
-      if (isResizing) {
-        handleResizeEnd();
-      }
-    };
     const handleClickOutside = (event) => { // Handle click outside logic here
       if (
         containerRef.current &&
@@ -181,15 +170,11 @@ const VirtualEventDesigner = () => {
     document.addEventListener("mousemove", handleMouseMove); 
     document.addEventListener("mouseup", handleMouseUp);
     document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchmove", handleTouchMove); 
-    document.addEventListener("touchend", handleTouchEnd); 
 
     return () => { // Clean up event listeners when the component unmounts
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchmove", handleTouchMove); 
-    document.removeEventListener("touchend", handleTouchEnd); 
     };
   }, [isResizing, activeDecoration]);
 
@@ -258,7 +243,7 @@ const VirtualEventDesigner = () => {
     const aspectRatio = activeDecoration.width / activeDecoration.height;
   
     // Get the new width and height based on mouse position, but constrain to the container bounds
-    let newWidth = Math.max(5, event.clientX - containerRect.left - activeDecoration.x);
+    let newWidth = Math.max(20, event.clientX - containerRect.left - activeDecoration.x);
     let newHeight = newWidth / aspectRatio; // Set the height based on the aspect ratio
   
     // Ensure the resized image stays within container bounds
@@ -372,6 +357,8 @@ const VirtualEventDesigner = () => {
                            e.stopPropagation(); // Prevent the event from bubbling up to the decoration
                            handleDeleteDecoration(decoration.id);
                          }}
+                         onMouseDown={(e) => handleDecorationClick(e)}
+                         onTouchStart={(e) => handleDecorationClick(e.touches[0])} // For mobile touch
                        >
                          <DeleteIcon fontSize="small" />
                        </IconButton>
