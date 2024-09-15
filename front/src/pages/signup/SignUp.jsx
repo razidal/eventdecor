@@ -185,7 +185,7 @@ const SignUp = () => {
         helperText={validationError.password}
         fullWidth
       />
-      <Typography variant="body1" align="center" style={{ marginTop: "20px" }}>
+      <Typography variant="body1" align="center" style={{ marginTop: "20px" ,marginBottom:"20px"}}>
         Have an account? <Link to="/SignIn">Sign In</Link>
       </Typography>
       <StyledButton variant="contained" onClick={submitHandler} fullWidth>
