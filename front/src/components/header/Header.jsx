@@ -256,7 +256,7 @@ const Header = () => {
                       </MenuItem>
                     </>
                   )}
-                  {userPermission === "User" && ( // If the user is a regular user, display user links in the mobile menu
+                  {userPermission === "user" && ( // If the user is a regular user, display user links in the mobile menu
                     <>
                       <MenuItem onClick={handleNavMenuClose} component={Link} to="/user/dashboard">
                         Dashboard
