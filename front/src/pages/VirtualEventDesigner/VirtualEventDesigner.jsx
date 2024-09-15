@@ -258,7 +258,7 @@ const VirtualEventDesigner = () => {
     const aspectRatio = activeDecoration.width / activeDecoration.height;
   
     // Get the new width and height based on mouse position, but constrain to the container bounds
-    let newWidth = Math.max(20, event.clientX - containerRect.left - activeDecoration.x);
+    let newWidth = Math.max(5, event.clientX - containerRect.left - activeDecoration.x);
     let newHeight = newWidth / aspectRatio; // Set the height based on the aspect ratio
   
     // Ensure the resized image stays within container bounds
