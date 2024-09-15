@@ -4,6 +4,8 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import Alert from "@mui/material/Alert";
+import Link from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { auth, googleProvider } from "../../FireBase";
