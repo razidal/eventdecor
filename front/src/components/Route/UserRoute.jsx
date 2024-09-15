@@ -60,7 +60,7 @@ const UserRoute = () => {
   ];
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", position: "relative" }}>
       <Drawer
         variant="persistent"
         open={drawerOpen} // Control drawer visibility
@@ -76,11 +76,8 @@ const UserRoute = () => {
           },
         }}
       >
-        <Box sx={{ p: 2, display: "flex", justifyContent: "space-between" }}>
+        <Box sx={{ p: 2 }}>
           <Typography variant="h6">User Menu</Typography>
-          <IconButton onClick={toggleDrawer}>
-            {drawerOpen ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
         </Box>
         <Divider />
         <List>
@@ -107,6 +104,8 @@ const UserRoute = () => {
           ))}
         </List>
       </Drawer>
+
+      {/* Main content area */}
       <Box
         component="main"
         sx={{
@@ -123,6 +122,23 @@ const UserRoute = () => {
           <Route path="/" element={<Navigate to="profile/" />} />
         </Routes>
       </Box>
+
+      {/* Toggle Button (visible even when the drawer is closed) */}
+      <IconButton
+        onClick={toggleDrawer}
+        sx={{
+          position: "fixed", // Keep the button fixed
+          top: "64px", // Align with the drawer
+          left: drawerOpen ? `${drawerWidth + 10}px` : "10px", // Position relative to the drawer state
+          transition: "left 0.3s ease", // Smooth transition for button position
+          zIndex: 1300, // Ensure it stays on top
+          backgroundColor: "white", // Optional: style the button background
+          borderRadius: "50%",
+          boxShadow: "0px 2px 4px rgba(0,0,0,0.2)", // Optional: add shadow for better visibility
+        }}
+      >
+        {drawerOpen ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+      </IconButton>
     </Box>
   );
 };
