@@ -184,6 +184,9 @@ const SignUp = () => {
         helperText={validationError.password}
         fullWidth
       />
+      <Typography variant="body1" align="center" style={{ marginTop: "20px" }}>
+        Have an account? <Link to="/SignIn">Sign In</Link>
+      </Typography>
       <Button
         variant="contained"
         onClick={handleGoogleSignup}
