@@ -40,13 +40,13 @@ const UserRoute = () => {
     }
   }, []);
 
-  const handleLogout = () => {
-    dispatch(logout());
-    Cookies.remove("user");
-    Cookies.remove("cart");
-    Cookies.remove("favorites");
-    navigate("/");
-    window.location.reload();
+  const handleLogout = () => {  // Handle logout action
+    dispatch(logout()); 
+    Cookies.remove("user"); // Remove user data from cookies
+    Cookies.remove("cart"); // Remove cart data from cookies
+    Cookies.remove("favorites"); // Remove favorites
+    navigate("/"); // Redirect to home page
+    window.location.reload(); // Reload the page to reflect the changes
   };
 
   const toggleDrawer = () => {
@@ -113,6 +113,10 @@ const UserRoute = () => {
           p: 3,
           marginLeft: drawerOpen ? `${drawerWidth}px` : "0", // Adjust main content width
           marginTop: "64px",
+          marginBottom: "64px", // Account for footer height
+          width: "100%",
+          minHeight: "calc(100vh - 128px)", // Ensure main content doesn't overlap footer
+          overflowY: "auto", // Allow scrolling if content overflows
           transition: "margin-left 0.3s ease", // Smooth transition for drawer
         }}
       >
