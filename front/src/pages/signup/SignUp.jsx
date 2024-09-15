@@ -189,6 +189,9 @@ const SignUp = () => {
       <Typography variant="body1" align="center" style={{ marginTop: "20px" }}>
         Have an account? <Link to="/SignIn">Sign In</Link>
       </Typography>
+      <StyledButton variant="contained" onClick={submitHandler} fullWidth>
+        Sign Up
+      </StyledButton>
       <Button
         variant="contained"
         onClick={handleGoogleSignup}
@@ -202,9 +205,7 @@ const SignUp = () => {
       >
         Sign up with Google
       </Button>
-      <StyledButton variant="contained" onClick={submitHandler} fullWidth>
-        Sign Up
-      </StyledButton>
+      
       {error && (
         <Alert severity="error" style={{ marginTop: "20px", width: "100%" }}>
           {error}
