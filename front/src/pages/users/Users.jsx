@@ -19,7 +19,7 @@ import axios from "axios";
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [deleting, setDeleting] = useState(false);
+  const [deleting, setDeleting] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => { // Fetch users from the server
@@ -54,11 +54,11 @@ const ManageUsers = () => {
   const handleDeleteUser = async (id) => { // Delete user from the server
     const confirmDelete = window.confirm("Are you sure you want to delete this user?");
     if (!confirmDelete) return;
-    setDeleting(true);
+    setDeleting(id);
     try {
       await axios.delete(`https://backstore-iqcq.onrender.com/users/delete/${id}`);
       setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id)); // Remove the user from the state
-      setDeleting(false);
+      setDeleting(null);
       alert("User deleted successfully.");
     } catch (error) {
       setDeleting(false);
@@ -108,11 +108,11 @@ const ManageUsers = () => {
                       color="error"
                       variant="contained"
                       onClick={() => handleDeleteUser(user._id)}
-                      disabled={deleting}
+                      disabled={deleting===user._id}
                       size="small"
                       fullWidth
                     >
-                      {deleting ? "Deleting..." : "Delete"} {/* Display a loading message while deleting user*/}
+                      {deleting===user._id ? "Deleting..." : "Delete"} {/* Display a loading message while deleting user*/}
                     </Button>
                   </TableCell>
                 </TableRow>
