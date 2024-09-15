@@ -357,8 +357,6 @@ const VirtualEventDesigner = () => {
                            e.stopPropagation(); // Prevent the event from bubbling up to the decoration
                            handleDeleteDecoration(decoration.id);
                          }}
-                         onMouseDown={(e) => handleDecorationClick(e)}
-                         onTouchStart={(e) => handleDecorationClick(e.touches[0])} // For mobile touch
                        >
                          <DeleteIcon fontSize="small" />
                        </IconButton>
