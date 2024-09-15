@@ -156,6 +156,17 @@ const VirtualEventDesigner = () => {
       }
     };
 
+    const handleTouchMove = (event) => {
+      if (isResizing && event.touches.length === 1) {
+        handleResizeMove(event.touches[0]); // Use touch event for resizing
+      }
+    };
+  
+    const handleTouchEnd = () => {
+      if (isResizing) {
+        handleResizeEnd();
+      }
+    };
     const handleClickOutside = (event) => { // Handle click outside logic here
       if (
         containerRef.current &&
@@ -170,11 +181,15 @@ const VirtualEventDesigner = () => {
     document.addEventListener("mousemove", handleMouseMove); 
     document.addEventListener("mouseup", handleMouseUp);
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchmove", handleTouchMove); 
+    document.addEventListener("touchend", handleTouchEnd); 
 
     return () => { // Clean up event listeners when the component unmounts
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchmove", handleTouchMove); 
+    document.removeEventListener("touchend", handleTouchEnd); 
     };
   }, [isResizing, activeDecoration]);
 
