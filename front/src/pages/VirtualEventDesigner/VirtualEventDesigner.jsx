@@ -163,7 +163,7 @@ const VirtualEventDesigner = () => {
         activeDecoration
       ) {
         setActiveDecoration(null);
-        setShowIcons(false); // Hide icons when clicking outside
+        // setShowIcons(false); // Hide icons when clicking outside
       }
     };
   
