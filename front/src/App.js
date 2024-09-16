@@ -40,9 +40,10 @@ function App() {
   }
 
   return (
-    <div className="wave">
+   
     <Router>
       <Header />
+      <div className="wave">
       <Routes>
         <Route path="/" element={<Home />} /> {/* Home page */}
         <Route path="/SignUp" element={<SignUp />} /> {/* Sign up page */}
@@ -66,9 +67,9 @@ function App() {
           element={<VirtualEventDesigner />}
         />
       </Routes>
+      </div>
       <Footer /> 
     </Router>
-    </div>
   );
 }
 
