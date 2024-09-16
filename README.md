@@ -14,5 +14,5 @@
 - if you want to connect to the mongoDB database, you can use the following link: mongodb+srv://razidal:eventdecor123@cluster0.eldvn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0   connect to it to see the data
 and if you want to be an Admin, go the user's collection in the database, and switch your role to "Admin" .
 
-#note :
+# note :
 - sometimes you might not see the products load on the products page, event virtualizer page etc, wait a minute for the products to load. 
