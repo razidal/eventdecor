@@ -121,7 +121,7 @@ const VirtualEventDesigner = () => {
   const containerRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1); // State for pagination
   const itemsPerPage = 6; // Number of items per page
-  const [showIcons, setShowIcons] = useState(true);
+  // const [showIcons, setShowIcons] = useState(true);
 
   const backgroundTemplates = [ // Array of background templates
     {
@@ -225,7 +225,7 @@ const VirtualEventDesigner = () => {
   const handleDecorationClick = (decoration, event) => {
     event.stopPropagation(); // Prevent the event from bubbling up to the container
     setActiveDecoration(decoration);
-    setShowIcons(true); // Show icons when a decoration is clicked
+    // setShowIcons(true); // Show icons when a decoration is clicked
   };
 
   const handleResizeStart = (event, decoration) => {
@@ -342,7 +342,7 @@ const VirtualEventDesigner = () => {
                      handleDecorationClick(decoration, event)
                    }
                  >
-                   {showIcons && activeDecoration && activeDecoration.id === decoration.id && (
+                   {activeDecoration && activeDecoration.id === decoration.id && (
                      <>
                        <IconButton
                          size="small"
