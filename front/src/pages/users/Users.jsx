@@ -69,7 +69,7 @@ const ManageUsers = () => {
 
   return (
     <Container>
-      <Box sx={{ textAlign: "center", mt: 4 }}>
+      <Box sx={{ textAlign: "center", mt: 4 , mb:6}}>
         <Typography variant="h4" gutterBottom>
           Manage Users
         </Typography>
