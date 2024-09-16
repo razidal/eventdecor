@@ -8,9 +8,9 @@ import {
   Typography,
   Button,
   IconButton,
+  Snackbar,
+  Alert,
 } from "@mui/material";
-import styled from "styled-components";
-import back from "./back.jpg";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../../redux/cartSlice";
@@ -21,25 +21,12 @@ import {
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CustomCarousel from "./CustomCarousel.jsx";
 
-const Banner = styled.div`
-  background-color: #3f51b5;
-  color: white;
-  text-align: center;
-  padding: 16px;
-  height: 600px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 24px;
-  background-image: url(${back});
-  background-size: cover;
-  background-position: center;
-  background-blend-mode: overlay;
-  background-color: rgba(0, 0, 0, 0.5);
-`;
+
 
 const Home = () => {
   const [products, setProducts] = useState([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false); 
+  const [snackbarMessage, setSnackbarMessage] = useState(""); 
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites.favorites);
 
@@ -68,6 +55,8 @@ const Home = () => {
         quantity: 1,
       })
     );
+    setSnackbarMessage(`${product.name} added to cart!`); //show customer message
+    setSnackbarOpen(true); 
   };
 
   const handleFavoriteToggle = (product) => { // toggle favorite status of a product
@@ -76,9 +65,12 @@ const Home = () => {
     ); 
     if (isAlreadyFavorite) { // if the product is already in favorites, remove it
       dispatch(removeFromFavorites(product._id));
+      setSnackbarMessage(`${product.name} removed from favorites!`); //show customer message
     } else {
       dispatch(addToFavorites(product)); // otherwise, add it to favorites
+      setSnackbarMessage(`${product.name} added to favorites!`); 
     }
+    setSnackbarOpen(true);
   };
 
   return (
@@ -128,6 +120,20 @@ const Home = () => {
             </Grid>
           ))}
         </Grid>
+        <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3500} // Snackbar duration
+        onClose={() => setSnackbarOpen(false)} // Handle snackbar close
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setSnackbarOpen(false)} // Handle snackbar close
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
       </Container>
     </div>
   );
