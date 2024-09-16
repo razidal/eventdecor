@@ -74,9 +74,11 @@ const Home = () => {
   };
 
   return (
-    <div className="wave">
+    <div>
       <CustomCarousel/>
       <Container sx={{ mt: 4 }}>
+      <div className="wave">
+
         <Typography variant="h4" component="h1" gutterBottom>
           Featured Products 
         </Typography>
@@ -134,6 +136,7 @@ const Home = () => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
+      </div>
       </Container>
     </div>
   );
