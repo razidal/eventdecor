@@ -20,7 +20,7 @@ import {
 } from "../../redux/favoritesSlice";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CustomCarousel from "./CustomCarousel.jsx";
-
+import "./Home.css";
 
 
 const Home = () => {
@@ -74,7 +74,7 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div className="wave">
       <CustomCarousel/>
       <Container sx={{ mt: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
