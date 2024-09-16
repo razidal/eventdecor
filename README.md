@@ -16,3 +16,4 @@ and if you want to be an Admin, go the user's collection in the database, and sw
 
 # note :
 - sometimes you might not see the products load on the products page, event virtualizer page etc, wait a minute for the products to load. 
+- you might get an error when trying to sign in/up , wait a bit, then do it.
