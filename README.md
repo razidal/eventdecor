@@ -1,12 +1,12 @@
 # eventdecor
-the video explanation can be found in the powerpoint
+- the video explanation can be found in the powerpoint
 # guide :
 
-# frontend :
-# the app is deployed on netlify for the frontend: https://eventdecor1.netlify.app
-# you can check the deploy logs on : https://app.netlify.com/sites/eventdecor1/deploys  (not neceesary)
+1. frontend :
+- the app is deployed on netlify for the frontend: https://eventdecor1.netlify.app
+- you can check the deploy logs on : https://app.netlify.com/sites/eventdecor1/deploys  (not neceesary)
 
-# backend :  (worry about only when you want to change anything in the backend)
+2. backend :  (worry about only when you want to change anything in the backend)
 - the app is deployed on render for the backend: https://backstore-iqcq.onrender.com  (not neceesary)
 - you can check the deploy logs on : https://dashboard.render.com/web/srv-cr84ffi3esus73fqcaa0/events (not neceesary)
 - the private deploy hook to trigger a deploy for the server : https://api.render.com/deploy/srv-cr84ffi3esus73fqcaa0?key=Q3ES4H8IfF0 (not neceesary)
@@ -15,4 +15,4 @@ the video explanation can be found in the powerpoint
 and if you want to be an Admin, go the user's collection in the database, and switch your role to "Admin" .
 
 #note :
-sometimes you might not see the products load on the products page, event virtualizer page etc, wait a minute for the products to load. 
+- sometimes you might not see the products load on the products page, event virtualizer page etc, wait a minute for the products to load. 
