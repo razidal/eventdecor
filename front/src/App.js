@@ -43,8 +43,9 @@ function App() {
    
     <Router>
       <Header />
-      <div className="wave">
+      
       <Routes>
+      <div className="wave">
         <Route path="/" element={<Home />} /> {/* Home page */}
         <Route path="/SignUp" element={<SignUp />} /> {/* Sign up page */}
         <Route path="/SignIn" element={<SignIn />} /> {/* Sign in page */}
@@ -66,8 +67,9 @@ function App() {
           path="/VirtualEventDesigner" // Virtual event designer page, only accessible to authenticated users
           element={<VirtualEventDesigner />}
         />
+        </div>
       </Routes>
-      </div>
+      
       <Footer /> 
     </Router>
   );
