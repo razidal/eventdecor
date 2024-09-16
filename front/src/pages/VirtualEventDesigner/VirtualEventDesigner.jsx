@@ -307,7 +307,7 @@ const VirtualEventDesigner = () => {
                 position: "relative",
                 width: "100%",
                 height: "calc(100vh - 100px)",
-                overflow: "hidden",
+                overflow: "auto",
                 backgroundImage: `url(${background})`, // Set the background image based on the selected template or uploaded image
                 backgroundSize: "cover",
                 backgroundPosition: "center",
@@ -319,7 +319,7 @@ const VirtualEventDesigner = () => {
                  key={decoration.id}
                  position={{ x: decoration.x, y: decoration.y }} // Set the initial position of the decoration based on its x and y coordinates
                  onDrag={(e, ui) => handleDrag(e, ui, decoration.id)} // Handle drag event for the decoration
-                 bounds="parent"
+                 bounds="false"
                >
                  <div
                    style={{
