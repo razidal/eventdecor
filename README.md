@@ -1,5 +1,5 @@
 # eventdecor
-- the video explanation can also be found in the powerpoint
+- the video explanation can also be found in the powerpoint or on this youtube link : https://www.youtube.com/watch?v=OHweD1o6DEw
 # guide :
 
 1. frontend :
