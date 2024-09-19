@@ -36,6 +36,7 @@ const InputField = styled(TextField)`
 const StyledButton = styled(Button)`
   margin-top: 30px;
   background-color: #1976d2;
+  width: 300px;
   &:hover {
     background-color: #10508f;
   }
@@ -201,7 +202,6 @@ const SignUp = () => {
       <GoogleButton
         variant="contained"
         onClick={handleGoogleSignup}
-        fullWidth
         style={{
           marginTop: "16px",
           marginBottom: "16px",
