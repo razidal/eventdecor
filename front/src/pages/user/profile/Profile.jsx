@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Typography, Paper, Box, Divider, useMediaQuery, useTheme, CircularProgress, Backdrop} from "@mui/material";
+import { Container, Typography, Paper, Box, Divider, useMediaQuery, useTheme } from "@mui/material";
 import TableOrder from "./TableOrder";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -54,15 +54,7 @@ const Profile = ({ id }) => {
           <Typography variant="h4" gutterBottom>
             User Profile
           </Typography>
-            <Backdrop
-                sx={{
-                  color: "#fff",
-                  zIndex: (theme) => theme.zIndex.drawer + 1,
-                }}
-                open={loading}
-              >
-              <CircularProgress color="inherit" />
-            </Backdrop>
+          <Typography variant="body1">Loading user data...</Typography>
         </Paper>
       </Container>
     );

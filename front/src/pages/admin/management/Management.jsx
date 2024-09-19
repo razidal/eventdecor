@@ -7,6 +7,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import AddSingleProjact from "./add/AddSingleProjact";
+import CircularProgress from "@mui/material/CircularProgress"; // Import CircularProgress
 import axios from "axios";
 import Grid from "@mui/material/Grid";
 import ProductsCard from "../../../components/card/products/ProductsCard";
@@ -14,6 +15,7 @@ import ProductsCard from "../../../components/card/products/ProductsCard";
 const Management = () => {
   const [open, setOpen] = React.useState(false);
   const [allProducts, setAllProducts] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -29,8 +31,10 @@ const Management = () => {
         timeout: 5000,
       });
       setAllProducts(response?.data.decorations); // Set the fetched products in the state
+      setLoading(false); // Set loading to false after fetching
     } catch (error) {
       console.log(error);
+      setLoading(false); // Set loading to false even on error
     }
   };
 
@@ -48,13 +52,19 @@ const Management = () => {
           </Button>
         </Stack>
         <Container sx={{ marginTop: 2 }}>
-          <Grid container spacing={3}>
-            {allProducts?.map((product) => ( // Map through the fetched products and render a card for each one
-              <Grid item xs={12} sm={6} md={4} key={product._id}>
+        {loading ? ( // Show loading spinner while fetching data
+            <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
+              <CircularProgress />
+            </div>
+          ) : (
+            <Grid container spacing={3}>
+              {allProducts?.map((product) => (
+                <Grid item xs={12} sm={6} md={4} key={product._id}>
                   <ProductsCard product={product} fetchProducts={fetchProducts} />
-              </Grid>
-            ))}
-          </Grid>
+                </Grid>
+              ))}
+            </Grid>
+          )}
           <Dialog
             open={open}
             onClose={handleClose} // Handle the dialog close event
