@@ -287,7 +287,7 @@ const Header = () => {
                             }}
                           />
                         <FavoriteContent>
-                        <Typography variant="h6" sx={{color:'red', fontSize: '1rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        <Typography variant="h6" sx={{color:'black', fontSize: '3rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           {item.name}
                         </Typography>
                           <Typography variant="body2" color="textSecondary">
