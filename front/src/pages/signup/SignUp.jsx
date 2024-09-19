@@ -24,7 +24,7 @@ const FormContainer = styled(Box)`
 
 const Title = styled.h1`
   text-align: center;
-  color: #3f51b5;
+  color: #1976d2;
   font-size: 36px;
   margin-bottom: 30px;
 `;
@@ -35,7 +35,7 @@ const InputField = styled(TextField)`
 
 const StyledButton = styled(Button)`
   margin-top: 30px;
-  background-color: #3f51b5;
+  background-color: #1976d2;
   &:hover {
     background-color: #2c387e;
   }

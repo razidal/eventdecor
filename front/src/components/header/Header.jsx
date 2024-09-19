@@ -78,6 +78,9 @@ const FavoriteContent = styled(CardContent)`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-left: 10px;
+  max-width: 200px; 
+  overflow: hidden;
 `;
 
 const StyledDrawer = styled(Drawer)`
@@ -115,11 +118,6 @@ const CartItemImage = styled.img`
 
 const CartItemDetails = styled(Box)`
   flex-grow: 1;
-`;
-
-const CartItemPrice = styled(Typography)`
-  font-weight: bold;
-  padding-right: 20px;
 `;
 
 const Header = () => {
@@ -289,7 +287,9 @@ const Header = () => {
                             }}
                           />
                         <FavoriteContent>
-                          <Typography variant="h6">{item.name}</Typography>
+                        <Typography variant="h6" sx={{ fontSize: '1rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {item.name}
+                        </Typography>
                           <Typography variant="body2" color="textSecondary">
                             ${item.price}
                           </Typography>
@@ -371,7 +371,7 @@ const Header = () => {
                         Quantity: {item.quantity}
                       </Typography>
                     </CartItemDetails>
-                    <CartItemPrice>${item.price * item.quantity}</CartItemPrice> {/* Display the item price */} 
+                    <Typography>Price: ${item.price * item.quantity}</Typography> {/* Display the item price */} 
                   </CartItem>
                   {index < cartItems.length - 1 && <Divider />} {/* Display a divider between cart items */}  
                 </React.Fragment>
