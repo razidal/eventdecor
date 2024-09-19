@@ -198,8 +198,12 @@ const SignUp = () => {
         style={{
           marginTop: "16px",
           marginBottom: "16px",
-          backgroundColor: "#4285F4",
+          backgroundColor: "#1976d2",
           color: "white",
+          '&:hover': {
+            backgroundColor: "#10508f",
+            
+              },
         }}
       >
         Sign up with Google

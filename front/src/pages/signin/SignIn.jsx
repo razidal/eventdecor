@@ -37,16 +37,16 @@ const StyledButton = styled(Button)`
   background-color: #1976d2;
   width: 300px;
   &:hover {
-    background-color: #2c387e;
+    background-color: #10508f;
   }
 `;
 
 const GoogleButton = styled(Button)`
-  background-color: #4285f4;
+  background-color: #1976d2;
   color: white;
   width: 300px;
   &:hover {
-    background-color: #357ae8;
+    background-color: #10508f;
   }
 `;
 
