@@ -49,7 +49,7 @@ const PayButton = styled(Button)`
   background-color: #007bff;
   color: white;
   margin-top: 20px;
-  padding-bottom:300px;
+  padding: 10px 20px;
   &:hover {
     background-color: #0056b3;
   }
