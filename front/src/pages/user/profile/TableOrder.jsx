@@ -10,6 +10,8 @@ import {
   Box,
   useMediaQuery,
   Container,
+  CircularProgress,
+  Backdrop,
 } from "@mui/material";
 import axios from "axios";
 
@@ -99,7 +101,15 @@ const TableOrder = ({ id }) => {
     <Container sx={{ mt: 4 }}>
     <h2>Orders</h2>
     {loading ? (
-      <p>Loading...</p>
+      <Backdrop
+      sx={{
+        color: "#fff",
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+      }}
+      open={loading}
+    >
+      <CircularProgress color="inherit" />
+    </Backdrop>
     ) : error ? (
       <p>Error: {error.message}</p>
     ) : userData.length === 0 ? (

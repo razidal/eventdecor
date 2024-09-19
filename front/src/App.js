@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
+import {CircularProgress,Backdrop} from "@mui/material";
 import Header from "./components/header/Header";
 import Home from "./pages/home/Home";
 import SignUp from "./pages/signup/SignUp";
@@ -35,7 +36,16 @@ function App() {
   }, [dispatch]);
 
   if (loading) { // Show a loading indicator while the app is initializing
-    return <div>Loading...</div>;
+    return (
+    <Backdrop
+    sx={{
+      color: "#fff",
+      zIndex: (theme) => theme.zIndex.drawer + 1,
+    }}
+    open={loading}
+  >
+    <CircularProgress color="inherit" />
+  </Backdrop>);
   }
 
   return (
