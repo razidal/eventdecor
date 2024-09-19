@@ -16,7 +16,8 @@ import VirtualEventDesigner from "./pages/VirtualEventDesigner/VirtualEventDesig
 import { login } from "./redux/userSlice";
 import Footer from "./components/footer/footer";
 import { loadFavoritesFromCookies } from "./redux/favoritesSlice";
-
+import "./App.css";
+ 
 function App() {
   const dispatch = useDispatch(); 
   const user = useSelector((state) => state.user.user);
@@ -51,6 +52,8 @@ function App() {
   return (
     <Router>
       <Header />
+      <div className="App-content">
+
       <Routes>
         <Route path="/" element={<Home />} /> {/* Home page */}
         <Route path="/SignUp" element={<SignUp />} /> {/* Sign up page */}
@@ -74,6 +77,7 @@ function App() {
           element={<VirtualEventDesigner />}
         />
       </Routes>
+      </div>
       <Footer /> 
     </Router>
   );
