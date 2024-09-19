@@ -69,7 +69,7 @@ const Home = () => {
       dispatch(removeFromFavorites(product._id));
       setSnackbarMessage(`${product.name} removed from favorites!`); //show customer message
     } else {
-      dispatch(addToFavorites(product._id)); // otherwise, add it to favorites
+      dispatch(addToFavorites(product)); // otherwise, add it to favorites
       setSnackbarMessage(`${product.name} added to favorites!`); 
     }
     setSnackbarOpen(true);

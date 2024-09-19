@@ -188,7 +188,7 @@ const Header = () => {
       (favorite) => favorite._id === product._id // Compare product IDs
     );
     if (isAlreadyFavorite) { // If the product is already in favorites, remove it
-      dispatch(removeFromFavorites(product._id)); // Dispatch the removeFromFavorites action with the product ID
+      dispatch(removeFromFavorites(product)); // Dispatch the removeFromFavorites action with the product ID
     } else { // If the product is not in favorites, add it
       dispatch(addToFavorites(product._id)); // Dispatch the addToFavorites action with the product object
     }
@@ -367,11 +367,11 @@ const Header = () => {
                     />
                     <CartItemDetails>
                       <Typography variant="subtitle1">{item.name}</Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Quantity: {item.quantity}
-                      </Typography>
+                      <Typography variant="body2" color="text.secondary"></Typography>
+                        Quantity: {item.quantity}           
+                      <Typography>Price: ${item.price * item.quantity}</Typography> {/* Display the item price */} 
                     </CartItemDetails>
-                    <Typography>Price: ${item.price * item.quantity}</Typography> {/* Display the item price */} 
+                    
                   </CartItem>
                   {index < cartItems.length - 1 && <Divider />} {/* Display a divider between cart items */}  
                 </React.Fragment>
