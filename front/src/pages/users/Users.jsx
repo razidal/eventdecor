@@ -13,6 +13,8 @@ import {
   Typography,
   Paper,
   TableContainer,
+  CircularProgress,
+  Backdrop,
 } from "@mui/material";
 import axios from "axios";
 
@@ -75,7 +77,15 @@ const ManageUsers = () => {
         </Typography>
       </Box>
       {loading ? ( // Display a loading message while fetching users
-        <Typography>Loading...</Typography>
+        <Backdrop
+        sx={{
+          color: "#fff",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       ) : (
         <TableContainer component={Paper} sx={{ overflowX: "auto" }}> 
           <Table size="small">
