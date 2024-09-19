@@ -18,6 +18,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ZoomOutMapIcon from "@mui/icons-material/ZoomOutMap";
 import Draggable from "react-draggable";
+import CircularProgress from "@mui/material/CircularProgress"; // Import CircularProgress
 
 const ImageUploader = ({ onImageUpload }) => {
   const [previewImage, setPreviewImage] = useState(null);
@@ -122,6 +123,7 @@ const VirtualEventDesigner = () => {
   const [currentPage, setCurrentPage] = useState(1); // State for pagination
   const itemsPerPage = 6; // Number of items per page
   const [showIcons, setShowIcons] = useState(true);
+  const [loading, setLoading] = useState(true); // Loading state
 
   const backgroundTemplates = [ // Array of background templates
     {
@@ -185,8 +187,10 @@ const VirtualEventDesigner = () => {
           "https://backstore-iqcq.onrender.com/products/all"
         );
         setProducts(response.data.decorations); // Set the products state with the fetched data
+        setLoading(false); // Set loading to false after fetching
       } catch (error) {
         console.error("Error fetching products:", error);
+        setLoading(false); // Set loading to false after fetching
       }
     };
 
@@ -423,6 +427,11 @@ const VirtualEventDesigner = () => {
             <Typography variant="h6" gutterBottom>
               Decorations
             </Typography>
+            {loading ? ( // Show loading spinner while fetching data
+            <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
+              <CircularProgress />
+            </div>
+          ) : (
             <Grid container spacing={1}>
               {currentDecorations.map((product) => ( // Map through the current decorations and create a grid item for each one
                 <Grid item key={product._id} xs={4}>
@@ -443,6 +452,7 @@ const VirtualEventDesigner = () => {
                 </Grid>
               ))}
             </Grid>
+          )}
             <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
               <Pagination
                 count={Math.ceil(products.length / itemsPerPage)}

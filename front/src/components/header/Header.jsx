@@ -216,13 +216,6 @@ const Header = () => {
                     <StyledLink to="/Admin/Users">Users</StyledLink>
                   </>
                 )}
-
-                {userPermission === "user" && ( // If the user is a regular user, display user links
-                  <>
-                    <StyledLink to="/user/dashboard">Dashboard</StyledLink>
-                    <StyledLink to="/user/orders">My Orders</StyledLink>
-                  </>
-                )}
               </>
             ) : ( 
               <> 

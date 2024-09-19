@@ -10,6 +10,7 @@ import {
   IconButton,
   Snackbar,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,6 +26,7 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false); 
   const [snackbarMessage, setSnackbarMessage] = useState(""); 
+  const [loading, setLoading] = useState(true); // Loading state
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites.favorites);
 
@@ -38,8 +40,10 @@ const Home = () => {
         timeout: 5000,
       });
       setProducts(response.data.decorations.slice(0, 3)); //only show 3 products
+      setLoading(false); // Set loading to false after fetching
     } catch (error) {
       console.error("Error fetching products:", error);
+      setLoading(false); // Set loading to false after fetching
     }
   };
 
@@ -78,7 +82,11 @@ const Home = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           Featured Products 
         </Typography>
-
+        {loading ? ( // Show loading spinner while fetching data
+            <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
+              <CircularProgress />
+            </div>
+          ) : (
         <Grid container spacing={4}>
           {products.map((product) => ( // map through the products and display them
             <Grid item key={product._id} xs={12} sm={6} md={4}>
@@ -118,6 +126,7 @@ const Home = () => {
             </Grid>
           ))}
         </Grid>
+          )}
         <Snackbar
         open={snackbarOpen}
         autoHideDuration={3500} // Snackbar duration
