@@ -40,7 +40,14 @@ const StyledButton = styled(Button)`
     background-color: #10508f;
   }
 `;
-
+const GoogleButton = styled(Button)`
+  background-color: #1976d2;
+  color: white;
+  width: 300px;
+  &:hover {
+    background-color: #10508f;
+  }
+`;
 const SignUp = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -191,23 +198,17 @@ const SignUp = () => {
       <StyledButton variant="contained" onClick={submitHandler} fullWidth>
         Sign Up
       </StyledButton>
-      <Button
+      <GoogleButton
         variant="contained"
         onClick={handleGoogleSignup}
         fullWidth
         style={{
           marginTop: "16px",
           marginBottom: "16px",
-          backgroundColor: "#1976d2",
-          color: "white",
-          '&:hover': {
-            backgroundColor: "#10508f",
-            
-              },
         }}
       >
         Sign up with Google
-      </Button>
+      </GoogleButton>
       
       {error && (
         <Alert severity="error" style={{ marginTop: "20px", width: "100%" }}>
