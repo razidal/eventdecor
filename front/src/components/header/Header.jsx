@@ -58,7 +58,6 @@ const StyledPopover = styled(Popover)`
 
 const StyledIconButton = styled(IconButton)`
   color: white;
-  background-color: white;
   position: relative; /* Ensure positioning of badge relative to the icon */
 `;
 
