@@ -144,7 +144,7 @@ const Products = () => {
       dispatch(removeFromFavorites(product._id));
       setSnackbarMessage(`${product.name} removed from favorites!`); //show customer message
     } else { 
-      dispatch(addToFavorites(product)); // Add to favorites if not already favorite
+      dispatch(addToFavorites(product._id)); // Add to favorites if not already favorite
       setSnackbarMessage(`${product.name} added to favorites!`); 
     }
     setSnackbarOpen(true);
