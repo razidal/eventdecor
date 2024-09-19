@@ -3,7 +3,7 @@ import { Box, Typography, Link } from '@mui/material';
 
 export default function Footer() {
   return ( 
-    <Box sx={{ bgcolor: '#f8f8f8', p: 2, mt: 4, textAlign: 'center' }}> {/* Added mt: 4 for margin-top */}
+    <Box sx={{ bgcolor: '#f8f8f8', p: 2, mt: 4, textAlign: 'center' , height:'100%'}}> {/* Added mt: 4 for margin-top */}
       <Typography variant="body2" color="textSecondary" gutterBottom> {/* Added gutterBottom for bottom margin */}
         © {new Date().getFullYear()} - Event Decor. All rights reserved. {/* Updated the year dynamically */}
       </Typography> 
