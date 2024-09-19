@@ -36,7 +36,7 @@ import {
 
 // Styled components for custom styling
 const StyledAppBar = styled(AppBar)`
-  background-color: #3f51b5;
+  background-color: #1976d2;
 `;
 
 const StyledLink = styled(Link)`

@@ -26,6 +26,7 @@ import {
   Pagination,
   Snackbar,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -76,6 +77,7 @@ const Products = () => {
   const [showFilters, setShowFilters] = useState(true);
   const [snackbarOpen, setSnackbarOpen] = useState(false); 
   const [snackbarMessage, setSnackbarMessage] = useState(""); 
+  const [loading, setLoading] = useState(true); // Loading state
 
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites.favorites);
@@ -106,8 +108,10 @@ const Products = () => {
         "https://backstore-iqcq.onrender.com/products/all"
       );
       setProducts(response.data.decorations); // Assuming the response structure is the same for all requests
+      setLoading(false); // Set loading to false after fetching
     } catch (error) {
       console.error("Error fetching products:", error);
+      setLoading(false); // Set loading to false after fetching
     }
   };
 
@@ -356,7 +360,11 @@ const Products = () => {
           </Box>
         </Box>
       </Paper>
-
+      {loading ? ( // Show loading spinner while fetching data
+            <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
+              <CircularProgress />
+            </div>
+          ) : (
       <Grid container spacing={3}>
         {currentItems.map((product) => ( // Map through current items and create product cards
           <Grid item key={product._id} xs={12} sm={6} md={3}>
@@ -421,7 +429,7 @@ const Products = () => {
           </Grid>
         ))}
       </Grid>
-
+)}
       <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
         <Pagination
           count={Math.ceil(filteredProducts.length / itemsPerPage)} // Calculate total pages
