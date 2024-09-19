@@ -39,7 +39,7 @@ import styled from "styled-components";
 import axios from "axios";
 
 const TotalPriceText = styled(Typography)`
-  text-align: right;
+  text-align: left;
   margin-top: 20px;
   color: #333;
   font-weight: bold;
