@@ -2,6 +2,7 @@ import { Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -60,7 +61,9 @@ const Management = () => {
             <Grid container spacing={3}>
               {allProducts?.map((product) => (
                 <Grid item xs={12} sm={6} md={4} key={product._id}>
+                   <Box sx={{ height: "100%" }}> {/* Ensure card takes full height */}
                   <ProductsCard product={product} fetchProducts={fetchProducts} />
+                  </Box>
                 </Grid>
               ))}
             </Grid>
