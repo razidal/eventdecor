@@ -136,6 +136,7 @@ const AddSingleProjact = ({ setOpen }) => {
       }, 2000);
     } catch (error) { // Handle errors
       console.log(error);
+      setError("Failed to update product. Please check fields.");
     }
   };
 
@@ -318,6 +319,7 @@ const AddSingleProjact = ({ setOpen }) => {
       <Button type="submit" variant="contained" color="primary" fullWidth>
         Add Product
       </Button>
+      {error && <Alert severity="error">{error}</Alert>} {/* Display error alert if there's an error */}
     </FormContainer>
   );
 };

@@ -10,9 +10,11 @@ import {
   Select,
   FormControlLabel,
   Checkbox,
+  Alert,
 } from "@mui/material";
 
 const Edit = ({ product, handleEditSuccess }) => {
+  const [error, setError] = useState(""); // Initialize error state to null
   const [editProduct, setEditProduct] = useState({ // Initialize editProduct state with product data
     // ...product, // Spread the product data into editProduct state
     name: product.name || "",
@@ -39,7 +41,7 @@ const Edit = ({ product, handleEditSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setError("");
     try { // Use try-catch block to handle errors during API call
       const response = await axios.put( 
         `https://backstore-iqcq.onrender.com/products/update/${product._id}`, // Use product._id to update the specific product
@@ -51,6 +53,7 @@ const Edit = ({ product, handleEditSuccess }) => {
       window.location.reload();
     } catch (error) {
       console.log(error);
+      setError("Failed to update product. Please check fields.");
     }
   };
 
@@ -304,6 +307,7 @@ const Edit = ({ product, handleEditSuccess }) => {
       <Button variant="contained" type="submit" sx={{ marginTop: 3 }}>
         Update
       </Button>
+      {error && <Alert severity="error">{error}</Alert>} {/* Display error alert if there's an error */}
     </form>
   );
 };
