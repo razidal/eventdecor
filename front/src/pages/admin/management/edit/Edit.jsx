@@ -69,6 +69,7 @@ const Edit = ({ product, handleEditSuccess }) => {
   return (
     <form onSubmit={handleSubmit}> 
       <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+      {error && <Alert severity="error">{error}</Alert>} {/* Display error alert if there's an error */}
         <TextField
           id="name"
           label="Product Name"
@@ -307,7 +308,6 @@ const Edit = ({ product, handleEditSuccess }) => {
       <Button variant="contained" type="submit" sx={{ marginTop: 3 }}>
         Update
       </Button>
-      {error && <Alert severity="error">{error}</Alert>} {/* Display error alert if there's an error */}
     </form>
   );
 };
