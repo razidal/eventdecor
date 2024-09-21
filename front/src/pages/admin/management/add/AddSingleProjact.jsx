@@ -133,7 +133,7 @@ const AddSingleProjact = ({ setOpen }) => {
       window.location.reload();
       setTimeout(() => { // Close the form after 2 seconds
         setOpen(false);
-      }, 2000);
+      }, 15000);
     } catch (error) { // Handle errors
       console.log(error);
     }
