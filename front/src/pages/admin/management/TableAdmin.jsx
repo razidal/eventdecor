@@ -115,7 +115,7 @@ const TableAdmin = () => {
               {userData?.map((user) => ( // Map through the user data and render a table row for each user
                 <TableRow key={user._id}>
                   <TableCell>{user._id}</TableCell>
-                  <TableCell>{user.totalAmount}$</TableCell>
+                  <TableCell align="center">{user.totalAmount}$</TableCell>
                   <TableCell>{user.userId?.fullName}</TableCell>
                   <TableCell>
                     <Button onClick={() => handleOpenModal(user)}>
