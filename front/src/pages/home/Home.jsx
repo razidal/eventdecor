@@ -35,6 +35,7 @@ const Home = () => {
   }, []);
 
   const getProducts = async () => { // fetch products from the backend
+    setLoading(true); // Set loading to true when fetching starts
     try {
       const response = await axios.get("https://backstore-iqcq.onrender.com/products/all", {
         timeout: 5000,
@@ -43,6 +44,7 @@ const Home = () => {
       setLoading(false); // Set loading to false after fetching
     } catch (error) {
       console.error("Error fetching products:", error);
+    }finally {
       setLoading(false); // Set loading to false after fetching
     }
   };
