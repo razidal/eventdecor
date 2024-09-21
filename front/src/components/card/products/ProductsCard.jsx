@@ -74,7 +74,13 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
 
   return (
     <div>
-      <Card sx={{ maxWidth: 345, height: "100%", minHeight: 300 }}> {/* Card component from Material-UI */}
+      <Card sx={{ maxWidth: 345, 
+                  height: "100%", 
+                  minHeight: 400, // Adjusted height for uniformity
+                  display: "flex", 
+                  flexDirection: "column", 
+                  justifyContent: "space-between" // Ensures proper alignment 
+                }}> {/* Card component from Material-UI */}
         <CardMedia 
             sx={{
               height: 140,
