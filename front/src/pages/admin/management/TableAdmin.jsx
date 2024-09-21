@@ -114,16 +114,16 @@ const TableAdmin = () => {
             <TableBody>
               {userData?.map((user) => ( // Map through the user data and render a table row for each user
                 <TableRow key={user._id}>
-                  <TableCell>{user._id}</TableCell>
+                  <TableCell align="center">{user._id}</TableCell>
                   <TableCell align="center">{user.totalAmount}$</TableCell>
-                  <TableCell>{user.userId?.fullName}</TableCell>
+                  <TableCell align="center">{user.userId?.fullName}</TableCell>
                   <TableCell>
-                    <Button onClick={() => handleOpenModal(user)}>
+                    <Button align="center" onClick={() => handleOpenModal(user)}>
                       Order Details
                     </Button>
                   </TableCell>
-                  <TableCell>{user.status}</TableCell>
-                  <TableCell>
+                  <TableCell align="center">{user.status}</TableCell>
+                  <TableCell align="center">
                     <Select
                       value={user.status}
                       onChange={(e) => updateOrderStatus(user._id, e.target.value)}
