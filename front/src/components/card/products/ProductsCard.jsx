@@ -40,7 +40,7 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
       await axios.delete( 
         `https://backstore-iqcq.onrender.com/products/delete/${product._id}`, 
         { // Request configuration
-          timeout: 5000, // Set a timeout of 5 seconds for the request
+          timeout: 15000, // Set a timeout of 15 seconds for the request
         }
       ); 
       alert(" Product deleted successfully"); // Show a success message

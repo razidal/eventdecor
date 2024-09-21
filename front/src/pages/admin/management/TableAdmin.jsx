@@ -41,7 +41,7 @@ const TableAdmin = () => {
       const response = await axios.get( 
         `https://backstore-iqcq.onrender.com/cart/allOrders`,
         {
-          timeout: 5000,
+          timeout: 15000,
         }
       ); 
       setUserData(response.data.orders); // Assuming the response contains an array of users

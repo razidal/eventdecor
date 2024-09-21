@@ -53,7 +53,7 @@ const AddSingleProjact = ({ setOpen }) => {
     const fetchProducts = async () => {
       try { // Fetch products from the server
         const response = await axios.get("https://backstore-iqcq.onrender.com/products/all", {
-          timeout: 5000,
+          timeout: 15000,
         });
         setProducts(response.data.products); // Update the products state
         setLoading(false); // Set loading to false
@@ -73,19 +73,19 @@ const AddSingleProjact = ({ setOpen }) => {
         const categoriesRes = await axios.get( // Fetch categories
           "https://backstore-iqcq.onrender.com/products/categories",
           {
-            timeout: 5000,
+            timeout: 15000,
           }
         );
         const themesRes = await axios.get( // Fetch themes
           "https://backstore-iqcq.onrender.com/products/themes",
           {
-            timeout: 5000,
+            timeout: 15000,
           }
         );
         const occasionsRes = await axios.get( // Fetch occasions
           "https://backstore-iqcq.onrender.com/products/occasions",
           {
-            timeout: 5000,
+            timeout: 15000,
           }
         );
           // Update the state with the fetched data
@@ -133,7 +133,7 @@ const AddSingleProjact = ({ setOpen }) => {
       window.location.reload();
       setTimeout(() => { // Close the form after 2 seconds
         setOpen(false);
-      }, 15000);
+      }, 2000);
     } catch (error) { // Handle errors
       console.log(error);
     }

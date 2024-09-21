@@ -29,7 +29,7 @@ const Management = () => {
   const fetchProducts = async () => { // Fetch all products from the server
     try {
       const response = await axios.get("https://backstore-iqcq.onrender.com/products/all", {
-        timeout: 5000,
+        timeout: 15000,
       });
       setAllProducts(response?.data.decorations); // Set the fetched products in the state
       setLoading(false); // Set loading to false after fetching

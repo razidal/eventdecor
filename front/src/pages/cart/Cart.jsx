@@ -147,7 +147,7 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
           expiryDate: `${selectedMonth}/${selectedYear}`, // Combine month and year into expiryDate
         },
         {
-          timeout: 5000, // Set a timeout of 5 seconds for the request
+          timeout: 15000, // Set a timeout of 15 seconds for the request
         }
       );
 
@@ -162,7 +162,7 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
     } finally { // Reset processing state after the request is complete
       setIsProcessing(false);
     }
-  }, 5000); // Throttle the handleSubmit function to limit it to once every 5 seconds
+  }, 5000); // Throttle the handleSubmit function to limit it to once every 15 seconds
 
   return (
     <form onSubmit={handleSubmit}>
