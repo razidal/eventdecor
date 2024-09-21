@@ -130,6 +130,7 @@ const AddSingleProjact = ({ setOpen }) => {
       console.log(response.data); 
  
       alert("Product added successfully"); // Show a success message
+      window.location.reload();
       setTimeout(() => { // Close the form after 2 seconds
         setOpen(false);
       }, 2000);
