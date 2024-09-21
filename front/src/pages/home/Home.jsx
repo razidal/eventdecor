@@ -38,7 +38,7 @@ const Home = () => {
     setLoading(true); // Set loading to true when fetching starts
     try {
       const response = await axios.get("https://backstore-iqcq.onrender.com/products/all", {
-        timeout: 5000,
+        timeout: 15000,
       });
       setProducts(response.data.decorations.slice(0, 3)); //only show 3 products
       setLoading(false); // Set loading to false after fetching
