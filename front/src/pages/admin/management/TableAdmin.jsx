@@ -103,12 +103,12 @@ const TableAdmin = () => {
         >
             <TableHead>
               <TableRow>
-                <TableCell>Order Number</TableCell>
-                <TableCell>Total Price</TableCell>
-                <TableCell>Customer Name</TableCell>
-                <TableCell>Order Details</TableCell>
-                <TableCell>Order Confirmation</TableCell>
-                <TableCell>Action</TableCell> {/* Add Action column */}
+                <TableCell align="center">Order Number</TableCell>
+                <TableCell align="center">Total Price</TableCell>
+                <TableCell align="center">Customer Name</TableCell>
+                <TableCell align="center">Order Details</TableCell>
+                <TableCell align="center">Order Confirmation</TableCell>
+                <TableCell align="center">Action</TableCell> {/* Add Action column */}
               </TableRow>
             </TableHead>
             <TableBody>
