@@ -17,11 +17,26 @@ import {
   Backdrop,
 } from "@mui/material";
 import axios from "axios";
-import Cookies from "js-cookie"
+import Cookies from "js-cookie";
+import { logout } from "../../redux/userSlice";
+import { useNavigate } from "react-router-dom";
+import {useDispatch } from "react-redux";
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(null);
+  const userCookies = Cookies.get("user"); // Get user data from cookies
+  const isLoggedIn = "" ;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
+  useEffect(() => { // Check login status based on user cookies
+    if (userCookies) {
+      isLoggedIn =JSON.parse(userCookies)._id
+    }else{
+      isLoggedIn = null;
+    }
+  }, [userCookies]); // Run the effect whenever userCookies change
 
   useEffect(() => {
     const fetchUsers = async () => { // Fetch users from the server
@@ -61,8 +76,11 @@ const ManageUsers = () => {
       await axios.delete(`https://backstore-iqcq.onrender.com/users/delete/${id}`);
       if (id === Cookies.get("user")._id) {
         // If the deleted user is the logged-in user, log them out and redirect to the sign in page
-        Cookies.remove("user");
-        window.location.href = "/SignIn";
+        dispatch(logout());
+        Cookies.remove("user"); // Remove user data from cookies
+        Cookies.remove("cart"); // Remove cart data from cookies
+        Cookies.remove("favorites"); // Remove favorites data from cookies
+        navigate("/SignIn");
         return;
       }
       setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id)); // Remove the user from the state
