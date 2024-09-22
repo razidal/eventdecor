@@ -188,9 +188,9 @@ const Header = () => {
       (favorite) => favorite._id === product._id // Compare product IDs
     );
     if (isAlreadyFavorite) { // If the product is already in favorites, remove it
-      dispatch(removeFromFavorites(product)); // Dispatch the removeFromFavorites action with the product ID
+      dispatch(removeFromFavorites(product._id)); // Dispatch the removeFromFavorites action with the product ID
     } else { // If the product is not in favorites, add it
-      dispatch(addToFavorites(product._id)); // Dispatch the addToFavorites action with the product object
+      dispatch(addToFavorites(product)); // Dispatch the addToFavorites action with the product object
     }
   };
   const isMobile = useMediaQuery("(max-width:600px)");
