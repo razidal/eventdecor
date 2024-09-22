@@ -26,17 +26,16 @@ const ManageUsers = () => {
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(null);
   const userCookies = Cookies.get("user"); // Get user data from cookies
-  const isLoggedIn = "" ;
+  const isLoggedIn = userCookies ? JSON.parse(userCookies)._id : null; // Extract user permission from cookies
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+  const [isLogin, setIsLogin] = useState(false);
+
   useEffect(() => { // Check login status based on user cookies
-    if (userCookies) {
-      isLoggedIn =JSON.parse(userCookies)._id
-    }else{
-      isLoggedIn = null;
+    if (isLoggedIn) {
+      setIsLogin(true);
     }
-  }, [userCookies]); // Run the effect whenever userCookies change
+  }, [isLoggedIn]); // Run the effect whenever userCookies change
 
   useEffect(() => {
     const fetchUsers = async () => { // Fetch users from the server
@@ -74,7 +73,7 @@ const ManageUsers = () => {
     setDeleting(id);
     try {
       await axios.delete(`https://backstore-iqcq.onrender.com/users/delete/${id}`);
-      if (id === Cookies.get("user")._id) {
+      if (isLogin) {
         // If the deleted user is the logged-in user, log them out and redirect to the sign in page
         dispatch(logout());
         Cookies.remove("user"); // Remove user data from cookies
