@@ -174,7 +174,7 @@ const ProductsCard = ({ product, fetchProducts }) => { // Pass fetchProducts as 
           <img
             src={product.imageUrl}
             alt={product.name}
-            style={{ width: "100%", height: "auto" }} // Make image responsive
+            style={{ width: "250px", height: "auto" }} // Make image responsive
           />
         </DialogContent>
         <DialogActions>
