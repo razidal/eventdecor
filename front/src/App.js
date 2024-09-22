@@ -13,7 +13,7 @@ import Management from "./pages/admin/management/Management";
 import Products from "./pages/products/Products";
 import Cart from "./pages/cart/Cart";
 import VirtualEventDesigner from "./pages/VirtualEventDesigner/VirtualEventDesigner";
-import { login, logout } from "./redux/userSlice";
+import { login } from "./redux/userSlice";
 import Footer from "./components/footer/footer";
 import { loadFavoritesFromCookies } from "./redux/favoritesSlice";
 import "./App.css"; 
@@ -33,22 +33,6 @@ function App() {
       dispatch(login(JSON.parse(savedUser)));
     }
     setLoading(false);
-  }, [dispatch]);
-
-  useEffect(() => {
-    const checkCookies = () => {
-      const userCookie = Cookies.get("user");
-      if (!userCookie) {
-        dispatch(logout()); // Call logout to clear the user state
-        window.location.reload(); // Reload the page
-      }
-    };
-
-    // Check every minute (60000 ms)
-    const interval = setInterval(checkCookies, 60000);
-
-    // Cleanup interval on component unmount
-    return () => clearInterval(interval);
   }, [dispatch]);
 
   if (loading) { // Show a loading indicator while the app is initializing

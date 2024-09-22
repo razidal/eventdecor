@@ -5,8 +5,7 @@ const initialState = {
   user: null,
   isAuthenticating: false,
 };
-const expireTime = new Date();
-expireTime.setMinutes(expireTime.getMinutes() + 3);
+
 const userSlice = createSlice({ // Define a userSlice using createSlice
   name: "user",
   initialState,
@@ -15,7 +14,7 @@ const userSlice = createSlice({ // Define a userSlice using createSlice
       state.user = action.payload; // Update the user state with the payload
       state.isAuthenticating = true;  // Set isAuthenticating to true
       Cookies.set("user", JSON.stringify(action.payload), {
-        expires: expireTime, 
+        expires: 7, 
         path: "/", 
       }); // Set a 7-day expiration (adjust as needed)
     },
