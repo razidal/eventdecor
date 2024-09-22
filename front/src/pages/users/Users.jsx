@@ -79,6 +79,10 @@ const ManageUsers = () => {
         Cookies.remove("user"); // Remove user data from cookies
         Cookies.remove("cart"); // Remove cart data from cookies
         Cookies.remove("favorites"); // Remove favorites data from cookies
+        setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id)); // Remove the user from the state
+        setDeleting(null);
+        alert("User deleted successfully.");
+        window.location.reload(); // Reload the page to reflect the updated user role  
         navigate("/SignIn");
         return;
       }
