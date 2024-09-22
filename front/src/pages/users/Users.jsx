@@ -62,6 +62,7 @@ const ManageUsers = () => {
       setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id)); // Remove the user from the state
       setDeleting(null);
       alert("User deleted successfully.");
+      window.location.reload(); // Reload the page to reflect the updated user role
     } catch (error) {
       setDeleting(false);
       alert("Failed to delete user. Please try again.");
