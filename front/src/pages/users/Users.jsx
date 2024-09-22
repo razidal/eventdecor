@@ -27,6 +27,7 @@ const ManageUsers = () => {
   const [deleting, setDeleting] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.user.user);
 
   useEffect(() => {
     const fetchUsers = async () => { // Fetch users from the server
