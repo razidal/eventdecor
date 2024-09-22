@@ -17,17 +17,11 @@ import {
   Backdrop,
 } from "@mui/material";
 import axios from "axios";
-import Cookies from "js-cookie";
-import { logout } from "../../redux/userSlice";
-import { useNavigate } from "react-router-dom";
-import {useDispatch ,useSelector} from "react-redux";
+
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(null);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.user.user);
 
   useEffect(() => {
     const fetchUsers = async () => { // Fetch users from the server
@@ -68,16 +62,7 @@ const ManageUsers = () => {
       setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id)); // Remove the user from the state
       setDeleting(null);
       alert("User deleted successfully.");
-      if (currentUser && currentUser._id === id) {
-        dispatch(logout());
-        Cookies.remove("user");
-        Cookies.remove("cart");
-        Cookies.remove("favorites");
-        navigate("/SignIn");
-        window.location.reload();
-      } else {
-        window.location.reload();
-      }
+      window.location.reload(); // Reload the page to reflect the updated user role
     } catch (error) {
       setDeleting(false);
       alert("Failed to delete user. Please try again.");
