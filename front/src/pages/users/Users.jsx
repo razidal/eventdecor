@@ -17,7 +17,7 @@ import {
   Backdrop,
 } from "@mui/material";
 import axios from "axios";
-
+import Cookies from "js-cookie"
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -59,6 +59,12 @@ const ManageUsers = () => {
     setDeleting(id);
     try {
       await axios.delete(`https://backstore-iqcq.onrender.com/users/delete/${id}`);
+      if (id === Cookies.getJSON("user")._id) {
+        // If the deleted user is the logged-in user, log them out and redirect to the sign in page
+        Cookies.remove("user");
+        window.location.href = "/SignIn";
+        return;
+      }
       setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id)); // Remove the user from the state
       setDeleting(null);
       alert("User deleted successfully.");
