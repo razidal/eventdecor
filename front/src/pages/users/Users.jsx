@@ -20,22 +20,13 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { logout } from "../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
-import {useDispatch } from "react-redux";
+import {useDispatch ,useSelector} from "react-redux";
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(null);
-  const userCookies = Cookies.get("user"); // Get user data from cookies
-  const isLoggedIn = userCookies ? JSON.parse(userCookies)._id : null; // Extract user permission from cookies
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [isLogin, setIsLogin] = useState(false);
-
-  useEffect(() => { // Check login status based on user cookies
-    if (isLoggedIn) {
-      setIsLogin(true);
-    }
-  }, [isLoggedIn]); // Run the effect whenever userCookies change
 
   useEffect(() => {
     const fetchUsers = async () => { // Fetch users from the server
@@ -73,23 +64,19 @@ const ManageUsers = () => {
     setDeleting(id);
     try {
       await axios.delete(`https://backstore-iqcq.onrender.com/users/delete/${id}`);
-      if (isLogin) {
-        // If the deleted user is the logged-in user, log them out and redirect to the sign in page
-        dispatch(logout());
-        Cookies.remove("user"); // Remove user data from cookies
-        Cookies.remove("cart"); // Remove cart data from cookies
-        Cookies.remove("favorites"); // Remove favorites data from cookies
-        setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id)); // Remove the user from the state
-        setDeleting(null);
-        alert("User deleted successfully.");
-        window.location.reload(); // Reload the page to reflect the updated user role  
-        navigate("/SignIn");
-        return;
-      }
       setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id)); // Remove the user from the state
       setDeleting(null);
       alert("User deleted successfully.");
-      window.location.reload(); // Reload the page to reflect the updated user role
+      if (currentUser && currentUser._id === id) {
+        dispatch(logout());
+        Cookies.remove("user");
+        Cookies.remove("cart");
+        Cookies.remove("favorites");
+        navigate("/SignIn");
+        window.location.reload();
+      } else {
+        window.location.reload();
+      }
     } catch (error) {
       setDeleting(false);
       alert("Failed to delete user. Please try again.");
