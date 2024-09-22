@@ -55,6 +55,7 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [date, setDate] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [validationError, setValidationError] = useState({});
   let navigate = useNavigate();
 
@@ -106,7 +107,7 @@ const SignUp = () => {
           userData
         );
         console.log(response.data);
-        setError("Registration successful");
+        setSuccess("Registration successful");
         setTimeout(() => {
           ///after a succeful sign up , go to sign in page
           navigate("/signin");
@@ -134,7 +135,7 @@ const SignUp = () => {
       });
 
       console.log("Google sign-up successful", response.data);
-      setError("Google Sign Up successful");
+      setSuccess("Google Sign Up successful");
       setTimeout(() => {
         navigate("/"); //go to homepage
       }, 2000); // Redirect to homepage after 2 seconds
@@ -213,6 +214,11 @@ const SignUp = () => {
       {error && (
         <Alert severity="error" style={{ marginTop: "20px", width: "100%" }}>
           {error}
+        </Alert>
+      )}
+      {success && (
+        <Alert severity="success" style={{ marginTop: "20px", width: "100%" }}>
+          {success}
         </Alert>
       )}
     </FormContainer>
