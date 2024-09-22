@@ -59,7 +59,7 @@ const ManageUsers = () => {
     setDeleting(id);
     try {
       await axios.delete(`https://backstore-iqcq.onrender.com/users/delete/${id}`);
-      if (id === Cookies.getJSON("user")._id) {
+      if (id === Cookies.get("user")._id) {
         // If the deleted user is the logged-in user, log them out and redirect to the sign in page
         Cookies.remove("user");
         window.location.href = "/SignIn";
