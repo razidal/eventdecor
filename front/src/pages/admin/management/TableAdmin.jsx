@@ -14,9 +14,9 @@ import {
   useMediaQuery,
   CircularProgress,
   Backdrop,
-  IconButton,
-  CloseIcon,
 } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import Typography from '@mui/material/Typography';
 
