@@ -14,6 +14,8 @@ import {
   useMediaQuery,
   CircularProgress,
   Backdrop,
+  IconButton,
+  CloseIcon,
 } from "@mui/material";
 import axios from "axios";
 import Typography from '@mui/material/Typography';
@@ -142,55 +144,70 @@ const TableAdmin = () => {
       )}
 
       <Modal open={openModal} onClose={handleCloseModal}>
-        <div>
-        <Box
-          component="form"
-          sx={{
-            "& > :not(style)": { m: 1, width: isMobile ? "90%" : "25ch" },
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            backgroundColor: "white",
-            justifyContent: "center",
-            gap: "1rem",
-            width: isMobile ? "95%" : "50%",
-            margin: "auto",
-            padding: isMobile ? "20px" : "40px",
-          }}
-        >
-            <h2>Order Details</h2>
-            <Table
-              sx={{
-              tableLayout: "auto",
-              width: isMobile ? "100%" : "auto",
-              overflowX: isMobile ? "auto" : "visible",
-            }}
-            >
-              <TableHead>
-                <TableRow>
-                  <TableCell>Product Name</TableCell>
-                  <TableCell>Price</TableCell>
-                  <TableCell>Quantity</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {selectedUser?.products?.map((product, productIndex) => (
-                  <TableRow key={productIndex}>
-                    <TableCell>{product.productId?.name}</TableCell>
-                    <TableCell>{product.price}$</TableCell>
-                    <TableCell>{product.quantity}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            <h3>Delivery Address</h3>
-            <p>
-              {selectedUser?.address?.street}, {selectedUser?.address?.city},{" "}
-              {selectedUser?.address?.postalCode}, {selectedUser?.address?.country}
-            </p>
-          </Box>
-        </div>
-      </Modal>
+  <div>
+    <Box
+      component="form"
+      sx={{
+        position: "relative",
+        "& > :not(style)": { m: 1, width: isMobile ? "90%" : "25ch" },
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        backgroundColor: "white",
+        justifyContent: "center",
+        gap: "1rem",
+        width: isMobile ? "95%" : "50%",
+        margin: "auto",
+        padding: isMobile ? "20px" : "40px",
+        mt: "100px", // optional: move modal slightly down vertically
+      }}
+    >
+      {/* Close Button */}
+      <IconButton
+        aria-label="close"
+        onClick={handleCloseModal}
+        sx={{
+          position: "absolute",
+          top: 8,
+          right: 8,
+        }}
+      >
+        <CloseIcon />
+      </IconButton>
+
+      <h2>Order Details</h2>
+      <Table
+        sx={{
+          tableLayout: "auto",
+          width: isMobile ? "100%" : "auto",
+          overflowX: isMobile ? "auto" : "visible",
+        }}
+      >
+        <TableHead>
+          <TableRow>
+            <TableCell>Product Name</TableCell>
+            <TableCell>Price</TableCell>
+            <TableCell>Quantity</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {selectedUser?.products?.map((product, productIndex) => (
+            <TableRow key={productIndex}>
+              <TableCell>{product.productId?.name}</TableCell>
+              <TableCell>{product.price}$</TableCell>
+              <TableCell>{product.quantity}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <h3>Delivery Address</h3>
+      <p>
+        {selectedUser?.address?.street}, {selectedUser?.address?.city},{" "}
+        {selectedUser?.address?.postalCode}, {selectedUser?.address?.country}
+      </p>
+    </Box>
+  </div>
+</Modal>
     </div>
   );
 };
