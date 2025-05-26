@@ -150,7 +150,7 @@ const decorations = [
     name: "Floral Centerpiece",
     price: 39.99,
     description: "Artificial flower centerpiece for tables",
-    stockQuantity: 15,
+    stockQuantity: 16,
     imageUrl: "https://example.com/floral-centerpiece.jpg",
     category: "Other",
     color: "Multi",
