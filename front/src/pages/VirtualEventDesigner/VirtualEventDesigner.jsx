@@ -122,7 +122,7 @@ const VirtualEventDesigner = () => {
   const [isResizing, setIsResizing] = useState(false);
   const containerRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1); // State for pagination
-  const itemsPerPage = 6; // Number of items per page
+  const itemsPerPage = 3; // Number of items per page
   const [showIcons, setShowIcons] = useState(true);
   const [loading, setLoading] = useState(true); // Loading state
 
