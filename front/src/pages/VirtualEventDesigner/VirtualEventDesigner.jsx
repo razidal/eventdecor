@@ -307,17 +307,17 @@ const VirtualEventDesigner = () => {
           <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
             <Box
               ref={containerRef}
-              onClick={handleContainerClick} // Handle container click event
+              onClick={handleContainerClick}
               sx={{
                 position: "relative",
                 width: "100%",
                 height: "calc(100vh - 100px)",
                 overflow: "hidden",
-                backgroundImage: `url(${background})`, // Set the background image based on the selected template or uploaded image
-                backgroundSize: "cover",
+                backgroundImage: `url(${background})`,
+                backgroundSize: "contain",        // <-- change here
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
-                cursor: selectedDecoration ? "crosshair" : "default", // Change the cursor based on the selected decoration
+                cursor: selectedDecoration ? "crosshair" : "default",
               }}
             >
               {decorations.map((decoration) => (
