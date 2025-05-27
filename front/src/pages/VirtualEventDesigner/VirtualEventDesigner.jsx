@@ -314,7 +314,7 @@ const VirtualEventDesigner = () => {
                 height: "calc(100vh - 100px)",
                 overflow: "hidden",
                 backgroundImage: `url(${background})`, // Set the background image based on the selected template or uploaded image
-                backgroundSize: "contain",
+                backgroundSize: "cover",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
                 cursor: selectedDecoration ? "crosshair" : "default", // Change the cursor based on the selected decoration
