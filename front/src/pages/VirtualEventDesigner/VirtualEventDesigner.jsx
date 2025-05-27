@@ -19,6 +19,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ZoomOutMapIcon from "@mui/icons-material/ZoomOutMap";
 import Draggable from "react-draggable";
 import CircularProgress from "@mui/material/CircularProgress"; // Import CircularProgress
+import Stack from "@mui/material/Stack";
 
 const ImageUploader = ({ onImageUpload }) => {
   const [previewImage, setPreviewImage] = useState(null);
@@ -313,7 +314,8 @@ const VirtualEventDesigner = () => {
                 height: "calc(100vh - 100px)",
                 overflow: "hidden",
                 backgroundImage: `url(${background})`, // Set the background image based on the selected template or uploaded image
-                backgroundSize: "cover",
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
                 cursor: selectedDecoration ? "crosshair" : "default", // Change the cursor based on the selected decoration
               }}
@@ -404,64 +406,66 @@ const VirtualEventDesigner = () => {
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <ImageUploader onImageUpload={handleBackgroundUpload} />
-
-          <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Or choose a template:
-            </Typography>
-            <Select
-              fullWidth
-              value={background}
-              onChange={handleTemplateSelect}
-            >
-              {backgroundTemplates.map((template, index) => ( // Map through the background templates and create a menu item for each one
-                <MenuItem key={index} value={template.url}>
-                  {template.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </Paper>
-
-          <Paper elevation={3} sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Decorations
-            </Typography>
-            {loading ? ( // Show loading spinner while fetching data
-            <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
-              <CircularProgress />
-            </div>
-          ) : (
-            <Grid container spacing={1}>
-              {currentDecorations.map((product) => ( // Map through the current decorations and create a grid item for each one
-                <Grid item key={product._id} xs={4}>
-                  <img
-                    src={product.imageUrl} // Set the source of the image based on the decoration's image URL
-                    alt={product.name}
-                    style={{
-                      width: "100%",
-                      cursor: "pointer",
-                      border:
-                      selectedDecoration &&
-                      selectedDecoration._id === product._id
-                          ? "2px solid blue"
-                          : "none",
-                    }}
-                    onClick={() => handleDecorationSelect(product)}
-                  />
+          <Stack spacing={2}>
+            <Paper elevation={3} sx={{ p: 2, width: "100%" }}>
+              <ImageUploader onImageUpload={handleBackgroundUpload} />
+            </Paper>
+            <Paper elevation={3} sx={{ p: 2, width: "100%" }}>
+              <Typography variant="h6" gutterBottom>
+                Or choose a template:
+              </Typography>
+              <Select
+                fullWidth
+                value={background}
+                onChange={handleTemplateSelect}
+              >
+                {backgroundTemplates.map((template, index) => (
+                  <MenuItem key={index} value={template.url}>
+                    {template.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Paper>
+            <Paper elevation={3} sx={{ p: 2, width: "100%" }}>
+              <Typography variant="h6" gutterBottom>
+                Decorations
+              </Typography>
+              {loading ? (
+                <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
+                  <CircularProgress />
+                </div>
+              ) : (
+                <Grid container spacing={1}>
+                  {currentDecorations.map((product) => (
+                    <Grid item key={product._id} xs={4}>
+                      <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        style={{
+                          width: "100%",
+                          cursor: "pointer",
+                          border:
+                            selectedDecoration &&
+                            selectedDecoration._id === product._id
+                              ? "2px solid blue"
+                              : "none",
+                        }}
+                        onClick={() => handleDecorationSelect(product)}
+                      />
+                    </Grid>
+                  ))}
                 </Grid>
-              ))}
-            </Grid>
-          )}
-            <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
-              <Pagination
-                count={Math.ceil(products.length / itemsPerPage)}
-                page={currentPage}
-                onChange={handlePageChange} // Handle page change event for the decorations pagination
-                color="primary"
-              />
-            </Box>
-          </Paper>
+              )}
+              <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
+                <Pagination
+                  count={Math.ceil(products.length / itemsPerPage)}
+                  page={currentPage}
+                  onChange={handlePageChange}
+                  color="primary"
+                />
+              </Box>
+            </Paper>
+          </Stack>
         </Grid>
       </Grid>
     </Box>
