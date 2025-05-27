@@ -26,36 +26,36 @@ const ImageUploader = ({ onImageUpload }) => {
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
 
-  const handleImageUpload = (event) => { // Handle image upload logic here
+  const handleImageUpload = (event) => {
     const file = event.target.files[0]; // Get the selected file
     setError(null);
 
-    if (file) { // Check if a file is selected
-      if (file.type.startsWith("image/")) { // Check if the file is an image
-        if (file.size <= 5 * 1024 * 1024) { // Check if the file size is within the limit (5MB)
+    if (file) {
+      if (file.type.startsWith("image/")) {
+        if (file.size <= 5 * 1024 * 1024) {
           // 5MB limit
           const reader = new FileReader(); // Create a new FileReader instance
-          reader.onload = (e) => { // Set up the onload event handler
+          reader.onload = (e) => {
             setPreviewImage(e.target.result); // Set the preview image source
             onImageUpload(e.target.result); // Call the onImageUpload callback with the image data
           };
           reader.readAsDataURL(file); // Read the file as a data URL
-        } else { // If the file size exceeds the limit, show an error message
+        } else {
           setError("File size exceeds 5MB limit.");
         }
-      } else { // If the file is not an image, show an error message
+      } else {
         setError("Please upload an image file.");
       }
     }
   };
 
-  const handleRemoveImage = () => { // Handle image removal logic here
+  const handleRemoveImage = () => {
     setPreviewImage(null); // Clear the preview image source
     setError(null); // Clear any error messages
-    if (fileInputRef.current) { // Clear the file input value
+    if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
-    onImageUpload(null); // Call the onImageUpload callback with null to indicate that the image has been removed 
+    onImageUpload(null); // Call the onImageUpload callback with null to indicate that the image has been removed
   };
 
   return (
@@ -81,13 +81,13 @@ const ImageUploader = ({ onImageUpload }) => {
         </Button>
       </label>
 
-      {error && ( // Display error message if there is one
+      {error && (
         <Alert severity="error" sx={{ mt: 2 }}>
           {error}
         </Alert>
       )}
 
-      {previewImage && ( // Display preview image if there is one
+      {previewImage && (
         <Box sx={{ mt: 2, position: "relative" }}>
           <img
             src={previewImage}
@@ -125,8 +125,9 @@ const VirtualEventDesigner = () => {
   const itemsPerPage = 3; // Number of items per page
   const [showIcons, setShowIcons] = useState(true);
   const [loading, setLoading] = useState(true); // Loading state
+  const [bgDimensions, setBgDimensions] = useState({ width: 800, height: 600 }); // Default aspect ratio
 
-  const backgroundTemplates = [ // Array of background templates
+  const backgroundTemplates = [
     {
       name: "Living Room",
       url: "https://hgtvhome.sndimg.com/content/dam/images/hgtv/fullset/2023/7/19/3/DOTY2023_Dramatic-Before-And-Afters_Hidden-Hills-11.jpg.rend.hgtvcom.1280.1280.suffix/1689786863909.jpeg",
@@ -137,29 +138,40 @@ const VirtualEventDesigner = () => {
     },
   ];
 
-  const handlePageChange = (event, newPage) => { // Handle page change logic here
+  const handlePageChange = (event, newPage) => {
     setCurrentPage(newPage);
   };
 
-  const currentDecorations = products.slice( // Slice the products array to get the current page's items
+  const currentDecorations = products.slice(
     (currentPage - 1) * itemsPerPage, // Start index of the slice
     currentPage * itemsPerPage // End index of the slice
   );
 
+  // Helper to update background and its dimensions
+  const updateBackground = (imgSrc) => {
+    if (!imgSrc) return;
+    const img = new window.Image();
+    img.onload = () => {
+      setBgDimensions({ width: img.naturalWidth, height: img.naturalHeight });
+      setBackground(imgSrc);
+    };
+    img.src = imgSrc;
+  };
+
   useEffect(() => {
     const handleMouseMove = (event) => {
-      if (isResizing) { // Handle resizing logic here
+      if (isResizing) {
         handleResizeMove(event);
       }
     };
 
-    const handleMouseUp = () => { // Handle mouse up logic here
+    const handleMouseUp = () => {
       if (isResizing) {
         handleResizeEnd();
       }
     };
 
-    const handleClickOutside = (event) => { // Handle click outside logic here
+    const handleClickOutside = (event) => {
       if (
         containerRef.current &&
         !containerRef.current.contains(event.target) &&
@@ -169,12 +181,12 @@ const VirtualEventDesigner = () => {
         setShowIcons(false); // Hide icons when clicking outside
       }
     };
-  
-    document.addEventListener("mousemove", handleMouseMove); 
+
+    document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
     document.addEventListener("mousedown", handleClickOutside);
 
-    return () => { // Clean up event listeners when the component unmounts
+    return () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("mousedown", handleClickOutside);
@@ -184,7 +196,7 @@ const VirtualEventDesigner = () => {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const response = await axios.get( // Fetch products from the API
+        const response = await axios.get(
           "https://backstore-iqcq.onrender.com/products/all"
         );
         setProducts(response.data.decorations); // Set the products state with the fetched data
@@ -198,16 +210,18 @@ const VirtualEventDesigner = () => {
     getProducts();
   }, []);
 
+  // Update for uploaded image
   const handleBackgroundUpload = (imageData) => {
-    setBackground(imageData);
+    updateBackground(imageData);
   };
 
+  // Update for template select
   const handleTemplateSelect = (event) => {
-    setBackground(event.target.value);
+    updateBackground(event.target.value);
   };
 
   const handleDecorationSelect = (decoration) => {
-    setSelectedDecoration({ // Set the selected decoration state with the clicked decoration object
+    setSelectedDecoration({
       ...decoration,
       width: 150,
       height: 150,
@@ -216,41 +230,41 @@ const VirtualEventDesigner = () => {
     });
   };
 
-  const handleContainerClick = (event) => { // Handle container click logic here
-    if (selectedDecoration && containerRef.current) { // If there is a selected decoration and the container ref is available
-      const rect = containerRef.current.getBoundingClientRect(); // Get the container's bounding rectangle
-      const x = event.clientX - rect.left; // Calculate the x-coordinate of the new decoration relative to the container
-      const y = event.clientY - rect.top;  // Calculate the y-coordinate of the new decoration relative to the container
-      const newDecoration = { ...selectedDecoration, x, y }; // Create a new decoration object with the calculated coordinates
-      setDecorations([...decorations, newDecoration]);  // Add the new decoration to the decorations state array
-      setSelectedDecoration(null); // Reset the selected decoration state to null
+  const handleContainerClick = (event) => {
+    if (selectedDecoration && containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const newDecoration = { ...selectedDecoration, x, y };
+      setDecorations([...decorations, newDecoration]);
+      setSelectedDecoration(null);
     }
   };
 
   const handleDecorationClick = (decoration, event) => {
-    event.stopPropagation(); // Prevent the event from bubbling up to the container
+    event.stopPropagation();
     setActiveDecoration(decoration);
     setShowIcons(true); // Show icons when a decoration is clicked
   };
 
   const handleResizeStart = (event, decoration) => {
-    event.stopPropagation(); 
+    event.stopPropagation();
     setIsResizing(true);
     setActiveDecoration(decoration);
   };
 
   const handleResizeMove = (event) => {
     if (!isResizing || !activeDecoration || !containerRef.current) return;
-  
+
     const containerRect = containerRef.current.getBoundingClientRect();
-  
+
     // Calculate the current aspect ratio of the image
     const aspectRatio = activeDecoration.width / activeDecoration.height;
-  
+
     // Get the new width and height based on mouse position, but constrain to the container bounds
     let newWidth = Math.max(20, event.clientX - containerRect.left - activeDecoration.x);
     let newHeight = newWidth / aspectRatio; // Set the height based on the aspect ratio
-  
+
     // Ensure the resized image stays within container bounds
     if (activeDecoration.x + newWidth > containerRect.width) {
       newWidth = containerRect.width - activeDecoration.x;
@@ -260,7 +274,7 @@ const VirtualEventDesigner = () => {
       newHeight = containerRect.height - activeDecoration.y;
       newWidth = newHeight * aspectRatio; // Adjust width based on aspect ratio
     }
-  
+
     // Update the decorations state with the new width and height while maintaining the position
     setDecorations(
       decorations.map((d) =>
@@ -270,9 +284,8 @@ const VirtualEventDesigner = () => {
       )
     );
   };
-  
 
-  const handleResizeEnd = () => { // Handle resize end logic here
+  const handleResizeEnd = () => {
     setIsResizing(false);
   };
 
@@ -286,6 +299,12 @@ const VirtualEventDesigner = () => {
     );
     setDecorations(updatedDecorations);
   };
+
+  // Calculate container size based on aspect ratio and a fixed width (e.g., 800px)
+  const containerWidth = 800;
+  const containerHeight = Math.round(
+    (bgDimensions.height / bgDimensions.width) * containerWidth
+  );
 
   return (
     <Box sx={{ p: 3 }}>
@@ -310,14 +329,16 @@ const VirtualEventDesigner = () => {
               onClick={handleContainerClick}
               sx={{
                 position: "relative",
-                width: "100%",
-                height: "calc(100vh - 100px)",
+                width: `${containerWidth}px`,
+                height: `${containerHeight}px`,
                 overflow: "hidden",
                 backgroundImage: `url(${background})`,
-                backgroundSize: "contain",        // <-- change here
+                backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
+                margin: "0 auto", // center the box
                 cursor: selectedDecoration ? "crosshair" : "default",
+                backgroundColor: "#fff", // ensure white background
               }}
             >
               {decorations.map((decoration) => (
