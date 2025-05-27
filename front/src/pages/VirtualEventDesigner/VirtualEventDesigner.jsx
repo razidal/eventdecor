@@ -302,9 +302,9 @@ const VirtualEventDesigner = () => {
         Virtual Event Designer
       </Typography>
 
-      <Grid container spacing={3}>
+      <Grid container spacing={3} alignItems="stretch">
         <Grid item xs={12} md={8}>
-          <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
+          <Paper elevation={3} sx={{ p: 2, mb: 2, height: "100%" }}>
             <Box
               ref={containerRef}
               onClick={handleContainerClick}
@@ -405,8 +405,8 @@ const VirtualEventDesigner = () => {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={4}>
-          <Stack spacing={2}>
+        <Grid item xs={12} md={4} sx={{ alignSelf: "stretch" }}>
+          <Stack spacing={2} sx={{ height: "100%" }}>
             <Paper elevation={3} sx={{ p: 2, width: "100%" }}>
               <ImageUploader onImageUpload={handleBackgroundUpload} />
             </Paper>
