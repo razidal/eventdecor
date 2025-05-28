@@ -20,7 +20,7 @@ const sendOrderConfirmationEmail = async (fullName,userEmail, orderData) => {
       from: "eventdeocr@gmail.com",
       to: userEmail,
       subject: "Order Confirmation",
-      text: `Hello ${fullName} Thank you for your order! Your order ID is: ${orderData._id}`,
+      text: `Hello ${fullName}, Thank you for your order! Your order ID is: ${orderData._id}`,
     };
     // Send the email
     await transporter.sendMail(mailOptions);
