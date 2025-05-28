@@ -49,7 +49,7 @@ const TableAdmin = () => {
   const seconds = String(date.getSeconds()).padStart(2, "0");
   return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 };
-s
+
   const fetchData = async () => {
     try { 
       const response = await axios.get( 
