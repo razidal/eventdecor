@@ -7,6 +7,7 @@ const nodemailer = require("nodemailer");
 
 router.put("/update-status/:id", async (req, res) => {
   const { status } = req.body;
+  console.log("Update status called for order:", req.params.id, req.body.status);
   try {
     const order = await Order.findById(req.params.id);
     if (!order) {
