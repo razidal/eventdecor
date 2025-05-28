@@ -295,7 +295,17 @@ const Header = () => {
                           <IconButton
                             size="small"
                             onClick={() => handleFavoriteToggle(item)}
-                            sx={{ padding: "2px" }} // Reduce padding for a smaller hover outline
+                            sx={{
+                              padding: "2px",
+                              minWidth: "unset",
+                              minHeight: "unset",
+                              width: 24,
+                              height: 24,
+                              borderRadius: "50%",
+                              "&:hover": {
+                                backgroundColor: "rgba(255,0,0,0.08)", // subtle hover effect
+                              },
+                            }}
                           >
                             <FavoriteIcon
                               color={
