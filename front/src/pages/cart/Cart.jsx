@@ -176,10 +176,11 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             fullWidth
             label="Card Number"
             value={cardNumber}
-            onChange={(e) => setCardNumber(e.target.value)} 
+            onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
             margin="normal"
             required
-            error={!!validationError && !/^\d{16}$/.test(cardNumber)} // Show error if card number is invalid
+            inputProps={{ maxLength: 19 }} // 16 digits + 3 spaces
+            error={!!validationError && cardNumber.replace(/\s/g, "").length !== 16}
             helperText="Must be 16 digits."
           />
 
@@ -529,4 +530,11 @@ export default function Cart() {
       </Snackbar>
     </Box>
   );
+}
+
+function formatCardNumber(value) {
+  // Remove all non-digit characters
+  const digits = value.replace(/\D/g, "").slice(0, 16);
+  // Add a space every 4 digits
+  return digits.replace(/(.{4})/g, "$1 ").trim();
 }
