@@ -119,7 +119,7 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
    
     // Check if any field is empty or invalid
     if (!cardNumberRegex.test(cardNumber) ||
-     !selectedMonth || !selectedYear || !cvvRegex.test(cvv) || !nameRegex.test(name) ||
+     !selectedMonth || !selectedYear || !cvvRegex.test(cvv) || !nameRegex.test(name) || !nameRegex.test(fullName) ||
      !postalCodeRegex.test(postalCode)) {
       setValidationError("Check fields."); // Set validation error message
       setIsProcessing(false);   // Reset processing state
@@ -251,7 +251,7 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             margin="normal"
             required
             error={!!validationError && !/^[A-Za-z\s]+$/.test(name)}
-            helperText="Must contain only letters."
+            helperText="Must contain only English letters."
           />
           <TextField
             fullWidth
@@ -260,8 +260,8 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             onChange={(e) => setfullName(e.target.value)}
             margin="normal"
             required
-            error={!!validationError && !/^[A-Za-z\s]+$/.test(name)}
-            helperText="Must contain only letters."
+            error={!!validationError && !/^[A-Za-z\s]+$/.test(fullName)}
+            helperText="Must contain only English letters."
           />
           <TextField
             fullWidth

@@ -6,7 +6,7 @@ const User = require("../models/User");
 const PartyDecoration = require("../models/PartyDecoration");
 
 
-const sendOrderConfirmationEmail = async (userEmail, orderData) => { 
+const sendOrderConfirmationEmail = async (fullName,userEmail, orderData) => { 
   try { // Set up the email transporter using your email service provider's SMTP settings
     const transporter = nodemailer.createTransport({ // Replace with your email service provider's SMTP settings
       service: "Gmail", // Example: "Gmail" or "Outlook"
@@ -20,7 +20,7 @@ const sendOrderConfirmationEmail = async (userEmail, orderData) => {
       from: "eventdeocr@gmail.com",
       to: userEmail,
       subject: "Order Confirmation",
-      text: `Thank you for your order! Your order ID is: ${orderData._id}`,
+      text: `Hello ${fullName} Thank you for your order! Your order ID is: ${orderData._id}`,
     };
     // Send the email
     await transporter.sendMail(mailOptions);
@@ -74,7 +74,7 @@ router.post("/user/:id/new_order", async (req, res) => {
         });
       }
       // Send order confirmation email to the user
-      await sendOrderConfirmationEmail(user.email, newOrder);
+      await sendOrderConfirmationEmail(user.fullName, user.email, newOrder);
 
       res
         .status(200)
@@ -91,7 +91,7 @@ router.post("/user/:id/new_order", async (req, res) => {
 router.post("/process-payment", async (req, res) => {
   console.log("Received payment request:", req.body);
   
-  const { userId, cartData, totalPrice, paymentMethod, email,fullName, address } =
+  const { userId, cartData, totalPrice, paymentMethod, email, address } =
     req.body;
   // Validate the request data here
   if (
@@ -100,7 +100,6 @@ router.post("/process-payment", async (req, res) => {
     !totalPrice ||
     !paymentMethod ||
     !email ||
-    !fullName ||
     !address
   ) {
     return res
@@ -142,7 +141,7 @@ router.post("/process-payment", async (req, res) => {
     }
     // Process the payment here 
     const newOrder = new Order({
-      userId,fullName,
+      userId,
       products: cartData.map((item) => ({
         productId: item.productId,
         quantity: item.quantity,
@@ -162,7 +161,7 @@ router.post("/process-payment", async (req, res) => {
       });
     }
 
-    await sendOrderConfirmationEmail(email, newOrder);
+    await sendOrderConfirmationEmail(fullName, email, newOrder);
 
     res.status(200).json({ success: true, orderId: newOrder._id });
   } catch (error) {
