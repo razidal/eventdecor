@@ -21,7 +21,6 @@ import axios from "axios";
 import Typography from '@mui/material/Typography';
 import {useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import React from "react";
 
 const TableAdmin = () => {
   const [userData, setUserData] = useState(null);
