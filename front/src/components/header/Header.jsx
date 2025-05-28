@@ -292,11 +292,16 @@ const Header = () => {
                           <Typography variant="body2" color="textSecondary">
                             ${item.price}
                           </Typography>
-                          <IconButton onClick={() => handleFavoriteToggle(item)}>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleFavoriteToggle(item)}
+                            sx={{ padding: "2px" }} // Reduce padding for a smaller hover outline
+                          >
                             <FavoriteIcon
                               color={
-                                favorites.some((fav) => fav._id === item._id) ? "error" : "disabled" // Change the favorite icon color based on whether the item is in favorites or not
+                                favorites.some((fav) => fav._id === item._id) ? "error" : "disabled"
                               }
+                              fontSize="small"
                             />
                           </IconButton>
                         </FavoriteContent>
