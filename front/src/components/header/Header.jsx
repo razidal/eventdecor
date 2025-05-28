@@ -158,12 +158,11 @@ const Header = () => {
     setIsDrawerOpen(open); // Set drawer open/close state
   };
 
-  const handleMenuClickFavorite = (event) => { // Handle favorite menu click
-    if (isPopoverOpen) { // If the popover is open, close it and reset the anchor element
-      setIsPopoverOpen(false);
+  const handleMenuClickFavorite = (event) => {
+    if (anchorElFavorite) {
+      setAnchorElFavorite(null);
     } else {
-      setAnchorElFavorite(event.currentTarget); // Set the anchor element to the current target
-      setIsPopoverOpen(true);  // Open the popover
+      setAnchorElFavorite(event.currentTarget);
     }
   };
 
@@ -268,9 +267,9 @@ const Header = () => {
                 )}
               </StyledIconButton> 
               <StyledPopover
-                open={isPopoverOpen}
+                open={Boolean(anchorElFavorite)}
                 anchorEl={anchorElFavorite}
-                onClose={() => setIsPopoverOpen(false)} // Close the favorite menu when clicked outside of it
+                onClose={() => setAnchorElFavorite(null)}
               >
                 <Grid container spacing={2}>
                   {favorites.map((item, index) => ( // Map through the favorite items and display them in the favorite menu
