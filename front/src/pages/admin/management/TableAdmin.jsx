@@ -82,7 +82,7 @@ const TableAdmin = () => {
       console.error("Error updating order status:", error.response?.data || error);
       alert("Failed to update order status.");
     }
-  };;
+  };
 
   return (
     <div>
@@ -128,7 +128,7 @@ const TableAdmin = () => {
             </TableHead>
             <TableBody>
               {userData?.map((user) => ( // Map through the user data and render a table row for each user
-                <TableRow key={user._id}>
+                <TableRow key={user._id}>         
                   <TableCell align="center">{user._id}</TableCell>
                   <TableCell align="center">{user.totalAmount}$</TableCell>
                   <TableCell align="center">{formatOrderDate(user.orderDate)}</TableCell>
