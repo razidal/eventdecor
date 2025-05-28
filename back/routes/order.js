@@ -3,11 +3,21 @@ const router = express.Router();
 const Order = require('../models/Order'); // Ensure the path to your Order model is correct
 const User = require('../models/User'); // Ensure the path to your User model is correct
 const nodemailer = require("nodemailer");
-// Route to delete an order
 
+// Create reusable transporter for email
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: "eventdeocr@gmail.com",
+    pass: "qbuw ncuc xwxl snsh", // Consider storing this securely
+  },
+});
+
+// Route to update order status and send email
 router.put("/update-status/:id", async (req, res) => {
   const { status } = req.body;
-  console.log("Update status called for order:", req.params.id, req.body.status);
+  console.log("Update status called for order:", req.params.id, status);
+
   try {
     const order = await Order.findById(req.params.id);
     if (!order) {
@@ -16,81 +26,71 @@ router.put("/update-status/:id", async (req, res) => {
 
     // Update order status
     order.status = status;
-    await order.save(); // Ensure the order is saved after updating status
+    await order.save();
 
-    const user = await User.findById(order.userId); // Retrieve user details
+    // Get user details
+    const user = await User.findById(order.userId);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Send email notification
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: "eventdeocr@gmail.com",
-        pass: "qbuw ncuc xwxl snsh",
-      },
-    });
-
+    // Compose email
     const mailOptions = {
       from: "eventdeocr@gmail.com",
-      to: user.email, // Send to the user's email
+      to: user.email,
       subject: "Order Update Notification",
       text: `Your order status has been updated to ${status}. Order ID: ${order._id}`,
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Error while sending email:", error);
-        return res.status(500).json({ error: "Failed to send email." });
-      }
+    // Send email with async/await
+    try {
+      const info = await transporter.sendMail(mailOptions);
       console.log("Email sent:", info.response);
-      res.status(200).json({ message: "Order status updated and email sent." });
-    });
+      return res.status(200).json({ message: "Order status updated and email sent." });
+    } catch (emailError) {
+      console.error("Error while sending email:", emailError);
+      return res.status(500).json({ error: "Order updated, but failed to send email." });
+    }
+
   } catch (error) {
     console.error("Error updating order status:", error);
-    res.status(500).json({ error: "Failed to update order status." });
+    return res.status(500).json({ error: "Failed to update order status." });
   }
 });
 
+// Route to send password reset code
 router.post("/send-code", async (req, res) => {
-  const { email } = req.body; //  getting email from the request body
+  const { email } = req.body;
   console.log(email);
+
   try {
-    const user = await User.findOne({ email }); 
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).send({ error: "User does not exist" });
     }
-    // Create the nodemailer transporter
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: "eventdeocr@gmail.com",
-        pass: "qbuw ncuc xwxl snsh", // Use an app-specific password if using Gmail 2FA
-      },
-    });
 
-    // Send the email with the verification code
+    // Generate a 6-digit random code
+    const code = Math.floor(100000 + Math.random() * 900000);
+
     const mailOptions = {
       from: "eventdeocr@gmail.com",
-      to: email, // recipient's email address
-      subject: "Password Reset Code", // subject of the email
+      to: email,
+      subject: "Password Reset Code",
       text: `Your verification code is ${code}`,
     };
 
-    transporter.sendMail(mailOptions, (error, info) => { //callback function to check if the email is sent or not
-      if (error) {
-        console.error("Error while sending email:", error);
-        return res.status(500).send({ error: "Failed to send email." });
-      }
-      console.log("Email sent:", info.response); //log the response if the email is sent successfully
+    try {
+      const info = await transporter.sendMail(mailOptions);
+      console.log("Email sent:", info.response);
+      return res.status(200).send({ code });
+    } catch (emailError) {
+      console.error("Error while sending email:", emailError);
+      return res.status(500).send({ error: "Failed to send email." });
+    }
 
-      // Respond with the generated code (or store it for comparison later)
-      res.status(200).send({ code });
-    });
-  } catch (err) { //catch any errors that occur during the process
+  } catch (err) {
     console.error("Unexpected error:", err);
-    res.status(500).send({ error: "Failed to send code. Please try again." });
+    return res.status(500).send({ error: "Failed to send code. Please try again." });
   }
 });
 
