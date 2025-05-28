@@ -234,7 +234,7 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             fullWidth
             label="CVV"
             value={cvv}
-            onChange={(e) => setCvv(setCardNumber(formatCardNumber(e.target.value,4)))}
+            onChange={(e) => setCvv((formatCardNumber(e.target.value,4)))}
             margin="normal"
             required
             error={!!validationError && !/^\d{3,4}$/.test(cvv)}
