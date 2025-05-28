@@ -38,15 +38,22 @@ router.put("/update-status/:id", async (req, res) => {
 
   try {
     const order = await Order.findById(orderId);
-    if (!order) return res.status(404).json({ error: "Order not found" });
+    if (!order) {
+      console.log("Order not found for id:", orderId);
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    console.log("Order found:", order);
 
     const user = await User.findById(order.userId);
-    if (!user) return res.status(404).json({ error: "User not found" });
+    if (!user) {
+      console.log("User not found for userId:", order.userId);
+      return res.status(404).json({ error: "User not found" });
+    }
 
     order.status = status;
     await order.save();
 
-    // Send email in background (non-blocking)
     sendStatusUpdateEmail(user.fullName, user.email, order._id, status);
 
     res.status(200).json({ message: "Order status updated successfully" });
@@ -55,7 +62,6 @@ router.put("/update-status/:id", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
 // Send password reset code
 router.post("/send-code", async (req, res) => {
   const { email } = req.body;
