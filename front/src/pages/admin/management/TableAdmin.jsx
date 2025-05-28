@@ -38,6 +38,18 @@ const TableAdmin = () => {
     setOpenModal(false);
   };
 
+  const formatOrderDate = (isoString) => {
+  if (!isoString) return "";
+  const date = new Date(isoString);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+};
+s
   const fetchData = async () => {
     try { 
       const response = await axios.get( 
@@ -119,7 +131,7 @@ const TableAdmin = () => {
                 <TableRow key={user._id}>
                   <TableCell align="center">{user._id}</TableCell>
                   <TableCell align="center">{user.totalAmount}$</TableCell>
-                  <TableCell align="center">{user.orderDate}$</TableCell>
+                  <TableCell align="center">{formatOrderDate(user.orderDate)}</TableCell>
                   <TableCell align="center">{user.userId?.fullName}</TableCell>
                   <TableCell>
                     <Button align="center" onClick={() => handleOpenModal(user)}>
