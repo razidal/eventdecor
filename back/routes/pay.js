@@ -91,7 +91,7 @@ router.post("/user/:id/new_order", async (req, res) => {
 router.post("/process-payment", async (req, res) => {
   console.log("Received payment request:", req.body);
   
-  const { userId, cartData, totalPrice, paymentMethod, email, address } =
+  const { userId, cartData, totalPrice, paymentMethod, email,fullName, address } =
     req.body;
   // Validate the request data here
   if (
@@ -100,6 +100,7 @@ router.post("/process-payment", async (req, res) => {
     !totalPrice ||
     !paymentMethod ||
     !email ||
+    !fullName ||
     !address
   ) {
     return res
@@ -141,7 +142,7 @@ router.post("/process-payment", async (req, res) => {
     }
     // Process the payment here 
     const newOrder = new Order({
-      userId,
+      userId,fullName,
       products: cartData.map((item) => ({
         productId: item.productId,
         quantity: item.quantity,
