@@ -17,20 +17,25 @@ router.post("/add", async (req, res) => {
 });
 
 // Get all orders (Admin)
-router.get("/all", async (req, res) => {
+
+router.get("/allOrders", async (req, res) => {
   try {
     const orders = await Order.find()
-      .populate("userId", "name email") // Populate user's name and email
+      .populate({
+        path: "userId",
+        model: "User",
+        select: "fullName", // Ensure 'fullName' is selected
+      })
       .populate({
         path: "products.productId",
-        model: "PartyDecoration", // Match your model name
-        select: "name price", // Select product fields to return
+        model: "PartyDecoration",
+        select: "name price",
       });
 
-    res.status(200).send({ message: "All Orders", orders });
+    res.status(200).json({ orders });
   } catch (err) {
-    console.error("Error fetching all orders:", err);
-    res.status(500).send({ error: "Something went wrong" });
+    console.error("Error fetching orders with populate:", err);
+    res.status(500).json({ error: "Failed to fetch orders", details: err.message });
   }
 });
 
