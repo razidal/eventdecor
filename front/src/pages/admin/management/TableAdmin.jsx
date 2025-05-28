@@ -107,6 +107,7 @@ const TableAdmin = () => {
               <TableRow>
                 <TableCell align="center">Order Number</TableCell>
                 <TableCell align="center">Total Price</TableCell>
+                <TableCell align="center">Order Date</TableCell>
                 <TableCell align="center">Customer Name</TableCell>
                 <TableCell align="center">Order Details</TableCell>
                 <TableCell align="center">Order Confirmation</TableCell>
@@ -118,6 +119,7 @@ const TableAdmin = () => {
                 <TableRow key={user._id}>
                   <TableCell align="center">{user._id}</TableCell>
                   <TableCell align="center">{user.totalAmount}$</TableCell>
+                  <TableCell align="center">{user.orderDate}$</TableCell>
                   <TableCell align="center">{user.userId?.fullName}</TableCell>
                   <TableCell>
                     <Button align="center" onClick={() => handleOpenModal(user)}>

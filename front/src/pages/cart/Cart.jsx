@@ -144,10 +144,11 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             postalCode,
             country,
           },
-          expiryDate: `${selectedMonth}/${selectedYear}`, // Combine month and year into expiryDate
+          expiryDate: `${selectedMonth}/${selectedYear}`,
+          orderDate: new Date().toISOString(), // <-- Add this line
         },
         {
-          timeout: 15000, // Set a timeout of 15 seconds for the request
+          timeout: 15000,
         }
       );
 
