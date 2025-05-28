@@ -176,7 +176,7 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             fullWidth
             label="Card Number"
             value={cardNumber}
-            onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
+            onChange={(e) => setCardNumber(formatCardNumber(e.target.value,16))}
             margin="normal"
             required
             inputProps={{ maxLength: 19 }} // 16 digits + 3 spaces
@@ -234,7 +234,7 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             fullWidth
             label="CVV"
             value={cvv}
-            onChange={(e) => setCvv(e.target.value)}
+            onChange={(e) => setCvv(setCardNumber(formatCardNumber(e.target.value,4)))}
             margin="normal"
             required
             error={!!validationError && !/^\d{3,4}$/.test(cvv)}
@@ -532,9 +532,9 @@ export default function Cart() {
   );
 }
 
-function formatCardNumber(value) {
+function formatCardNumber(value,num) {
   // Remove all non-digit characters
-  const digits = value.replace(/\D/g, "").slice(0, 16);
+  const digits = value.replace(/\D/g, "").slice(0, num);
   // Add a space every 4 digits
   return digits.replace(/(.{4})/g, "$1 ").trim();
 }
