@@ -260,10 +260,24 @@ const Header = () => {
             <>
               <StyledIconButton
                 aria-haspopup="true"
-                onClick={handleMenuClickFavorite} // Open the favorite menu when clicked
-              >
-                <FavoriteIcon />
-                {favorites.length > 0 && ( // Display the favorite badge if there are favorite items
+                 // Open the favorite menu when clicked
+                        sx={{
+                        padding: 0.5,
+                        '&:hover': {
+                          outline: '2px solid #1976d2',
+                          outlineOffset: '2px',
+                          borderRadius: '50%',
+                        },
+                        // Remove default focus ring for a cleaner look
+                        '&:focus': {
+                          outline: '2px solid #1976d2',
+                          outlineOffset: '2px',
+                          borderRadius: '50%',
+                        },
+                        }}
+                        >
+                        <FavoriteIcon />
+                        {favorites.length > 0 && ( // Display the favorite badge if there are favorite items
                   <CartBadge>{favorites.length}</CartBadge> 
                 )}
               </StyledIconButton> 
