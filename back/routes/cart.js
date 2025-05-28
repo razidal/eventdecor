@@ -24,7 +24,7 @@ router.get("/allOrders", async (req, res) => {
       .populate({
         path: "userId",
         model: "User",
-        select: "fullName", // Ensure 'fullName' is selected
+        select: "fullName email", // Include fullName for frontend
       })
       .populate({
         path: "products.productId",
@@ -35,7 +35,7 @@ router.get("/allOrders", async (req, res) => {
     res.status(200).json({ orders });
   } catch (err) {
     console.error("Error fetching orders with populate:", err);
-    res.status(500).json({ error: "Failed to fetch orders", details: err.message });
+    res.status(500).json({ error: "Failed to fetch orders" });
   }
 });
 

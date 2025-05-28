@@ -161,7 +161,7 @@ router.post("/process-payment", async (req, res) => {
       });
     }
 
-    await sendOrderConfirmationEmail(fullName, email, newOrder);
+    await sendOrderConfirmationEmail(user.fullName, email, newOrder); // Send order confirmation email to the user
 
     res.status(200).json({ success: true, orderId: newOrder._id });
   } catch (error) {
