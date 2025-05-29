@@ -56,45 +56,45 @@ router.put("/update-status/:id", async (req, res) => {
   }
 });
 
-router.post("/send-code", async (req, res) => {
-  const { email } = req.body; //  getting email from the request body
-  console.log(email);
-  try {
-    const user = await User.findOne({ email }); 
-    if (!user) {
-      return res.status(400).send({ error: "User does not exist" });
-    }
-    // Create the nodemailer transporter
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: EMAIL_USER,
-        pass: EMAIL_PASS, // Use an app-specific password if using Gmail 2FA
-      },
-    });
+// router.post("/send-code", async (req, res) => {
+//   const { email } = req.body; //  getting email from the request body
+//   console.log(email);
+//   try {
+//     const user = await User.findOne({ email }); 
+//     if (!user) {
+//       return res.status(400).send({ error: "User does not exist" });
+//     }
+//     // Create the nodemailer transporter
+//     const transporter = nodemailer.createTransport({
+//       service: "Gmail",
+//       auth: {
+//         user: EMAIL_USER,
+//         pass: EMAIL_PASS, // Use an app-specific password if using Gmail 2FA
+//       },
+//     });
 
-    // Send the email with the verification code
-    const mailOptions = {
-      from: EMAIL_USER,
-      to: email, // recipient's email address
-      subject: "Password Reset Code", // subject of the email
-      text: `Your verification code is ${code}`,
-    };
+//     // Send the email with the verification code
+//     const mailOptions = {
+//       from: EMAIL_USER,
+//       to: email, // recipient's email address
+//       subject: "Password Reset Code", // subject of the email
+//       text: `Your verification code is ${code}`,
+//     };
 
-    transporter.sendMail(mailOptions, (error, info) => { //callback function to check if the email is sent or not
-      if (error) {
-        console.error("Error while sending email:", error);
-        return res.status(500).send({ error: "Failed to send email." });
-      }
-      console.log("Email sent:", info.response); //log the response if the email is sent successfully
+//     transporter.sendMail(mailOptions, (error, info) => { //callback function to check if the email is sent or not
+//       if (error) {
+//         console.error("Error while sending email:", error);
+//         return res.status(500).send({ error: "Failed to send email." });
+//       }
+//       console.log("Email sent:", info.response); //log the response if the email is sent successfully
 
-      // Respond with the generated code (or store it for comparison later)
-      res.status(200).send({ code });
-    });
-  } catch (err) { //catch any errors that occur during the process
-    console.error("Unexpected error:", err);
-    res.status(500).send({ error: "Failed to send code. Please try again." });
-  }
-});
+//       // Respond with the generated code (or store it for comparison later)
+//       res.status(200).send({ code });
+//     });
+//   } catch (err) { //catch any errors that occur during the process
+//     console.error("Unexpected error:", err);
+//     res.status(500).send({ error: "Failed to send code. Please try again." });
+//   }
+// });
 
 module.exports = router;
