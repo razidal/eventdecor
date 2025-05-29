@@ -6,7 +6,7 @@ const User = require("../models/User");
 const PartyDecoration = require("../models/PartyDecoration");
 
 
-const sendOrderConfirmationEmail = async (fullName,userEmail, orderData) => { 
+const sendOrderConfirmationEmail = async (userName,userEmail, orderData) => { 
   try { // Set up the email transporter using your email service provider's SMTP settings
     const transporter = nodemailer.createTransport({ // Replace with your email service provider's SMTP settings
       service: "Gmail", // Example: "Gmail" or "Outlook"
@@ -20,7 +20,7 @@ const sendOrderConfirmationEmail = async (fullName,userEmail, orderData) => {
       from: "eventdeocr@gmail.com",
       to: userEmail,
       subject: "Order Confirmation",
-      text: `Hello ${fullName}, Thank you for your order! Your order ID is: ${orderData._id}`,
+      text: `Hello ${userName}, Thank you for your order! Your order ID is: ${orderData._id}`,
     };
     // Send the email
     await transporter.sendMail(mailOptions);
@@ -74,7 +74,7 @@ router.post("/user/:id/new_order", async (req, res) => {
         });
       }
       // Send order confirmation email to the user
-      await sendOrderConfirmationEmail(user.fullName, user.email, newOrder);
+      await sendOrderConfirmationEmail(user.fullName,user.email, newOrder);
 
       res
         .status(200)
@@ -91,7 +91,7 @@ router.post("/user/:id/new_order", async (req, res) => {
 router.post("/process-payment", async (req, res) => {
   console.log("Received payment request:", req.body);
   
-  const { userId, cartData, totalPrice, paymentMethod, email, address } =
+  const { userId, cartData, totalPrice, paymentMethod, userName, email, address } =
     req.body;
   // Validate the request data here
   if (
@@ -100,6 +100,7 @@ router.post("/process-payment", async (req, res) => {
     !totalPrice ||
     !paymentMethod ||
     !email ||
+    !userName ||
     !address
   ) {
     return res
@@ -161,7 +162,7 @@ router.post("/process-payment", async (req, res) => {
       });
     }
 
-    await sendOrderConfirmationEmail(user.fullName, email, newOrder); // Send order confirmation email to the user
+    await sendOrderConfirmationEmail(userName,email, newOrder);
 
     res.status(200).json({ success: true, orderId: newOrder._id });
   } catch (error) {

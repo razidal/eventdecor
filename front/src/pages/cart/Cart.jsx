@@ -92,7 +92,6 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
   const [cardNumber, setCardNumber] = useState("");
   const [cvv, setCvv] = useState("");
   const [name, setName] = useState("");
-  const [fullName, setfullName] = useState("");
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [postalCode, setPostalCode] = useState("");
@@ -119,7 +118,7 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
    
     // Check if any field is empty or invalid
     if (!cardNumberRegex.test(cardNumber.replace(/\s/g, "")) ||
-    !selectedMonth || !selectedYear || !cvvRegex.test(cvv) || !nameRegex.test(name) || !nameRegex.test(fullName) ||
+    !selectedMonth || !selectedYear || !cvvRegex.test(cvv) || !nameRegex.test(name) ||
     !postalCodeRegex.test(postalCode)) {
       setValidationError("Check fields."); // Set validation error message
       setIsProcessing(false);   // Reset processing state
@@ -139,7 +138,6 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
           totalPrice,
           paymentMethod,
           email: user.email,
-          fullName: user.fullName,
           address: {
             street,
             city,
@@ -251,16 +249,6 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
             margin="normal"
             required
             error={!!validationError && !/^[A-Za-z\s]+$/.test(name)}
-            helperText="Must contain only English letters."
-          />
-          <TextField
-            fullWidth
-            label="Full Name"
-            value={fullName}
-            onChange={(e) => setfullName(e.target.value)}
-            margin="normal"
-            required
-            error={!!validationError && !/^[A-Za-z\s]+$/.test(fullName)}
             helperText="Must contain only English letters."
           />
           <TextField
