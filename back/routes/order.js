@@ -6,53 +6,44 @@ const nodemailer = require("nodemailer");
 // Route to delete an order
 require('dotenv').config();
 
-const EMAIL_USER = process.env.EMAIL_USER 
-const EMAIL_PASS = process.env.EMAIL_PASS 
-
-router.put("/update-status/:id", async (req, res) => {
-  const { status } = req.body;
+router.put('/update-status/:id', async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
-    if (!order) {
-      return res.status(404).json({ error: "Order not found " });
+    const orderId = req.params.id;
+    const { status } = req.body;
+
+    const updatedOrder = await Order.findByIdAndUpdate(
+      orderId,
+      { status },
+      { new: true }
+    ).populate('user');
+
+    if (!updatedOrder) {
+      return res.status(404).json({ error: 'Order not found' });
     }
 
-    // Update order status
-    order.status = status;
-    await order.save(); // Ensure the order is saved after updating status
-
-    const user = await User.findById(order.userId); // Retrieve user details
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    // Send email notification
+    // Send confirmation email
     const transporter = nodemailer.createTransport({
-      service: "Gmail",
+      service: 'gmail',
       auth: {
-        user: EMAIL_USER,
-        pass: EMAIL_PASS, 
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
     const mailOptions = {
-      from: EMAIL_USER,
-      to: user.email, // Send to the user's email
-      subject: "Order Update Notification",
-      text: `Your order status has been updated to ${status}. Order ID: ${order._id}`,
+      from: process.env.EMAIL_USER,
+      to: updatedOrder.user.email,
+      subject: `Order #${updatedOrder._id} Status Update`,
+      text: `Your order status has been updated to: ${status}`,
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Error while sending email:", error);
-        return res.status(500).json({ error: "Failed to send email." });
-      }
-      console.log("Email sent:", info.response);
-      res.status(200).json({ message: "Order status updated and email sent." });
-    });
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: 'Order status updated', order: updatedOrder });
+
   } catch (error) {
-    console.error("Error updating order status:", error);
-    res.status(500).json({ error: "Failed to update order status." });
+    console.error('Error updating order:', error);
+    res.status(500).json({ error: 'Failed to send email.' });
   }
 });
 
