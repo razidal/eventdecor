@@ -15,7 +15,7 @@ router.put('/update-status/:id', async (req, res) => {
       orderId,
       { status },
       { new: true }
-    ).populate('user');
+    ).populate('userId');
 
     if (!updatedOrder) {
       return res.status(404).json({ error: 'Order not found' });
@@ -32,7 +32,7 @@ router.put('/update-status/:id', async (req, res) => {
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: updatedOrder.user.email,
+      to: updatedOrder.userId.email,
       subject: `Order #${updatedOrder._id} Status Update`,
       text: `Your order status has been updated to: ${status}`,
     };
