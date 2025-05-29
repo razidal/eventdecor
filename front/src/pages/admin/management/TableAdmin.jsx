@@ -19,8 +19,6 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import Typography from '@mui/material/Typography';
-import {useSelector } from "react-redux";
-import Cookies from "js-cookie";
 
 const TableAdmin = () => {
   const [userData, setUserData] = useState(null);
@@ -28,7 +26,6 @@ const TableAdmin = () => {
   const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null); // State to store the ID of the selected user
-  const user = useSelector((state) => state.user.user);
   const isMobile = useMediaQuery("(max-width:600px)"); // for mobile devices
 
   const handleOpenModal = (user) => {
@@ -40,8 +37,6 @@ const TableAdmin = () => {
     setOpenModal(false);
   };
 
-  const userCookies = Cookies.get("user"); // Get user data from cookies
-  const userfullName = userCookies ? JSON.parse(userCookies).fullName : null;
   const formatOrderDate = (isoString) => {
   if (!isoString) return "";
   const date = new Date(isoString);
@@ -124,7 +119,6 @@ const TableAdmin = () => {
                 <TableCell align="center">Order Number</TableCell>
                 <TableCell align="center">Total Price</TableCell>
                 <TableCell align="center">Order Date</TableCell>
-                <TableCell align="center">Customer Name</TableCell>
                 <TableCell align="center">Order Details</TableCell>
                 <TableCell align="center">Order Confirmation</TableCell>
                 <TableCell align="center">Action</TableCell> {/* Add Action column */}
@@ -136,7 +130,6 @@ const TableAdmin = () => {
                   <TableCell align="center">{user._id}</TableCell>
                   <TableCell align="center">{user.totalAmount}$</TableCell>
                   <TableCell align="center">{formatOrderDate(user.orderDate)}</TableCell>
-                  <TableCell align="center">{userfullName}</TableCell>
                   <TableCell>
                     <Button align="center" onClick={() => handleOpenModal(user)}>
                       Order Details
