@@ -8,7 +8,7 @@ export default function Footer() {
         © {new Date().getFullYear()} - Event Decor. All rights reserved. {/* Updated the year dynamically */}
       </Typography> 
       <Typography variant="body2" color="textSecondary">
-        Contact: <Link href="mailto:eventdeocr@gmail.com">eventdeocr@gmail.com</Link> {/* Added contact information */}   
+        Contact: <Link href="mailto:eventdecor99@gmail.com">eventdecor99@gmail.com</Link> {/* Added contact information */}   
       </Typography>
     </Box>
   );

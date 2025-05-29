@@ -3,20 +3,23 @@ const router = express.Router();
 const Order = require("../models/Order");
 const User = require("../models/User");
 const nodemailer = require("nodemailer");
+require('dotenv').config();
 
+const EMAIL_USER = process.env.EMAIL_USER 
+const EMAIL_PASS = process.env.EMAIL_PASS 
 // Helper function to send email on status update
 const sendStatusUpdateEmail = async (fullName, userEmail, orderId, newStatus) => {
   try {
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
-        user: "eventdeocr@gmail.com",
-        pass: "qbuw ncuc xwxl snsh", // move to .env in production
+        user: EMAIL_USER,
+        pass: EMAIL_PASS, // move to .env in production
       },
     });
 
     const mailOptions = {
-      from: "eventdeocr@gmail.com",
+      from: EMAIL_USER,
       to: userEmail,
       subject: "Order Status Update",
       text: `Hello ${fullName},\n\nYour order with ID ${orderId} has been updated to: ${newStatus}.\n\nThank you for shopping with us!\nEvent Decor Team`,
@@ -76,13 +79,13 @@ router.post("/send-code", async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
-        user: "eventdeocr@gmail.com",
-        pass: "qbuw ncuc xwxl snsh",
+        user: EMAIL_USER,
+        pass: EMAIL_PASS,
       },
     });
 
     const mailOptions = {
-      from: "eventdeocr@gmail.com",
+      from: EMAIL_USER,
       to: email,
       subject: "Password Reset Code",
       text: `Your verification code is ${code}`,

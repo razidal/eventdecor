@@ -4,20 +4,23 @@ const nodemailer = require("nodemailer");
 const Order = require("../models/Order");
 const User = require("../models/User");
 const PartyDecoration = require("../models/PartyDecoration");
+require('dotenv').config();
 
+const EMAIL_USER = process.env.EMAIL_USER 
+const EMAIL_PASS = process.env.EMAIL_PASS 
 
 const sendOrderConfirmationEmail = async (userName,userEmail, orderData) => { 
   try { // Set up the email transporter using your email service provider's SMTP settings
     const transporter = nodemailer.createTransport({ // Replace with your email service provider's SMTP settings
       service: "Gmail", // Example: "Gmail" or "Outlook"
       auth: {   // Replace with your email credentials
-        user: "eventdeocr@gmail.com",
-        pass: "qbuw ncuc xwxl snsh",
+        user: EMAIL_USER ,
+        pass: EMAIL_PASS, // Use environment variables for security
       },
     });
     // Set up the email options
     const mailOptions = {
-      from: "eventdeocr@gmail.com",
+      from: EMAIL_USER,
       to: userEmail,
       subject: "Order Confirmation",
       text: `Hello ${userName}, Thank you for your order! Your order ID is: ${orderData._id}`,

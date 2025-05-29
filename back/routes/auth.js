@@ -5,19 +5,24 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 
+require('dotenv').config();
+
+const EMAIL_USER = process.env.EMAIL_USER 
+const EMAIL_PASS = process.env.EMAIL_PASS 
+
 const sendRegistrationConfirmationEmail = async (userEmail, userName) => {
   //using Google strategy for registeration and loging in
   try {
     const transporter = nodemailer.createTransport({ //using nodemailer to send email to the user
       service: "Gmail",
       auth: {
-        user: "eventdeocr@gmail.com", //sender email
-        pass: "qbuw ncuc xwxl snsh", //sender password
+        user: EMAIL_USER, //sender email
+        pass: EMAIL_PASS, //sender password
       },
     });
 
     const mailOptions = {
-      from: "eventdeocr@gmail.com",
+      from: EMAIL_USER,
       to: userEmail, //reciever email
       subject: "Registration Confirmation", // subject of the email
       text:` Dear ${userName},\n\nThank you for registering!\n\nBest regards,\nYour Team,` //email body
@@ -205,14 +210,14 @@ router.post("/send-code", async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
-        user: "eventdeocr@gmail.com",
-        pass: "qbuw ncuc xwxl snsh", // Use an app-specific password if using Gmail 2FA
+        user: EMAIL_USER,
+        pass: EMAIL_PASS, // Use an app-specific password if using Gmail 2FA
       },
     });
 
     // Send the email with the verification code
     const mailOptions = {
-      from: "eventdeocr@gmail.com",
+      from: EMAIL_USER,
       to: email, // recipient's email address
       subject: "Password Reset Code", // subject of the email
       text: `Your verification code is ${code}`,
