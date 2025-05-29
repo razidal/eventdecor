@@ -1,102 +1,98 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const Order = require("../models/Order");
-const User = require("../models/User");
+const Order = require('../models/Order'); // Ensure the path to your Order model is correct
+const User = require('../models/User'); // Ensure the path to your User model is correct
 const nodemailer = require("nodemailer");
+// Route to delete an order
 require('dotenv').config();
 
 const EMAIL_USER = process.env.EMAIL_USER 
 const EMAIL_PASS = process.env.EMAIL_PASS 
-// Helper function to send email on status update
-const sendStatusUpdateEmail = async (fullName, userEmail, orderId, newStatus) => {
-  try {
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: EMAIL_USER,
-        pass: EMAIL_PASS, // move to .env in production
-      },
-    });
 
-    const mailOptions = {
-      from: EMAIL_USER,
-      to: userEmail,
-      subject: "Order Status Update",
-      text: `Hello ${fullName},\n\nYour order with ID ${orderId} has been updated to: ${newStatus}.\n\nThank you for shopping with us!\nEvent Decor Team`,
-    };
-
-    await transporter.sendMail(mailOptions);
-    console.log("Status update email sent successfully");
-  } catch (error) {
-    console.error("Error sending status update email:", error);
-  }
-};
-
-// Update order status and notify user
 router.put("/update-status/:id", async (req, res) => {
   const { status } = req.body;
-  const orderId = req.params.id;
-
-  console.log("Updating order status:", orderId, "->", status);
-
   try {
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(req.params.id);
     if (!order) {
-      console.log("Order not found for id:", orderId);
       return res.status(404).json({ error: "Order not found" });
     }
 
-    console.log("Order found:", order);
+    // Update order status
+    order.status = status;
+    await order.save(); // Ensure the order is saved after updating status
 
-    const user = await User.findById(order.userId);
+    const user = await User.findById(order.userId); // Retrieve user details
     if (!user) {
-      console.log("User not found for userId:", order.userId);
       return res.status(404).json({ error: "User not found" });
     }
 
-    order.status = status;
-    await order.save();
-
-    sendStatusUpdateEmail(user.fullName, user.email, order._id, status);
-
-    res.status(200).json({ message: "Order status updated successfully" });
-  } catch (error) {
-    console.error("Error updating order status:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-// Send password reset code
-router.post("/send-code", async (req, res) => {
-  const { email } = req.body;
-  console.log("Sending verification code to:", email);
-
-  try {
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).send({ error: "User does not exist" });
-
-    const code = Math.floor(100000 + Math.random() * 900000);
-
+    // Send email notification
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
         user: EMAIL_USER,
-        pass: EMAIL_PASS,
+        pass: EMAIL_PASS, 
       },
     });
 
     const mailOptions = {
       from: EMAIL_USER,
-      to: email,
-      subject: "Password Reset Code",
+      to: user.email, // Send to the user's email
+      subject: "Order Update Notification",
+      text: `Your order status has been updated to ${status}. Order ID: ${order._id}`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error while sending email:", error);
+        return res.status(500).json({ error: "Failed to send email." });
+      }
+      console.log("Email sent:", info.response);
+      res.status(200).json({ message: "Order status updated and email sent." });
+    });
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    res.status(500).json({ error: "Failed to update order status." });
+  }
+});
+
+router.post("/send-code", async (req, res) => {
+  const { email } = req.body; //  getting email from the request body
+  console.log(email);
+  try {
+    const user = await User.findOne({ email }); 
+    if (!user) {
+      return res.status(400).send({ error: "User does not exist" });
+    }
+    // Create the nodemailer transporter
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: EMAIL_USER,
+        pass: EMAIL_PASS, // Use an app-specific password if using Gmail 2FA
+      },
+    });
+
+    // Send the email with the verification code
+    const mailOptions = {
+      from: EMAIL_USER,
+      to: email, // recipient's email address
+      subject: "Password Reset Code", // subject of the email
       text: `Your verification code is ${code}`,
     };
 
-    await transporter.sendMail(mailOptions);
-    console.log("Verification email sent");
-    res.status(200).send({ code });
+    transporter.sendMail(mailOptions, (error, info) => { //callback function to check if the email is sent or not
+      if (error) {
+        console.error("Error while sending email:", error);
+        return res.status(500).send({ error: "Failed to send email." });
+      }
+      console.log("Email sent:", info.response); //log the response if the email is sent successfully
 
-  } catch (err) {
-    console.error("Error sending verification email:", err);
+      // Respond with the generated code (or store it for comparison later)
+      res.status(200).send({ code });
+    });
+  } catch (err) { //catch any errors that occur during the process
+    console.error("Unexpected error:", err);
     res.status(500).send({ error: "Failed to send code. Please try again." });
   }
 });
