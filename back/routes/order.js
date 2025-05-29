@@ -14,7 +14,7 @@ router.put("/update-status/:id", async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (!order) {
-      return res.status(404).json({ error: "Order not found" });
+      return res.status(404).json({ error: "Order not found " });
     }
 
     // Update order status
