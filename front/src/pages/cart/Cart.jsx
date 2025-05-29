@@ -118,9 +118,9 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
     const postalCodeRegex = /^\d+$/;
    
     // Check if any field is empty or invalid
-    if (!cardNumberRegex.test(cardNumber) ||
-     !selectedMonth || !selectedYear || !cvvRegex.test(cvv) || !nameRegex.test(name) || !nameRegex.test(fullName) ||
-     !postalCodeRegex.test(postalCode)) {
+    if (!cardNumberRegex.test(cardNumber.replace(/\s/g, "")) ||
+    !selectedMonth || !selectedYear || !cvvRegex.test(cvv) || !nameRegex.test(name) || !nameRegex.test(fullName) ||
+    !postalCodeRegex.test(postalCode)) {
       setValidationError("Check fields."); // Set validation error message
       setIsProcessing(false);   // Reset processing state
       return;
