@@ -14,13 +14,13 @@ const sendOrderConfirmationEmail = async (userName,userEmail, orderData) => {
     const transporter = nodemailer.createTransport({ // Replace with your email service provider's SMTP settings
       service: "Gmail", // Example: "Gmail" or "Outlook"
       auth: {   // Replace with your email credentials
-        user: EMAIL_USER ,
-        pass: EMAIL_PASS, // Use environment variables for security
+        user: "eventdecor99@gmail.com" ,
+        pass: "lpwj edge dtgz ugxj", // Use environment variables for security
       },
     });
     // Set up the email options
     const mailOptions = {
-      from: EMAIL_USER,
+      from: "eventdecor99@gmail.com",
       to: userEmail,
       subject: "Order Confirmation",
       text: `Hello ${userName}, Thank you for your order! Your order ID is: ${orderData._id}`,
