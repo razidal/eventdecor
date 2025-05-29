@@ -138,6 +138,7 @@ const PaymentForm = ({ totalPrice, onSuccess, onCancel }) => {
           totalPrice,
           paymentMethod,
           email: user.email,
+          userName: user.fullName,
           address: {
             street,
             city,

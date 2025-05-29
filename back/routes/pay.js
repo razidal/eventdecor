@@ -94,7 +94,7 @@ router.post("/user/:id/new_order", async (req, res) => {
 router.post("/process-payment", async (req, res) => {
   console.log("Received payment request:", req.body);
   
-  const { userId, cartData, totalPrice, paymentMethod, email, address } =
+  const { userId, cartData, totalPrice, paymentMethod, userName, email, address } =
     req.body;
   // Validate the request data here
   if (
@@ -103,6 +103,7 @@ router.post("/process-payment", async (req, res) => {
     !totalPrice ||
     !paymentMethod ||
     !email ||
+    !userName ||
     !address
   ) {
     return res
