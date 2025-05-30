@@ -106,7 +106,7 @@ const TableAdmin = () => {
         <p>Error: {error.message}</p>
       ) : ( // Render the table with user data if data is available and there was no error
          <Container sx={{ padding: isMobile ? "0 10px" : "0" }}>
-          <Box sx={{ overflowX: "auto" }}>
+          <div style={{ overflowX: 'auto', width: '100%' }}> {/* Adding scrollable wrapper */}
             <Table
               sx={{
                 width: "100%",
@@ -152,25 +152,24 @@ const TableAdmin = () => {
               ))}
             </TableBody>
           </Table>
-          </Box>
+          </div>
         </Container>
       )}
 
       <Modal open={openModal} onClose={handleCloseModal}>
   <Box
     sx={{
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      backgroundColor: 'white',
-      width: isMobile ? '95%' : '60%',
-      maxHeight: '90vh',
-      overflowY: 'auto',
-      padding: isMobile ? '20px' : '40px',
-      borderRadius: '8px',
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: "white",
+      width: isMobile ? "95%" : "60%",
+      height: isMobile ? "90vh" : "auto", // Fixed height on mobile to allow full scroll
+      overflowY: "auto", // Enables vertical scroll inside modal
+      padding: isMobile ? "20px" : "40px",
+      borderRadius: "8px",
       boxShadow: 24,
-      position: 'relative',
     }}
   >
     <IconButton
