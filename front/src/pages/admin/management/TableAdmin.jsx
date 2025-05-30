@@ -106,7 +106,7 @@ const TableAdmin = () => {
         <p>Error: {error.message}</p>
       ) : ( // Render the table with user data if data is available and there was no error
          <Container sx={{ padding: isMobile ? "0 10px" : "0" }}>
-          <div style={{ overflowX: 'auto', width: '100%' }}> {/* Adding scrollable wrapper */}
+          <Box sx={{ overflowX: "auto" }}>
             <Table
               sx={{
                 width: "100%",
@@ -152,7 +152,7 @@ const TableAdmin = () => {
               ))}
             </TableBody>
           </Table>
-          </div>
+          </Box>
         </Container>
       )}
 
