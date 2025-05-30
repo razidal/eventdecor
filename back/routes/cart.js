@@ -29,8 +29,9 @@ router.get("/all", async (req, res) => {
 });
 router.get("/allOrders", async (req, res) => {
   try { // Fetch all orders from the database
+    
     const orders = await Order.find()
-      .populate("userId") // Populate the user details
+      .populate("userId","fullName email") // Populate the user details
       .populate({
         path: "products.productId", // Populate the product details
         model: "PartyDecoration", // Ensure this matches the correct model for the product (PartyDecoration in your case)

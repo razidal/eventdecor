@@ -38,7 +38,7 @@ router.put('/update-status/:id', async (req, res) => {
       from: process.env.EMAIL_USER,
       to: updatedOrder.userId.email,
       subject: `Order #${updatedOrder._id} Status Update`,
-      text: `Hello ${updatedOrder.userId.fullName} Your order status has been updated to: ${status}`,
+      text: `Hello ${updatedOrder.userId.fullName}, your order status has been updated to: ${status}`,
     };
 
     await transporter.sendMail(mailOptions);

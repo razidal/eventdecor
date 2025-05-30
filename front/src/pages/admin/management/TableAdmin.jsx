@@ -193,6 +193,12 @@ const TableAdmin = () => {
       Order Details
     </Typography>
 
+    {/* User Info */}
+    <Box sx={{ marginBottom: 2 }}>
+      <Typography variant="subtitle1"><strong>User Full Name:</strong> {selectedUser?.userId?.fullName || 'N/A'}</Typography>
+      <Typography variant="subtitle1"><strong>User Email:</strong> {selectedUser?.userId?.email || 'N/A'}</Typography>
+    </Box>
+
     <Table
       sx={{
         tableLayout: "auto",
@@ -210,7 +216,7 @@ const TableAdmin = () => {
       <TableBody>
         {selectedUser?.products?.map((product, index) => (
           <TableRow key={index}>
-            <TableCell>{product.productId?.name}</TableCell>
+            <TableCell>{product.productId?.name || 'N/A'}</TableCell>
             <TableCell>{product.price}$</TableCell>
             <TableCell>{product.quantity}</TableCell>
           </TableRow>
