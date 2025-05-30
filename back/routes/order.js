@@ -21,6 +21,10 @@ router.put('/update-status/:id', async (req, res) => {
       return res.status(404).json({ error: 'Order not found' });
     }
 
+    if (!updatedOrder.userId || !updatedOrder.userId.email) {
+      return res.status(400).json({ error: 'Associated user not found or has no email.' });
+    }
+
     // Send confirmation email
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -34,7 +38,7 @@ router.put('/update-status/:id', async (req, res) => {
       from: process.env.EMAIL_USER,
       to: updatedOrder.userId.email,
       subject: `Order #${updatedOrder._id} Status Update`,
-      text: `Your order status has been updated to: ${status}`,
+      text: `Hello ${updatedOrder.userId.fullName} Your order status has been updated to: ${status}`,
     };
 
     await transporter.sendMail(mailOptions);
