@@ -189,14 +189,14 @@ const TableAdmin = () => {
       <CloseIcon />
     </IconButton>
 
-    <Typography variant="h6" gutterBottom sx={{ textAlign: 'center', mt: 2 }}>
-      Order Details
+    <Typography variant="h5" gutterBottom sx={{ textAlign: 'center', mt: 2 }}>
+      <strong>Order Details</strong>
     </Typography>
 
     {/* User Info */}
     <Box sx={{ marginBottom: 2 }}>
-      <Typography variant="subtitle1"><strong>User Full Name:</strong> {selectedUser?.userId?.fullName || 'N/A'}</Typography>
-      <Typography variant="subtitle1"><strong>User Email:</strong> {selectedUser?.userId?.email || 'N/A'}</Typography>
+      <Typography variant="h6">User Full Name: {selectedUser?.userId?.fullName || 'N/A'}</Typography>
+      <Typography variant="h6">User Email: {selectedUser?.userId?.email || 'N/A'}</Typography>
     </Box>
 
     <Table
@@ -225,7 +225,7 @@ const TableAdmin = () => {
     </Table>
 
     <Typography variant="h6" gutterBottom>
-      Delivery Address
+     <strong>Delivery Address</strong> 
     </Typography>
     <Typography variant="body2">
       {selectedUser?.address?.street}, {selectedUser?.address?.city},{" "}
