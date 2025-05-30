@@ -105,15 +105,16 @@ const TableAdmin = () => {
       ) : error ? ( // Show error message if there was an error during the fetch request
         <p>Error: {error.message}</p>
       ) : ( // Render the table with user data if data is available and there was no error
-        <Container sx={{ padding: isMobile ? "0 10px" : "0" }}>
-        <Table
-          sx={{
-            width: "100%",
-            tableLayout: isMobile ? "auto" : "fixed",
-            display: isMobile ? "block" : "table",
-            overflowX: "auto",
-          }}
-        >
+         <Container sx={{ padding: isMobile ? "0 10px" : "0" }}>
+          <div style={{ overflowX: 'auto', width: '100%' }}> {/* Adding scrollable wrapper */}
+            <Table
+              sx={{
+                width: "100%",
+                tableLayout: isMobile ? "auto" : "fixed",
+                display: isMobile ? "block" : "table",
+                overflowX: "auto",
+              }}
+            >
             <TableHead>
               <TableRow>
                 <TableCell align="center">Order Number</TableCell>
@@ -151,6 +152,7 @@ const TableAdmin = () => {
               ))}
             </TableBody>
           </Table>
+          </div>
         </Container>
       )}
 
@@ -195,8 +197,8 @@ const TableAdmin = () => {
 
     {/* User Info */}
     <Box sx={{ marginBottom: 2 }}>
-      <Typography variant="body2" sx={{paddingTop:"8px"}}>User Full Name: {selectedUser?.userId?.fullName || 'N/A'}</Typography>
-      <Typography variant="body2" sx={{paddingTop:"8px"}}>User Email: {selectedUser?.userId?.email || 'N/A'}</Typography>
+      <Typography variant="body2" sx={{paddingTop:"8px"}}>Full Name: {selectedUser?.userId?.fullName || 'N/A'}</Typography>
+      <Typography variant="body2" sx={{paddingTop:"8px"}}>Email: {selectedUser?.userId?.email || 'N/A'}</Typography>
     </Box>
 
     <Table
