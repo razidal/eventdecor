@@ -195,8 +195,8 @@ const TableAdmin = () => {
 
     {/* User Info */}
     <Box sx={{ marginBottom: 2 }}>
-      <Typography variant="h6">User Full Name: {selectedUser?.userId?.fullName || 'N/A'}</Typography>
-      <Typography variant="h6">User Email: {selectedUser?.userId?.email || 'N/A'}</Typography>
+      <Typography variant="body2" sx={{paddingTop:"8px"}}>User Full Name: {selectedUser?.userId?.fullName || 'N/A'}</Typography>
+      <Typography variant="body2" sx={{paddingTop:"8px"}}>User Email: {selectedUser?.userId?.email || 'N/A'}</Typography>
     </Box>
 
     <Table
