@@ -100,7 +100,7 @@ const decorations = [
     isReusable: false,
     ageGroup: "All Ages",
     packageQuantity: 5,
-  },
+  }, 
   {
     name: "Wedding Arch",
     price: 89.99,
