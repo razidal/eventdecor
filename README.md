@@ -7,7 +7,7 @@
 - you can check the deploy logs on : https://app.netlify.com/sites/eventdecor1/deploys  (not neceesary)
 
 2. backend :  (worry about only when you want to change anything in the backend)
-- the app is deployed on render for the backend: https://backstore-iqcq.onrender.com  (not neceesary)
+- the app is deployed on render for the backend: https://backstore-iqcq.onrender.com  (not neceesary) 
 - you can check the deploy logs on : https://dashboard.render.com/web/srv-cr84ffi3esus73fqcaa0/events (not neceesary)
 - the private deploy hook to trigger a deploy for the server : https://api.render.com/deploy/srv-cr84ffi3esus73fqcaa0?key=Q3ES4H8IfF0 (not neceesary)
 - for any changes that you want to make to the backend, you have to: manual deploy -> deploy latest commit (not neceesary)
