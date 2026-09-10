@@ -1,15 +1,15 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const connectDB = async () => { // async function to handle promise
   try {
-    mongoose // mongoose library
-      .connect("mongodb+srv://razidallasheh_db_user:lBuTVLog4rPL5VTO@cluster0.xupesy3.mongodb.net") // connect to MongoDB database
-      .then(() => console.log("Connected to MongoDB")) // log success message
-      .catch((err) => console.error("Could not connect to MongoDB", err)); // log error message
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log("Connected to MongoDB"); // log success message
     console.log("MongoDB connection SUCCESS");
   } catch (err) { // catch any errors that occur during the connection process
+    console.error("Could not connect to MongoDB", err); // log error message
     console.error("MongoDB connection FAIL");
-    process.exit(1); // exit the process with a failure status code
+    throw err;
   }
 };
 
