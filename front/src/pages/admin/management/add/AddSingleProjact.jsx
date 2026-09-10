@@ -177,10 +177,13 @@ const AddSingleProjact = ({ setOpen }) => {
         fullWidth
       />
       <FormControl fullWidth>
-        <InputLabel>Category</InputLabel>
+        <InputLabel id="category-label">Category</InputLabel>
         <Select
+          labelId="category-label"
+          id="category"
           name="category"
           value={product.category}
+          label="Category"
           onChange={handleInputChange} // Update the category property
         >
           {categories.map((category, index) => ( // Map through the categories and create a MenuItem for each one
@@ -208,8 +211,15 @@ const AddSingleProjact = ({ setOpen }) => {
         fullWidth
       />
       <FormControl fullWidth>
-        <InputLabel>Theme</InputLabel>
-        <Select name="theme" value={product.theme} onChange={handleInputChange}> 
+        <InputLabel id="theme-label">Theme</InputLabel>
+        <Select
+          labelId="theme-label"
+          id="theme"
+          name="theme"
+          value={product.theme}
+          label="Theme"
+          onChange={handleInputChange}
+        >
           {themes.map((theme, index) => ( // Map through the themes and create a MenuItem for each one
             <MenuItem key={index} value={theme}>
               {theme}
@@ -218,10 +228,13 @@ const AddSingleProjact = ({ setOpen }) => {
         </Select>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel>Occasion</InputLabel>
+        <InputLabel id="occasion-label">Occasion</InputLabel>
         <Select
+          labelId="occasion-label"
+          id="occasion"
           name="occasion"
           value={product.occasion}
+          label="Occasion"
           onChange={handleInputChange} // Update the occasion property
         >
           {occasions.map((occasion, index) => ( // Map through the occasions and create a MenuItem for each one
@@ -279,10 +292,13 @@ const AddSingleProjact = ({ setOpen }) => {
         label="Is Reusable"
       />
       <FormControl fullWidth>
-        <InputLabel>Age Group</InputLabel>
+        <InputLabel id="age-group-label">Age Group</InputLabel>
         <Select
+          labelId="age-group-label"
+          id="age-group"
           name="ageGroup"
           value={product.ageGroup}
+          label="Age Group"
           onChange={handleInputChange}
         >
           <MenuItem value="Kids">Kids</MenuItem>
