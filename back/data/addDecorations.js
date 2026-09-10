@@ -3,10 +3,12 @@
 // don't run it because it might ruin the database
 
 const mongoose = require("mongoose");
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 const PartyDecoration = require("../models/PartyDecoration"); // Adjust the path as needed
 
 // Connect to your MongoDB database
-mongoose.connect("mongodb+srv://razidal:eventdecor123@cluster0.eldvn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
