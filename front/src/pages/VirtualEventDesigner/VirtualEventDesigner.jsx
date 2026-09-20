@@ -21,6 +21,58 @@ import Draggable from "react-draggable";
 import CircularProgress from "@mui/material/CircularProgress"; // Import CircularProgress
 import Stack from "@mui/material/Stack";
 
+const removeWhiteBackground = (imageUrl) =>
+  new Promise((resolve, reject) => {
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = image.naturalWidth;
+      canvas.height = image.naturalHeight;
+      const context = canvas.getContext("2d");
+
+      if (!context) {
+        reject(new Error("Canvas is not supported by this browser."));
+        return;
+      }
+
+      context.drawImage(image, 0, 0);
+
+      try {
+        const imageData = context.getImageData(
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+        const pixels = imageData.data;
+
+        for (let index = 0; index < pixels.length; index += 4) {
+          const red = pixels[index];
+          const green = pixels[index + 1];
+          const blue = pixels[index + 2];
+          const whiteness = Math.min(red, green, blue);
+
+          if (whiteness >= 245) {
+            pixels[index + 3] = 0;
+          } else if (whiteness >= 220) {
+            pixels[index + 3] = Math.round(
+              ((245 - whiteness) / 25) * pixels[index + 3]
+            );
+          }
+        }
+
+        context.putImageData(imageData, 0, 0);
+        resolve(canvas.toDataURL("image/png"));
+      } catch (error) {
+        reject(error);
+      }
+    };
+    image.onerror = () =>
+      reject(new Error("The decoration image could not be loaded."));
+    image.src = imageUrl;
+  });
+
 const ImageUploader = ({ onImageUpload }) => {
   const [previewImage, setPreviewImage] = useState(null);
   const [error, setError] = useState(null);
@@ -126,6 +178,7 @@ const VirtualEventDesigner = () => {
   const [showIcons, setShowIcons] = useState(true);
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState("");
+  const [processingDecorationId, setProcessingDecorationId] = useState(null);
 
   const backgroundTemplates = [ // Array of background templates
     {
@@ -205,13 +258,24 @@ const VirtualEventDesigner = () => {
     setBackground(event.target.value);
   };
 
-  const handleDecorationSelect = (decoration) => {
+  const handleDecorationSelect = async (decoration) => {
+    setProcessingDecorationId(decoration._id);
+    let image = decoration.imageUrl;
+
+    try {
+      image = await removeWhiteBackground(decoration.imageUrl);
+    } catch (processingError) {
+      console.error("Could not remove the decoration background:", processingError);
+    } finally {
+      setProcessingDecorationId(null);
+    }
+
     setSelectedDecoration({ // Set the selected decoration state with the clicked decoration object
       ...decoration,
       width: 150,
       height: 150,
       id: Date.now(),
-      image: decoration.imageUrl,
+      image,
     });
   };
 
@@ -447,16 +511,21 @@ const VirtualEventDesigner = () => {
                       <img
                         src={product.imageUrl}
                         alt={product.name}
+                        onClick={() => handleDecorationSelect(product)}
                         style={{
                           width: "100%",
-                          cursor: "pointer",
+                          cursor:
+                            processingDecorationId === product._id
+                              ? "wait"
+                              : "pointer",
+                          opacity:
+                            processingDecorationId === product._id ? 0.5 : 1,
                           border:
                             selectedDecoration &&
                             selectedDecoration._id === product._id
                               ? "2px solid blue"
                               : "none",
                         }}
-                        onClick={() => handleDecorationSelect(product)}
                       />
                     </Grid>
                   ))}
