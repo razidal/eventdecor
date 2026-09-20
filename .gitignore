@@ -1,3 +1,4 @@
 
 # Environment variables
 back/.env
+front/node_modules/

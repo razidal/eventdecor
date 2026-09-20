@@ -12,7 +12,6 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../../redux/cartSlice";
 import {
@@ -21,12 +20,14 @@ import {
 } from "../../redux/favoritesSlice";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CustomCarousel from "./CustomCarousel.jsx";
+import { fetchProducts } from "../../api/products";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false); 
   const [snackbarMessage, setSnackbarMessage] = useState(""); 
   const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites.favorites);
 
@@ -36,14 +37,13 @@ const Home = () => {
 
   const getProducts = async () => { // fetch products from the backend
     setLoading(true); // Set loading to true when fetching starts
+    setError("");
     try {
-      const response = await axios.get("https://backstore-iqcq.onrender.com/products/all", {
-        timeout: 15000,
-      });
-      setProducts(response.data.decorations.slice(0, 3)); //only show 3 products
-      setLoading(false); // Set loading to false after fetching
+      const decorations = await fetchProducts();
+      setProducts(decorations.slice(0, 3)); //only show 3 products
     } catch (error) {
       console.error("Error fetching products:", error);
+      setError("Products are taking longer than usual to load. Please try again.");
     }finally {
       setLoading(false); // Set loading to false after fetching
     }
@@ -88,6 +88,13 @@ const Home = () => {
             <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
               <CircularProgress />
             </div>
+          ) : error ? (
+            <Alert
+              severity="error"
+              action={<Button color="inherit" size="small" onClick={getProducts}>Retry</Button>}
+            >
+              {error}
+            </Alert>
           ) : (
         <Grid container spacing={4}>
           {products.map((product) => ( // map through the products and display them

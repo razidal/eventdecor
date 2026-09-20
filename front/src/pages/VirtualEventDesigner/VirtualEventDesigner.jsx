@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import axios from "axios";
+import { fetchProducts } from "../../api/products";
 import {
   Button,
   Box,
@@ -125,6 +125,7 @@ const VirtualEventDesigner = () => {
   const itemsPerPage = 3; // Number of items per page
   const [showIcons, setShowIcons] = useState(true);
   const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState("");
 
   const backgroundTemplates = [ // Array of background templates
     {
@@ -184,14 +185,12 @@ const VirtualEventDesigner = () => {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const response = await axios.get( // Fetch products from the API
-          "https://backstore-iqcq.onrender.com/products/all"
-        );
-        setProducts(response.data.decorations); // Set the products state with the fetched data
-        setLoading(false); // Set loading to false after fetching
+        setProducts(await fetchProducts()); // Set the products state with the fetched data
       } catch (error) {
         console.error("Error fetching products:", error);
-        setLoading(false); // Set loading to false after fetching
+        setError("Products are taking longer than usual to load.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -434,6 +433,13 @@ const VirtualEventDesigner = () => {
                 <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
                   <CircularProgress />
                 </div>
+              ) : error ? (
+                <Alert
+                  severity="error"
+                  action={<Button color="inherit" size="small" onClick={() => window.location.reload()}>Retry</Button>}
+                >
+                  {error}
+                </Alert>
               ) : (
                 <Grid container spacing={1}>
                   {currentDecorations.map((product) => (

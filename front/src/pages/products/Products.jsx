@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {
   Container,
   Grid,
@@ -39,6 +38,7 @@ import {
 } from "../../redux/favoritesSlice";
 import { addItem } from "../../redux/cartSlice";
 import styled from "styled-components";
+import { fetchProductFilters, fetchProducts } from "../../api/products";
 
 const ImageWrapper = styled("div")({
   overflow: "hidden",
@@ -78,6 +78,7 @@ const Products = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false); 
   const [snackbarMessage, setSnackbarMessage] = useState(""); 
   const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState("");
 
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites.favorites);
@@ -85,16 +86,13 @@ const Products = () => {
   useEffect(() => {
     const fetchFilterOptions = async () => { // Fetch filter options (categories, themes, occasions) from the backend
       try {
-        const [categoriesRes, themesRes, occasionsRes] = await Promise.all([
-          axios.get("https://backstore-iqcq.onrender.com/products/categories"),
-          axios.get("https://backstore-iqcq.onrender.com/products/themes"),
-          axios.get("https://backstore-iqcq.onrender.com/products/occasions"),
-        ]);
-        setCategories(categoriesRes.data); // Assuming the response structure is the same for all requests
-        setThemes(themesRes.data); // Assuming the response structure is the same for all requests
-        setOccasions(occasionsRes.data); // Assuming the response structure is the same for all requests
+        const filters = await fetchProductFilters();
+        setCategories(filters.categories);
+        setThemes(filters.themes);
+        setOccasions(filters.occasions);
       } catch (error) {
         console.error("Error fetching filter options:", error);
+        setError("Some product filters could not be loaded.");
       }
     };
 
@@ -103,15 +101,15 @@ const Products = () => {
   }, []);
 
   const getProducts = async () => { // Fetch products from the backend
-    try { 
-      const response = await axios.get(
-        "https://backstore-iqcq.onrender.com/products/all"
-      );
-      setProducts(response.data.decorations); // Assuming the response structure is the same for all requests
-      setLoading(false); // Set loading to false after fetching
+    setLoading(true);
+    setError("");
+    try {
+      setProducts(await fetchProducts());
     } catch (error) {
       console.error("Error fetching products:", error);
-      setLoading(false); // Set loading to false after fetching
+      setError("Products are taking longer than usual to load.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -364,6 +362,13 @@ const Products = () => {
             <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
               <CircularProgress />
             </div>
+          ) : error ? (
+            <Alert
+              severity="error"
+              action={<Button color="inherit" size="small" onClick={getProducts}>Retry</Button>}
+            >
+              {error}
+            </Alert>
           ) : (
       <Grid container spacing={3}>
         {currentItems.map((product) => ( // Map through current items and create product cards
